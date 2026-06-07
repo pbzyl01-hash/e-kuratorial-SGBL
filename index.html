@@ -1,0 +1,2235 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f6ff',
+              100: '#e0f0fe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .neon-pulse {
+      animation: neonPulse 2s infinite alternate;
+    }
+    @keyframes neonPulse {
+      from {
+        text-shadow: 0 0 4px rgba(37, 99, 235, 0.4), 0 0 10px rgba(37, 99, 235, 0.2);
+      }
+      to {
+        text-shadow: 0 0 12px rgba(37, 99, 235, 0.9), 0 0 22px rgba(37, 99, 235, 0.5);
+      }
+    }
+    .glass-card-3d {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(240, 246, 255, 0.7) 100%);
+      box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.1), 0 5px 15px -5px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark .glass-card-3d {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+      box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.5);
+    }
+    .glass-card-3d:hover {
+      transform: translateY(-4px) scale(1.015);
+      box-shadow: 0 20px 40px -5px rgba(37, 99, 235, 0.18);
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Kertas Simulasi Cetak Laporan (Ukuran A4 Realistis) */
+    .paper-sim {
+      background: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
+      color: #000000;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20mm;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    /* Spesifikasi Cetak A4 Media */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="flex-1 flex items-center justify-center p-4 min-h-screen relative overflow-hidden bg-cover bg-center" style="background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.9)), url('https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&q=80&w=1200');">
+    <div class="absolute inset-0 bg-brand-900/10 backdrop-blur-sm"></div>
+    <div class="w-full max-w-md bg-white/95 dark:bg-slate-800/95 p-8 rounded-3xl shadow-2xl relative z-10 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-md transform transition-all hover:scale-[1.01]">
+      <div class="text-center mb-8">
+        <div class="w-20 h-20 bg-brand-500/10 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-500/30 shadow-lg shadow-brand-500/10">
+          <i class="fa-solid fa-compass text-4xl text-blue-600"></i>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white neon-pulse">e-Kuratorial Satwa</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-semibold">Taman Satwa Gunung Bayan Lestari</p>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+              <i class="fa-solid fa-user-shield"></i>
+            </span>
+            <input type="text" id="login-username" value="yonas.kurator" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm transition-all" placeholder="Masukkan username" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">PIN Sandi</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+              <i class="fa-solid fa-key"></i>
+            </span>
+            <input type="password" id="login-password" value="1234" class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm transition-all" placeholder="Masukkan PIN" required>
+            <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-brand-500" title="Mata Elang Pengintai">
+              <i id="password-toggle-icon" class="fa-solid fa-eye-slash text-blue-600"></i>
+            </button>
+          </div>
+          <p class="text-xs text-slate-400 mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>PIN standar sistem: <span class="font-mono font-bold text-blue-600">1234</span></p>
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white py-3 rounded-xl font-semibold shadow-lg shadow-brand-600/35 transition-all flex items-center justify-center gap-2 mt-2">
+          <span>Masuk Sistem</span>
+          <i class="fa-solid fa-circle-chevron-right"></i>
+        </button>
+      </form>
+
+      <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-center text-xs text-slate-400">
+        &copy; 2026 PT. Satwa Gunung Bayan Lestari • Tabang, Kukar
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT (Hidden initially) -->
+  <div id="main-layout" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+    
+    <!-- SIDEBAR -->
+    <aside class="w-full md:w-64 bg-white dark:bg-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 flex flex-col shadow-sm z-20">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-600/20">
+            <i class="fa-solid fa-compass text-xl"></i>
+          </div>
+          <div>
+            <span class="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight block">e-Kuratorial</span>
+            <span class="text-xs text-slate-400 font-medium block">Taman Satwa SGBL</span>
+          </div>
+        </div>
+        <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-500 hover:text-slate-800 dark:hover:text-white">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav id="sidebar-nav" class="flex-1 p-4 space-y-1.5 overflow-y-auto no-scrollbar">
+        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-50 text-brand-700 dark:bg-brand-900/25 dark:text-brand-400">
+          <i class="fa-solid fa-chart-pie w-5 text-center text-blue-500"></i>
+          <span>Dashboard</span>
+        </button>
+        <button onclick="switchTab('master')" data-tab="master" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-paw w-5 text-center text-amber-500"></i>
+          <span>Master Satwa</span>
+        </button>
+        <button onclick="switchTab('kelahiran')" data-tab="kelahiran" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-egg w-5 text-center text-emerald-500"></i>
+          <span>Kelahiran Satwa</span>
+        </button>
+        <button onclick="switchTab('kematian')" data-tab="kematian" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-circle-xmark w-5 text-center text-rose-500"></i>
+          <span>Kematian Satwa</span>
+        </button>
+        <button onclick="switchTab('titipan')" data-tab="titipan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-handshake w-5 text-center text-cyan-500"></i>
+          <span>Satwa Titipan</span>
+        </button>
+        <button onclick="switchTab('mutasi')" data-tab="mutasi" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-shuffle w-5 text-center text-violet-500"></i>
+          <span>Mutasi Satwa</span>
+        </button>
+        <button onclick="switchTab('laporan')" data-tab="laporan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-print w-5 text-center text-indigo-500"></i>
+          <span>Laporan BKSDA</span>
+        </button>
+        <button onclick="switchTab('qrcode')" data-tab="qrcode" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+          <i class="fa-solid fa-qrcode w-5 text-center text-teal-500"></i>
+          <span>QR Code Kandang</span>
+        </button>
+      </nav>
+
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100" class="w-10 h-10 rounded-full border border-blue-300 dark:border-blue-600 shadow-sm" alt="Avatar">
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold text-slate-800 dark:text-white truncate">Yonas Adestira</p>
+            <p class="text-xs text-slate-400 truncate">Asst. Kurator Utama</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT WRAPPER -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto no-scrollbar">
+      
+      <!-- TOP NAVIGATION BAR -->
+      <header class="h-16 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm no-print">
+        <h2 id="header-title" class="text-lg font-bold text-slate-800 dark:text-white">Dashboard Populasi</h2>
+        
+        <div class="flex items-center gap-4">
+          <!-- Real-time Clock Widget -->
+          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-slate-900 border border-blue-100 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300">
+            <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
+            <span id="live-clock">Senin, 08 Juni 2026 00:00:00</span>
+          </div>
+
+          <!-- Light/Dark Toggle -->
+          <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all" title="Ubah Tema">
+            <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+          </button>
+          
+          <div class="h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
+
+          <!-- Logout Button -->
+          <button onclick="handleLogout()" class="px-3.5 py-1.5 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-sm font-semibold transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span class="hidden md:inline">Keluar</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- MAIN APP CONTAINER -->
+      <main class="flex-1 p-6 space-y-6">
+
+        <!-- 1. DASHBOARD TAB -->
+        <section id="tab-dashboard" class="space-y-6 fade-in">
+          <!-- Summary Cards Grid with 3D Glossy Badge Effects -->
+          <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
+            <!-- Total Populasi -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Populasi</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-blue-600">
+                  <i class="fa-solid fa-users text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-total-populasi" class="text-3xl font-extrabold text-blue-600 dark:text-blue-400">850</span>
+                <span class="text-[10px] bg-blue-50 dark:bg-blue-950/40 text-blue-600 px-2 py-0.5 rounded font-bold">Ekor</span>
+              </div>
+            </div>
+            <!-- Kelahiran -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kelahiran Baru</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-emerald-600">
+                  <i class="fa-solid fa-egg text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-kelahiran" class="text-3xl font-extrabold text-emerald-500">35</span>
+                <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-500 px-2 py-0.5 rounded font-bold">Baru</span>
+              </div>
+            </div>
+            <!-- Kematian -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kematian</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-600">
+                  <i class="fa-solid fa-skull text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-kematian" class="text-3xl font-extrabold text-rose-500">8</span>
+                <span class="text-[10px] bg-rose-50 dark:bg-rose-950/40 text-rose-500 px-2 py-0.5 rounded font-bold">Mati</span>
+              </div>
+            </div>
+            <!-- Satwa Titipan -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Titipan Negara</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-amber-600">
+                  <i class="fa-solid fa-handshake text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-titipan" class="text-3xl font-extrabold text-amber-500">120</span>
+                <span class="text-[10px] bg-amber-50 dark:bg-amber-950/40 text-amber-500 px-2 py-0.5 rounded font-bold">BKSDA</span>
+              </div>
+            </div>
+            <!-- Satwa Dilindungi -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Dilindungi (UU)</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-purple-600">
+                  <i class="fa-solid fa-shield-halved text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-dilindungi" class="text-3xl font-extrabold text-purple-500">340</span>
+                <span class="text-[10px] bg-purple-50 dark:bg-purple-950/40 text-purple-500 px-2 py-0.5 rounded font-bold">UU</span>
+              </div>
+            </div>
+            <!-- Satwa TIDAK Dilindungi -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Tidak Dilindungi</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-slate-600">
+                  <i class="fa-solid fa-ban text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-tidak-dilindungi" class="text-3xl font-extrabold text-slate-500 dark:text-slate-400">510</span>
+                <span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 px-2 py-0.5 rounded font-bold">Bebas</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm lg:col-span-2">
+              <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fa-solid fa-chart-line mr-2 text-blue-500"></i>Tren Dinamika Populasi Bulanan</h3>
+              <div class="h-64">
+                <canvas id="populasiChart"></canvas>
+              </div>
+            </div>
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+              <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i>Proporsi Perlindungan</h3>
+              <div class="h-64 flex items-center justify-center">
+                <canvas id="proporsiChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. DATA MASTER SATWA TAB -->
+        <section id="tab-master" class="space-y-6 hidden fade-in">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              <div class="relative flex-1 sm:w-64">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="master-search" oninput="filterMasterTable()" class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm" placeholder="Cari nama satwa / spesies...">
+              </div>
+              <select id="master-filter-status" onchange="filterMasterTable()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                <option value="">Semua Status</option>
+                <option value="Dilindungi">Dilindungi</option>
+                <option value="Tidak Dilindungi">Tidak Dilindungi</option>
+              </select>
+              <select id="master-filter-kelas" onchange="filterMasterTable()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                <option value="">Semua Kelas</option>
+                <option value="Aves">Aves</option>
+                <option value="Mamalia">Mamalia</option>
+                <option value="Reptil">Reptil</option>
+              </select>
+            </div>
+            <button onclick="openAddSatwaModal()" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-md shadow-brand-600/20 text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-circle-plus"></i>
+              <span>Tambah Satwa Baru</span>
+            </button>
+          </div>
+
+          <!-- Data Grid / Table -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
+                    <th class="p-4">Satwa / Spesies</th>
+                    <th class="p-4">Kelas</th>
+                    <th class="p-4">No. Registrasi</th>
+                    <th class="p-4">Populasi (Ekor)</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4">Kandang</th>
+                    <th class="p-4 text-center">Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody id="master-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. KELAHIRAN SATWA TAB -->
+        <section id="tab-kelahiran" class="space-y-6 hidden fade-in">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg">Histori Kelahiran Satwa</h3>
+              <p class="text-xs text-slate-400">Pencatatan perkembangan biak & penetasan di Lembaga Konservasi.</p>
+            </div>
+            <button onclick="openModal('add-kelahiran-modal')" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-baby-carriage"></i>
+              <span>Catat Kelahiran Baru</span>
+            </button>
+          </div>
+
+          <!-- Kelahiran Table -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
+                    <th class="p-4">Nama Jenis Satwa</th>
+                    <th class="p-4">Tanggal Lahir</th>
+                    <th class="p-4">Jumlah (Ekor)</th>
+                    <th class="p-4">Tag / No. ID</th>
+                    <th class="p-4">Jenis Kelamin</th>
+                    <th class="p-4">Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody id="kelahiran-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. KEMATIAN SATWA TAB -->
+        <section id="tab-kematian" class="space-y-6 hidden fade-in">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg">Histori Kematian Satwa</h3>
+              <p class="text-xs text-slate-400">Pencatatan data nekropsi, penyebab sakit, dan nomor berita acara penitipan.</p>
+            </div>
+            <button onclick="openModal('add-kematian-modal')" class="w-full md:w-auto bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-skull-crossbones"></i>
+              <span>Catat Kematian Baru</span>
+            </button>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
+                    <th class="p-4">Jenis Satwa</th>
+                    <th class="p-4">Tanggal Kematian</th>
+                    <th class="p-4">Jumlah</th>
+                    <th class="p-4">Penyebab</th>
+                    <th class="p-4">Nomor BAP Penitipan</th>
+                    <th class="p-4 font-center text-center">Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody id="kematian-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. SATWA TITIPAN TAB -->
+        <section id="tab-titipan" class="space-y-6 hidden fade-in">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg">Satwa Titipan BKSDA & Instansi Lain</h3>
+              <p class="text-xs text-slate-400">Pencatatan titipan resmi satwa sitaan, konflik, ataupun penyelamatan.</p>
+            </div>
+            <button onclick="openModal('add-titipan-modal')" class="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-handshake-angle"></i>
+              <span>Catat Satwa Titipan</span>
+            </button>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
+                    <th class="p-4">Nomor Dokumen</th>
+                    <th class="p-4">Jenis Satwa</th>
+                    <th class="p-4">Tanggal Masuk</th>
+                    <th class="p-4">Jumlah</th>
+                    <th class="p-4">Asal Instansi</th>
+                    <th class="p-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="titipan-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. MUTASI SATWA TAB -->
+        <section id="tab-mutasi" class="space-y-6 hidden fade-in">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg">Riwayat Mutasi & Pemindahan Satwa</h3>
+              <p class="text-xs text-slate-400">Log perpindahan kandang, rescue, barter, pelepasliaran atau pertukaran Lembaga Konservasi.</p>
+            </div>
+            <button onclick="openModal('add-mutasi-modal')" class="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-route"></i>
+              <span>Catat Pemindahan Mutasi</span>
+            </button>
+          </div>
+
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
+                    <th class="p-4">ID Mutasi</th>
+                    <th class="p-4">Jenis Satwa</th>
+                    <th class="p-4">Jenis Mutasi</th>
+                    <th class="p-4">Dari Lokasi</th>
+                    <th class="p-4">Ke Lokasi</th>
+                    <th class="p-4">Tanggal</th>
+                    <th class="p-4">Petugas Lapangan</th>
+                  </tr>
+                </thead>
+                <tbody id="mutasi-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. LAPORAN BKSDA TAB -->
+        <section id="tab-laporan" class="space-y-6 hidden fade-in">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Selector Panel -->
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm space-y-4">
+              <h4 class="font-bold text-slate-800 dark:text-white">Pengaturan Generator Laporan</h4>
+              
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Format Laporan</label>
+                  <select id="report-type" onchange="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                    <option value="kelahiran">Laporan Kelahiran Satwa ke BKSDA (A4 Portrait)</option>
+                    <option value="kematian">Laporan Kematian Satwa ke BKSDA (A4 Portrait)</option>
+                    <option value="kesehatan">Surat Keterangan Kesehatan Hewan - SKKH (A4 Portrait)</option>
+                    <option value="mutasi_bulanan">Laporan Bulanan Mutasi Lembaga Konservasi (A4 Landscape)</option>
+                    <option value="logbook_aves">Buku Catatan Harian Lembaga Konservasi - Aves (A4 Portrait)</option>
+                    <option value="logbook_mamalia">Buku Catatan Harian Lembaga Konservasi - Mamalia (A4 Portrait)</option>
+                    <option value="logbook_reptil">Buku Catatan Harian Lembaga Konservasi - Reptil (A4 Portrait)</option>
+                    <option value="studbook">Buku Induk (Studbook) Lembaga Konservasi (A4 Landscape)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Pilih Tanggal Laporan</label>
+                  <input type="date" id="report-date" value="2026-06-08" onchange="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                </div>
+
+                <div id="doctor-input-container" class="hidden">
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Nama Dokter Hewan (SKKH)</label>
+                  <input type="text" id="report-doctor-name" value="drh. Rayni Septianingsih" oninput="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Penanggung Jawab Laporan</label>
+                  <div class="p-3 bg-slate-100 dark:bg-slate-900 rounded-xl text-xs font-semibold text-slate-500">
+                    <i class="fa-solid fa-lock mr-1.5 text-blue-500"></i>Yonas Adestira Ichti
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 space-y-2">
+                <button onclick="generateSelectedReport()" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/10">
+                  <i class="fa-solid fa-arrows-rotate animate-spin" style="animation-duration: 8s;"></i>
+                  <span>Perbarui Draft</span>
+                </button>
+                <button onclick="printReport()" class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-print"></i>
+                  <span>Cetak / Ekspor PDF</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Panel (Responsif Kertas A4 Portrait/Landscape) -->
+            <div class="bg-slate-100 dark:bg-slate-900/60 p-4 md:p-8 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-md lg:col-span-3 min-h-[600px] flex flex-col justify-between overflow-x-auto no-scrollbar" id="report-preview-container">
+              <div id="print-area" class="paper-sim mx-auto bg-white rounded-lg shadow-lg">
+                <!-- Output HTML dinamis akan merender berkas di sini -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. QR CODE SCANNER & GENERATOR TAB -->
+        <section id="tab-qrcode" class="space-y-6 hidden fade-in">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Generator -->
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm space-y-4">
+              <h3 class="font-bold text-lg"><i class="fa-solid fa-qrcode mr-2 text-brand-500"></i>Cetak QR Code Kandang Satwa</h3>
+              <p class="text-xs text-slate-400">Pilih individu satwa untuk membuat kode QR yang dapat diunduh & ditempel di papan edukasi kandang.</p>
+              
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 mb-1">Pilih Satwa</label>
+                  <select id="qr-satwa-select" onchange="generateQRCodePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                    <!-- Loaded dynamically -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Preview Frame -->
+              <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center text-center">
+                <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 flex items-center justify-center mb-3">
+                  <div id="qr-svg-container"></div>
+                </div>
+                <h4 id="qr-preview-title" class="font-bold text-sm text-slate-800 dark:text-slate-200">Kasuari Gelambir-ganda</h4>
+                <p id="qr-preview-reg" class="text-xs text-slate-400">REG-003</p>
+                <button onclick="printSingleQR()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-200 dark:hover:bg-slate-300 dark:text-slate-950 text-white rounded-xl text-xs font-bold transition-all">
+                  <i class="fa-solid fa-print mr-1"></i>Cetak QR Satwa
+                </button>
+              </div>
+            </div>
+
+            <!-- Scanner Simulator -->
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-circle-nodes mr-2 text-brand-500"></i>Simulasi Pemindai QR Lapangan</h3>
+                <p class="text-xs text-slate-400 mb-4">Pindai QR Code kandang untuk melihat data populasi harian & riwayat secara instan.</p>
+                
+                <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center text-center">
+                  <div class="w-16 h-16 bg-brand-500/10 text-brand-500 rounded-full flex items-center justify-center mb-3 animate-pulse">
+                    <i class="fa-solid fa-camera text-2xl"></i>
+                  </div>
+                  <p class="text-xs font-semibold mb-3 text-slate-600 dark:text-slate-400">Kamera Pemindai Siap</p>
+                  <select id="simulate-scan-select" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none mb-3 text-slate-700 dark:text-slate-300">
+                    <!-- Loaded dynamically -->
+                  </select>
+                  <button onclick="triggerSimulatedScan()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition-all">
+                    Pindai & Tampilkan Data
+                  </button>
+                </div>
+              </div>
+
+              <!-- Scan Results Display -->
+              <div id="scan-result-card" class="hidden mt-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-brand-200 dark:border-brand-900/40 space-y-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 bg-brand-500/20 text-brand-500 rounded-lg flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </div>
+                  <div>
+                    <h5 id="scan-res-nama" class="font-bold text-xs">Kasuari Gelambir-ganda</h5>
+                    <p id="scan-res-latin" class="text-[10px] text-slate-400 italic">Casuarius casuarius</p>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-slate-200 dark:border-slate-700">
+                  <div>
+                    <span class="text-slate-400">Populasi:</span>
+                    <span id="scan-res-populasi" class="font-bold ml-1">8 ekor</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400">Kandang:</span>
+                    <span id="scan-res-kandang" class="font-bold ml-1">Kandang Utama</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="p-6 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 text-center text-xs text-slate-400 no-print">
+        e-Kuratorial Satwa &copy; 2026 PT. Satwa Gunung Bayan Lestari. All rights reserved.
+      </footer>
+    </div>
+  </div>
+
+  <!-- ==================== MODALS SECTION ==================== -->
+  <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4"></div>
+
+  <!-- 1. MODAL REGISTER/EDIT SATWA MASTER -->
+  <div id="add-satwa-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
+      <h3 id="modal-satwa-title" class="font-bold text-lg text-blue-600"><i class="fa-solid fa-circle-plus mr-2"></i>Registrasi Satwa Baru</h3>
+      <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="add-satwa-form" onsubmit="handleSaveSatwa(event)" class="space-y-4">
+      <input type="hidden" id="ms-id-hidden">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Nama Indonesia</label>
+          <input type="text" id="ms-nama" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Nama Latin (Spesies)</label>
+          <input type="text" id="ms-latin" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Kelas Satwa</label>
+          <select id="ms-kelas" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+            <option value="Aves">Aves</option>
+            <option value="Mamalia">Mamalia</option>
+            <option value="Reptil">Reptil</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Status Perlindungan</label>
+          <select id="ms-status" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+            <option value="Dilindungi">Dilindungi Undang-Undang</option>
+            <option value="Tidak Dilindungi">Tidak Dilindungi</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Jumlah (Ekor)</label>
+          <input type="number" id="ms-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Jenis Kelamin</label>
+          <select id="ms-gender" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+            <option value="Jantan">Jantan</option>
+            <option value="Betina">Betina</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Generasi</label>
+          <input type="text" id="ms-generasi" value="F0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Kandang</label>
+          <input type="text" id="ms-kandang" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Asal-Usul / Perolehan</label>
+          <input type="text" id="ms-asal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5">Keterangan / Kondisi Fisik</label>
+        <textarea id="ms-keterangan" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" rows="2"></textarea>
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
+        <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Data</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 2. MODAL TAMBAH KELAHIRAN -->
+  <div id="add-kelahiran-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
+      <h3 class="font-bold text-lg text-blue-600"><i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa</h3>
+      <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="add-kelahiran-form" onsubmit="handleSaveKelahiran(event)" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold mb-1.5">Pilih Spesies Induk</label>
+        <select id="kl-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+          <!-- Dynamic -->
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Tanggal Kelahiran / Masuk Lembaga Konservasi</label>
+          <input type="date" id="kl-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Jumlah Lahir (Ekor)</label>
+          <input type="number" id="kl-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Nomor Band / Tag ID</label>
+          <input type="text" id="kl-tag" value="Noband" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Keterangan Kondisi Anak</label>
+          <input type="text" id="kl-keterangan" value="Sehat secara klinis" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
+        <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Kelahiran</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 3. MODAL TAMBAH KEMATIAN -->
+  <div id="add-kematian-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
+      <h3 class="font-bold text-lg text-rose-500"><i class="fa-solid fa-skull-crossbones mr-2"></i>Catat Kematian Satwa</h3>
+      <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="add-kematian-form" onsubmit="handleSaveKematian(event)" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold mb-1.5">Pilih Spesies</label>
+        <select id="km-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+          <!-- Dynamic -->
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Tanggal Kematian</label>
+          <input type="date" id="km-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Jumlah Kematian (Ekor)</label>
+          <input type="number" id="km-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Penyebab Kematian / Sakit</label>
+          <input type="text" id="km-sebab" value="Sakit" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Nomor BAP Penitipan (Opsional)</label>
+          <input type="text" id="km-bap" value="-" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+        </div>
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
+        <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold">Simpan & Kurangi Populasi</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 4. MODAL TAMBAH TITIPAN -->
+  <div id="add-titipan-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
+      <h3 class="font-bold text-lg text-amber-500"><i class="fa-solid fa-handshake-angle mr-2"></i>Catat Satwa Titipan BKSDA</h3>
+      <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="add-titipan-form" onsubmit="handleSaveTitipan(event)" class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Nomor Dokumen BAP</label>
+          <input type="text" id="tp-bap" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" placeholder="Contoh: BA.30/K.18-SKW.3..." required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Instansi Pemilik</label>
+          <input type="text" id="tp-asal" value="BKSDA Kalimantan Timur" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5">Pilih Spesies</label>
+        <select id="tp-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+          <!-- Dynamic -->
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Jumlah Satwa (Ekor)</label>
+          <input type="number" id="tp-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Tanggal Penitipan</label>
+          <input type="date" id="tp-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
+        <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Data Titipan</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 5. MODAL TAMBAH MUTASI -->
+  <div id="add-mutasi-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
+      <h3 class="font-bold text-lg text-violet-500"><i class="fa-solid fa-route mr-2"></i>Catat Pemindahan Mutasi</h3>
+      <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="add-mutasi-form" onsubmit="handleSaveMutasi(event)" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold mb-1.5">Pilih Satwa</label>
+        <select id="mt-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+          <!-- Dynamic -->
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Jenis Mutasi</label>
+          <select id="mt-jenis" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+            <option value="Perpindahan Kandang">Perpindahan Kandang</option>
+            <option value="Rescue / Penyelamatan">Rescue / Penyelamatan</option>
+            <option value="Pelepasliaran">Pelepasliaran</option>
+            <option value="Barter / Pertukaran">Barter / Pertukaran</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Tanggal Mutasi</label>
+          <input type="date" id="mt-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Lokasi Asal</label>
+          <input type="text" id="mt-asal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1.5">Lokasi Baru</label>
+          <input type="text" id="mt-tujuan" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5">Petugas Lapangan</label>
+        <input type="text" id="mt-petugas" value="Yonas Adestira Ichti" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
+        <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Mutasi</button>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- ==================== SYSTEM JAVASCRIPT ==================== -->
+  <script>
+    let localDB = {
+      master: JSON.parse(localStorage.getItem('sgbl_master')) || [
+        { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", jumlah: 20, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Kondisi Sehat" },
+        { id: "REG-002", nama: "Betet Ekor Panjang", latin: "Psittacula longicauda", kelas: "Aves", jumlah: 3, status: "Dilindungi", kandang: "Kandang Kawat 4", asal: "Rescue BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat" },
+        { id: "REG-003", nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 8, status: "Dilindungi", kandang: "Kandang Besar Kasuari", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sangat Aktif" },
+        { id: "REG-004", nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 12, status: "Tidak Dilindungi", kandang: "Kandang Lemur", asal: "Import", generasi: "F0", kelamin: "Unknown", keterangan: "Lincah" },
+        { id: "REG-005", nama: "Sigung", latin: "Mephitis mephitis", kelas: "Mamalia", jumlah: 15, status: "Tidak Dilindungi", kandang: "Kandang Kubah Sigung", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sehat" },
+        { id: "REG-006", nama: "Tamandua", latin: "Tamandua tetradactyla", kelas: "Mamalia", jumlah: 4, status: "Tidak Dilindungi", kandang: "Kandang Khusus", asal: "Import", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat klinis" },
+        { id: "REG-007", nama: "Beruang Madu", latin: "Helarctos malayanus", kelas: "Mamalia", jumlah: 16, status: "Dilindungi", kandang: "Kandang Hutan Beruang", asal: "Penyelamatan", generasi: "F0", kelamin: "Betina", keterangan: "Aktif" },
+        { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", jumlah: 8, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", generasi: "F0", kelamin: "Jantan", keterangan: "Sehat klinis" }
+      ],
+      kelahiran: JSON.parse(localStorage.getItem('sgbl_kelahiran')) || [
+        { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "Noband", tanggal: "2026-03-02", kelamin: "Unknown", ket: "Anak sehat klinis" },
+        { nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 2, tag: "Noband", tanggal: "2026-03-06", kelamin: "Unknown", ket: "Lahir kembar sehat" }
+      ],
+      kematian: JSON.parse(localStorage.getItem('sgbl_kematian')) || [
+        { nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", jumlah: 1, tanggal: "2026-11-21", sebab: "Sakit", bap: "BA.30/K.18-SKW.3/KSA.1/01/2018" }
+      ],
+      titipan: JSON.parse(localStorage.getItem('sgbl_titipan')) || [
+        { bap: "BA.30/K.18-SKW.3/KSA.1/01/2018", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", tanggal: "2018-01-15", jumlah: 20, asal: "BKSDA Kaltim", status: "Titipan" }
+      ],
+      mutasi: JSON.parse(localStorage.getItem('sgbl_mutasi')) || [
+        { id: "MUT-001", nama: "Beruang Madu", jenis: "Perpindahan Kandang", asal: "Kandang Karantina", tujuan: "Kandang Hutan Beruang", tanggal: "2026-03-01", petugas: "Yonas Adestira Ichti" }
+      ],
+      activities: JSON.parse(localStorage.getItem('sgbl_activities')) || [
+        { icon: "fa-baby-carriage", color: "text-emerald-500", text: "Kelahiran Kasuari Gelambir-ganda teregistrasi.", time: "Maret 2026" }
+      ]
+    };
+
+    let populationChartInstance = null;
+    let proporsiChartInstance = null;
+
+    function updateClock() {
+      const now = new Date();
+      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      
+      const dayName = days[now.getDay()];
+      const dateStr = now.getDate().toString().padStart(2, '0');
+      const monthName = months[now.getMonth()];
+      const yearStr = now.getFullYear();
+      
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      
+      const clockElement = document.getElementById("live-clock");
+      if (clockElement) {
+        clockElement.innerHTML = `${dayName}, ${dateStr} ${monthName} ${yearStr} &bull; ${hours}:${minutes}:${seconds}`;
+      }
+    }
+    setInterval(updateClock, 1000);
+
+    // === LIFECYCLE INITIALIZER ===
+    window.onload = function() {
+      updateClock();
+      renderCharts();
+      renderAllTables();
+      populateSelectDropdowns();
+      generateSelectedReport();
+      updateDashboardStats();
+    };
+
+    function saveToLocalStorage() {
+      localStorage.setItem('sgbl_master', JSON.stringify(localDB.master));
+      localStorage.setItem('sgbl_kelahiran', JSON.stringify(localDB.kelahiran));
+      localStorage.setItem('sgbl_kematian', JSON.stringify(localDB.kematian));
+      localStorage.setItem('sgbl_titipan', JSON.stringify(localDB.titipan));
+      localStorage.setItem('sgbl_mutasi', JSON.stringify(localDB.mutasi));
+      localStorage.setItem('sgbl_activities', JSON.stringify(localDB.activities));
+    }
+
+    // === LOGIN / SESSION ===
+    function togglePasswordVisibility() {
+      const pinField = document.getElementById("login-password");
+      const icon = document.getElementById("password-toggle-icon");
+      if (pinField.type === "password") {
+        pinField.type = "text";
+        icon.className = "fa-solid fa-eye text-blue-600";
+      } else {
+        pinField.type = "password";
+        icon.className = "fa-solid fa-eye-slash text-blue-600";
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const pin = document.getElementById("login-password").value;
+
+      if (pin === "1234") {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("main-layout").classList.remove("hidden");
+        showToast("Sesi berhasil dibuka. Selamat bekerja Kurator!", "success");
+        updateDashboardStats();
+        setTimeout(renderCharts, 100);
+      } else {
+        showToast("PIN Sandi salah! Coba gunakan: 1234", "error");
+      }
+    }
+
+    function handleLogout() {
+      document.getElementById("main-layout").classList.add("hidden");
+      document.getElementById("login-screen").classList.remove("hidden");
+      showToast("Berhasil logout dari sistem.", "success");
+    }
+
+    // === THEME MANAGER ===
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      const icon = document.getElementById("theme-icon");
+      if (isDark) {
+        icon.className = "fa-solid fa-sun text-yellow-500";
+      } else {
+        icon.className = "fa-solid fa-moon text-blue-600";
+      }
+      renderCharts();
+    }
+
+    // === NAVIGATION AND TAB ROUTING ===
+    function switchTab(tabId) {
+      const tabs = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi', 'laporan', 'qrcode'];
+      tabs.forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add("hidden");
+      });
+
+      document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+
+      const buttons = document.querySelectorAll("#sidebar-nav button");
+      buttons.forEach(btn => {
+        const dTab = btn.getAttribute("data-tab");
+        if (dTab === tabId) {
+          btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-50 text-brand-700 dark:bg-brand-900/25 dark:text-brand-400";
+        } else {
+          btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50";
+        }
+      });
+
+      const titles = {
+        'dashboard': 'Dashboard Populasi',
+        'master': 'Data Master Satwa',
+        'kelahiran': 'Sistem Kelahiran & Penetasan',
+        'kematian': 'Arsip Kematian & BAP Satwa',
+        'titipan': 'Satwa Titipan Negara',
+        'mutasi': 'Mutasi Pemindahan Satwa',
+        'laporan': 'Pembuat Laporan Resmi BKSDA',
+        'qrcode': 'Cetak QR Code Informasi'
+      };
+      document.getElementById("header-title").innerText = titles[tabId];
+
+      if (tabId === 'dashboard') {
+        setTimeout(renderCharts, 50);
+      }
+    }
+
+    let isSidebarOpen = false;
+    function toggleMobileSidebar() {
+      const sidebar = document.querySelector("aside");
+      isSidebarOpen = !isSidebarOpen;
+      if (isSidebarOpen) {
+        sidebar.classList.remove("hidden");
+        sidebar.classList.add("block", "fixed", "inset-y-0", "left-0", "z-50", "w-64");
+      } else {
+        sidebar.classList.add("hidden");
+      }
+    }
+
+    // === POPULATE ALL SELECT DROPDOWNS ===
+    function populateSelectDropdowns() {
+      const dropdowns = ['kl-satwa', 'km-satwa', 'tp-satwa', 'mt-satwa', 'qr-satwa-select', 'simulate-scan-select'];
+      dropdowns.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.innerHTML = '';
+          localDB.master.forEach(satwa => {
+            const opt = document.createElement("option");
+            opt.value = satwa.nama;
+            opt.innerText = `${satwa.nama} (${satwa.latin})`;
+            select.appendChild(opt);
+          });
+        }
+      });
+      generateQRCodePreview();
+    }
+
+    // === TOAST NOTIFICATION ===
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = `p-4 rounded-xl shadow-lg border text-xs font-bold transition-all duration-300 flex items-center gap-3 w-72 pointer-events-auto transform translate-y-2 opacity-0 bg-white dark:bg-slate-800 ${
+        type === 'success' ? 'border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400' : 'border-rose-200 dark:border-rose-800 text-rose-500'
+      }`;
+
+      const icon = type === 'success' ? 'fa-circle-check text-blue-600' : 'fa-triangle-exclamation';
+      toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i><span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove("translate-y-2", "opacity-0");
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add("translate-y-2", "opacity-0");
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // === RENDER CHARTS ===
+    function renderCharts() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const textColor = isDark ? '#94a3b8' : '#64748b';
+      const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+      const popCtx = document.getElementById('populasiChart');
+      if (!popCtx) return;
+      const popCtx2d = popCtx.getContext('2d');
+      if (populationChartInstance) {
+        populationChartInstance.destroy();
+      }
+
+      populationChartInstance = new Chart(popCtx2d, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
+          datasets: [
+            {
+              label: 'Kelahiran 2026',
+              data: [1, 2, 8, 3, 2, 4, 1, 3, 2, 5, 1, 2],
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'Kematian 2026',
+              data: [0, 1, 0, 1, 0, 2, 0, 1, 1, 0, 2, 0],
+              borderColor: '#f43f5e',
+              backgroundColor: 'rgba(244, 63, 94, 0.1)',
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans', weight: '600' } } }
+          },
+          scales: {
+            x: { grid: { color: gridColor }, ticks: { color: textColor } },
+            y: { grid: { color: gridColor }, ticks: { color: textColor } }
+          }
+        }
+      });
+
+      const propCtx = document.getElementById('proporsiChart');
+      if (!propCtx) return;
+      const propCtx2d = propCtx.getContext('2d');
+      if (proporsiChartInstance) {
+        proporsiChartInstance.destroy();
+      }
+
+      const totalDilindungi = localDB.master.filter(s => s.status === 'Dilindungi').reduce((acc, s) => acc + s.jumlah, 0);
+      const totalTidakDilindungi = localDB.master.filter(s => s.status !== 'Dilindungi').reduce((acc, s) => acc + s.jumlah, 0);
+
+      proporsiChartInstance = new Chart(propCtx2d, {
+        type: 'doughnut',
+        data: {
+          labels: ['Dilindungi UU', 'Tidak Dilindungi'],
+          datasets: [{
+            data: [totalDilindungi, totalTidakDilindungi],
+            backgroundColor: ['#2563eb', '#94a3b8'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', weight: '600' } }
+            }
+          }
+        }
+      });
+    }
+
+    // === STATS & POPULATION CALCULATION ===
+    function updateDashboardStats() {
+      const totalPop = localDB.master.reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalLahir = localDB.kelahiran.reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalMati = localDB.kematian.reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalTitip = localDB.titipan.reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalDilindungi = localDB.master.filter(s => s.status === 'Dilindungi').reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalTidakDilindungi = localDB.master.filter(s => s.status !== 'Dilindungi').reduce((acc, curr) => acc + curr.jumlah, 0);
+
+      document.getElementById("stat-total-populasi").innerText = totalPop;
+      document.getElementById("stat-kelahiran").innerText = totalLahir;
+      document.getElementById("stat-kematian").innerText = totalMati;
+      document.getElementById("stat-titipan").innerText = totalTitip;
+      document.getElementById("stat-dilindungi").innerText = totalDilindungi;
+      document.getElementById("stat-tidak-dilindungi").innerText = totalTidakDilindungi;
+    }
+
+    // === RENDER ALL TABLES ===
+    function renderAllTables() {
+      // 1. Master Satwa
+      const masterBody = document.getElementById("master-table-body");
+      masterBody.innerHTML = '';
+      localDB.master.forEach(satwa => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+        row.innerHTML = `
+          <td class="p-4 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-slate-700/50 flex items-center justify-center text-blue-600 font-bold">
+              ${satwa.nama.charAt(0)}
+            </div>
+            <div>
+              <p class="font-bold text-slate-800 dark:text-white leading-tight">${satwa.nama}</p>
+              <p class="text-xs text-slate-400 italic">${satwa.latin}</p>
+            </div>
+          </td>
+          <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${satwa.kelas || 'Mamalia'}</span></td>
+          <td class="p-4 font-mono text-xs font-semibold">${satwa.id}</td>
+          <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${satwa.jumlah} ekor</td>
+          <td class="p-4">
+            <span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${
+              satwa.status === 'Dilindungi' 
+                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800' 
+                : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+            }">${satwa.status}</span>
+          </td>
+          <td class="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400">${satwa.kandang}</td>
+          <td class="p-4 text-center">
+            <button onclick="editSatwa('${satwa.id}')" class="text-slate-400 hover:text-brand-500 mr-2" title="Edit Data"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+            <button onclick="deleteSatwa('${satwa.id}')" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+          </td>
+        `;
+        masterBody.appendChild(row);
+      });
+
+      // 2. Kelahiran Satwa
+      const lahirBody = document.getElementById("kelahiran-table-body");
+      lahirBody.innerHTML = '';
+      localDB.kelahiran.forEach(kl => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+        row.innerHTML = `
+          <td class="p-4">
+            <p class="font-bold leading-tight">${kl.nama}</p>
+            <p class="text-xs text-slate-400 italic">${kl.latin}</p>
+          </td>
+          <td class="p-4 text-xs font-semibold">${kl.tanggal}</td>
+          <td class="p-4 font-bold text-blue-600">${kl.jumlah} ekor</td>
+          <td class="p-4 font-mono text-xs">${kl.tag}</td>
+          <td class="p-4 text-xs font-bold text-slate-500">${kl.kelamin}</td>
+          <td class="p-4 text-xs text-slate-400">${kl.ket}</td>
+        `;
+        lahirBody.appendChild(row);
+      });
+
+      // 3. Kematian Satwa
+      const matiBody = document.getElementById("kematian-table-body");
+      matiBody.innerHTML = '';
+      localDB.kematian.forEach((km, idx) => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+        row.innerHTML = `
+          <td class="p-4">
+            <p class="font-bold leading-tight">${km.nama}</p>
+            <p class="text-xs text-slate-400 italic">${km.latin}</p>
+          </td>
+          <td class="p-4 text-xs font-semibold">${km.tanggal}</td>
+          <td class="p-4 font-bold text-rose-500">${km.jumlah} ekor</td>
+          <td class="p-4"><span class="text-xs bg-rose-50 dark:bg-rose-950/20 text-rose-500 font-bold px-2 py-0.5 rounded">${km.sebab}</span></td>
+          <td class="p-4 text-xs font-mono text-slate-400 truncate max-w-[150px]" title="${km.bap}">${km.bap}</td>
+          <td class="p-4 text-center">
+            <button onclick="deleteKematian(${idx})" class="text-slate-400 hover:text-rose-500"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        matiBody.appendChild(row);
+      });
+
+      // 4. Satwa Titipan
+      const titipBody = document.getElementById("titipan-table-body");
+      titipBody.innerHTML = '';
+      localDB.titipan.forEach(tp => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+        row.innerHTML = `
+          <td class="p-4 font-mono text-xs font-bold text-amber-600">${tp.bap}</td>
+          <td class="p-4">
+            <p class="font-bold leading-tight">${tp.nama}</p>
+            <p class="text-xs text-slate-400 italic">${tp.latin}</p>
+          </td>
+          <td class="p-4 text-xs font-semibold">${tp.tanggal}</td>
+          <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${tp.jumlah} ekor</td>
+          <td class="p-4 text-xs font-bold text-slate-500">${tp.asal}</td>
+          <td class="p-4"><span class="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-bold">${tp.status}</span></td>
+        `;
+        titipBody.appendChild(row);
+      });
+
+      // 5. Mutasi Satwa
+      const mutasiBody = document.getElementById("mutasi-table-body");
+      mutasiBody.innerHTML = '';
+      localDB.mutasi.forEach(mt => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+        row.innerHTML = `
+          <td class="p-4 font-mono text-xs font-bold text-violet-600">${mt.id}</td>
+          <td class="p-4 font-bold">${mt.nama}</td>
+          <td class="p-4 text-xs"><span class="px-2 py-0.5 rounded bg-violet-50 dark:bg-violet-950/30 text-violet-600 font-bold">${mt.jenis}</span></td>
+          <td class="p-4 text-xs text-slate-400">${mt.asal}</td>
+          <td class="p-4 text-xs text-slate-800 dark:text-slate-100 font-semibold">${mt.tujuan}</td>
+          <td class="p-4 text-xs">${mt.tanggal}</td>
+          <td class="p-4 text-xs font-bold text-slate-500">${mt.petugas}</td>
+        `;
+        mutasiBody.appendChild(row);
+      });
+    }
+
+    // === FILTER FUNCTION FOR MASTER ===
+    function filterMasterTable() {
+      const q = document.getElementById("master-search").value.toLowerCase();
+      const statusFilter = document.getElementById("master-filter-status").value;
+      const kelasFilter = document.getElementById("master-filter-kelas").value;
+      const rows = document.querySelectorAll("#master-table-body tr");
+
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        const containsQ = text.includes(q);
+        const hasStatus = statusFilter === "" || text.includes(statusFilter.toLowerCase());
+        const hasKelas = kelasFilter === "" || text.includes(kelasFilter.toLowerCase());
+
+        if (containsQ && hasStatus && hasKelas) {
+          row.classList.remove("hidden");
+        } else {
+          row.classList.add("hidden");
+        }
+      });
+    }
+
+    // === MODAL CONTROL ===
+    function openModal(modalId) {
+      document.getElementById("modal-backdrop").classList.remove("hidden");
+      document.getElementById(modalId).classList.remove("hidden");
+    }
+
+    function closeAllModals() {
+      document.getElementById("modal-backdrop").classList.add("hidden");
+      const modals = ['add-satwa-modal', 'add-kelahiran-modal', 'add-kematian-modal', 'add-titipan-modal', 'add-mutasi-modal'];
+      modals.forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+    }
+
+    function openAddSatwaModal() {
+      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-circle-plus mr-2"></i>Registrasi Satwa Baru`;
+      document.getElementById("add-satwa-form").reset();
+      document.getElementById("ms-id-hidden").value = "";
+      openModal("add-satwa-modal");
+    }
+
+    function editSatwa(id) {
+      const satwa = localDB.master.find(s => s.id === id);
+      if (satwa) {
+        document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Satwa: ${satwa.id}`;
+        document.getElementById("ms-id-hidden").value = satwa.id;
+        document.getElementById("ms-nama").value = satwa.nama;
+        document.getElementById("ms-latin").value = satwa.latin;
+        document.getElementById("ms-kelas").value = satwa.kelas || "Mamalia";
+        document.getElementById("ms-status").value = satwa.status;
+        document.getElementById("ms-jumlah").value = satwa.jumlah;
+        document.getElementById("ms-gender").value = satwa.kelamin || "Unknown";
+        document.getElementById("ms-generasi").value = satwa.generasi || "F0";
+        document.getElementById("ms-kandang").value = satwa.kandang;
+        document.getElementById("ms-asal").value = satwa.asal;
+        document.getElementById("ms-keterangan").value = satwa.keterangan || "";
+        
+        openModal("add-satwa-modal");
+      }
+    }
+
+    // === CORE SAVE FUNCTIONS ===
+    function handleSaveSatwa(e) {
+      e.preventDefault();
+      const hiddenId = document.getElementById("ms-id-hidden").value;
+      const nama = document.getElementById("ms-nama").value;
+      const latin = document.getElementById("ms-latin").value;
+      const kelas = document.getElementById("ms-kelas").value;
+      const status = document.getElementById("ms-status").value;
+      const jumlah = parseInt(document.getElementById("ms-jumlah").value);
+      const kelamin = document.getElementById("ms-gender").value;
+      const generasi = document.getElementById("ms-generasi").value;
+      const kandang = document.getElementById("ms-kandang").value;
+      const asal = document.getElementById("ms-asal").value;
+      const keterangan = document.getElementById("ms-keterangan").value;
+
+      if (hiddenId) {
+        // Edit existing
+        const satwaIdx = localDB.master.findIndex(s => s.id === hiddenId);
+        if (satwaIdx !== -1) {
+          localDB.master[satwaIdx] = { id: hiddenId, nama, latin, kelas, jumlah, status, kandang, asal, generasi, kelamin, keterangan };
+          showToast(`Berhasil memperbarui data Satwa ${hiddenId}!`, "success");
+        }
+      } else {
+        // Add new
+        const newId = `REG-00${localDB.master.length + 1}`;
+        localDB.master.push({ id: newId, nama, latin, kelas, jumlah, status, kandang, asal, generasi, kelamin, keterangan });
+        showToast("Berhasil meregistrasikan satwa baru!", "success");
+      }
+      
+      saveToLocalStorage();
+      renderAllTables();
+      populateSelectDropdowns();
+      updateDashboardStats();
+      closeAllModals();
+    }
+
+    function handleSaveKelahiran(e) {
+      e.preventDefault();
+      const satwaNama = document.getElementById("kl-satwa").value;
+      const tanggal = document.getElementById("kl-tanggal").value;
+      const jumlah = parseInt(document.getElementById("kl-jumlah").value);
+      const tag = document.getElementById("kl-tag").value;
+      const ket = document.getElementById("kl-keterangan").value;
+
+      const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      if (satwaObj) {
+        satwaObj.jumlah += jumlah;
+        localDB.kelahiran.unshift({ nama: satwaNama, latin: satwaObj.latin, kelas: satwaObj.kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket });
+
+        saveToLocalStorage();
+        renderAllTables();
+        updateDashboardStats();
+        closeAllModals();
+        showToast("Laporan kelahiran baru telah disimpan!", "success");
+        document.getElementById("add-kelahiran-form").reset();
+      }
+    }
+
+    function handleSaveKematian(e) {
+      e.preventDefault();
+      const satwaNama = document.getElementById("km-satwa").value;
+      const tanggal = document.getElementById("km-tanggal").value;
+      const jumlah = parseInt(document.getElementById("km-jumlah").value);
+      const sebab = document.getElementById("km-sebab").value;
+      const bap = document.getElementById("km-bap").value;
+
+      const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      if (satwaObj) {
+        if (satwaObj.jumlah < jumlah) {
+          showToast("Jumlah kematian tidak boleh melebihi populasi saat ini!", "error");
+          return;
+        }
+        satwaObj.jumlah -= jumlah;
+        localDB.kematian.unshift({ nama: satwaNama, latin: satwaObj.latin, jumlah, tanggal, sebab, bap });
+
+        saveToLocalStorage();
+        renderAllTables();
+        updateDashboardStats();
+        closeAllModals();
+        showToast("Kematian satwa berhasil dicatat.", "success");
+        document.getElementById("add-kematian-form").reset();
+      }
+    }
+
+    function handleSaveTitipan(e) {
+      e.preventDefault();
+      const bap = document.getElementById("tp-bap").value;
+      const asal = document.getElementById("tp-asal").value;
+      const satwaNama = document.getElementById("tp-satwa").value;
+      const jumlah = parseInt(document.getElementById("tp-jumlah").value);
+      const tanggal = document.getElementById("tp-tanggal").value;
+
+      const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      if (satwaObj) {
+        satwaObj.jumlah += jumlah;
+        localDB.titipan.unshift({ bap, nama: satwaNama, latin: satwaObj.latin, tanggal, jumlah, asal, status: "Titipan" });
+
+        saveToLocalStorage();
+        renderAllTables();
+        updateDashboardStats();
+        closeAllModals();
+        showToast("Arsip titipan berhasil dimasukkan.", "success");
+        document.getElementById("add-titipan-form").reset();
+      }
+    }
+
+    function handleSaveMutasi(e) {
+      e.preventDefault();
+      const satwaNama = document.getElementById("mt-satwa").value;
+      const jenis = document.getElementById("mt-jenis").value;
+      const tanggal = document.getElementById("mt-tanggal").value;
+      const asal = document.getElementById("mt-asal").value;
+      const tujuan = document.getElementById("mt-tujuan").value;
+      const petugas = document.getElementById("mt-petugas").value;
+
+      const newId = `MUT-00${localDB.mutasi.length + 1}`;
+      localDB.mutasi.unshift({ id: newId, nama: satwaNama, jenis, asal, tujuan, tanggal, petugas });
+
+      saveToLocalStorage();
+      renderAllTables();
+      updateDashboardStats();
+      closeAllModals();
+      showToast("Berhasil mencatat mutasi pemindahan satwa.", "success");
+      document.getElementById("add-mutasi-form").reset();
+    }
+
+    // === STREAMING_CHUNK: Mengatur Orientasi Cetak Kertas A4 Dinamis (Portrait / Landscape) ===
+    function generateSelectedReport() {
+      const type = document.getElementById("report-type").value;
+      const rawDate = document.getElementById("report-date").value;
+      const doctorInputContainer = document.getElementById("doctor-input-container");
+      
+      if (type === "kesehatan") {
+        doctorInputContainer.classList.remove("hidden");
+      } else {
+        doctorInputContainer.classList.add("hidden");
+      }
+
+      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      const d = new Date(rawDate);
+      const formattedDateStr = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+      // Locked Signee for BKSDA Reports
+      const kuratorSignee = "Yonas Adestira Ichti";
+      const kuratorTitle = "Asst. Kurator Utama";
+
+      // Doctor's name dynamically input
+      const docName = document.getElementById("report-doctor-name").value || "drh. Rayni Septianingsih";
+
+      const reportArea = document.getElementById("print-area");
+
+      // Menentukan layout cetak kertas A4 Portrait atau Landscape secara Dinamis
+      const isLandscape = (type === "studbook" || type === "mutasi_bulanan");
+      
+      let styleElement = document.getElementById('dynamic-print-style');
+      if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = 'dynamic-print-style';
+        document.head.appendChild(styleElement);
+      }
+      
+      // Inject Rule Cetak Khusus & Ganti Class Tampilan Simulasi Layar Komputer
+      if (isLandscape) {
+        styleElement.innerHTML = '@page { size: A4 landscape; margin: 15mm; }';
+        reportArea.className = "paper-sim mx-auto text-sm leading-relaxed overflow-x-auto no-scrollbar w-full max-w-[297mm] min-h-[210mm] shadow-lg bg-white text-black transition-all";
+      } else {
+        styleElement.innerHTML = '@page { size: A4 portrait; margin: 15mm; }';
+        reportArea.className = "paper-sim mx-auto text-sm leading-relaxed overflow-x-auto no-scrollbar w-full max-w-[210mm] min-h-[297mm] shadow-lg bg-white text-black transition-all";
+      }
+
+      if (type === "kelahiran") {
+        let rowsHtml = '';
+        localDB.kelahiran.forEach((kl, idx) => {
+          rowsHtml += `
+            <tr class="border-b border-slate-300">
+              <td class="p-2 border border-slate-300 text-center">${idx + 1}</td>
+              <td class="p-2 border border-slate-300 font-bold">${kl.nama} <br><span class="text-xs italic font-normal">${kl.latin}</span></td>
+              <td class="p-2 border border-slate-300 text-center font-bold">${kl.jumlah} ekor</td>
+              <td class="p-2 border border-slate-300 text-center font-mono">${kl.tag}</td>
+              <td class="p-2 border border-slate-300 text-center">${kl.tanggal}</td>
+              <td class="p-2 border border-slate-300 text-center">${kl.kelamin}</td>
+              <td class="p-2 border border-slate-300 text-xs">${kl.ket || '-'}</td>
+            </tr>
+          `;
+        });
+
+        reportArea.innerHTML = `
+          <div class="border-b-4 border-double border-slate-900 pb-4 text-center mb-6 text-slate-900">
+            <h1 class="text-2xl font-black uppercase tracking-wide">PT. Satwa Gunung Bayan Lestari</h1>
+            <p class="text-xs font-bold text-slate-500">Lembaga Konservasi / Taman Satwa - Kecamatan Tabang, Kabupaten Kutai Kartanegara</p>
+            <p class="text-[11px] text-slate-400">Provinsi Kalimantan Timur, Indonesia</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-xs mb-6 text-slate-900">
+            <div>
+              <p><strong>Tabang, ${formattedDateStr}</strong></p>
+              <p>Nomor : 03/SGBL/ZOO/IV/2026</p>
+              <p>Lampiran : -</p>
+              <p>Perihal : Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold">Kepada Yth.</p>
+              <p>Kepala Balai Konservasi Sumber Daya Alam</p>
+              <p>Kalimantan Timur</p>
+              <p class="italic">Di Samarinda</p>
+            </div>
+          </div>
+
+          <p class="text-xs mb-4 text-slate-900">Dengan hormat,</p>
+          <p class="text-xs mb-4 text-slate-900">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk dapat dilakukan pemeriksaan dengan data sebagai berikut:</p>
+
+          <table class="w-full text-xs border border-slate-300 border-collapse mb-6 text-slate-900">
+            <thead>
+              <tr class="bg-slate-100 font-bold text-center">
+                <th class="p-2 border border-slate-300" style="width: 5%">No</th>
+                <th class="p-2 border border-slate-300" style="width: 35%">Jenis Satwa (Indonesia/Latin)</th>
+                <th class="p-2 border border-slate-300" style="width: 12%">Jumlah</th>
+                <th class="p-2 border border-slate-300" style="width: 12%">No. Tag / ID</th>
+                <th class="p-2 border border-slate-300" style="width: 12%">Tgl. Lahir</th>
+                <th class="p-2 border border-slate-300" style="width: 10%">Kelamin</th>
+                <th class="p-2 border border-slate-300" style="width: 14%">Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <p class="text-xs mb-8 text-slate-900">Demikian laporan kelahiran ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+
+          <div class="flex justify-end text-xs text-slate-900">
+            <div class="text-center w-64">
+              <p>Hormat kami,</p>
+              <p class="font-bold mb-16">${kuratorTitle}</p>
+              <p class="font-bold underline">${kuratorSignee}</p>
+              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
+            </div>
+          </div>
+        `;
+      } else if (type === "kematian") {
+        let rowsHtml = '';
+        localDB.kematian.forEach((km, idx) => {
+          rowsHtml += `
+            <tr class="border-b border-slate-300">
+              <td class="p-2 border border-slate-300 text-center">${idx + 1}</td>
+              <td class="p-2 border border-slate-300 font-bold">${km.nama} <br><span class="text-xs italic font-normal">${km.latin}</span></td>
+              <td class="p-2 border border-slate-300 text-center font-bold">${km.jumlah} ekor</td>
+              <td class="p-2 border border-slate-300 text-center font-mono">${km.tanggal}</td>
+              <td class="p-2 border border-slate-300 text-center text-rose-600 font-bold">${km.sebab}</td>
+              <td class="p-2 border border-slate-300 text-xs font-mono">${km.bap}</td>
+            </tr>
+          `;
+        });
+
+        reportArea.innerHTML = `
+          <div class="border-b-4 border-double border-slate-900 pb-4 text-center mb-6 text-slate-900">
+            <h1 class="text-2xl font-black uppercase tracking-wide">PT. Satwa Gunung Bayan Lestari</h1>
+            <p class="text-xs font-bold text-slate-500">Lembaga Konservasi / Taman Satwa - Kecamatan Tabang, Kabupaten Kutai Kartanegara</p>
+            <p class="text-[11px] text-slate-400">Provinsi Kalimantan Timur, Indonesia</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-xs mb-6 text-slate-900">
+            <div>
+              <p><strong>Tabang, ${formattedDateStr}</strong></p>
+              <p>Nomor : 12/SGBL-BAK/ZOO/II/2026</p>
+              <p>Lampiran : -</p>
+              <p>Perihal : Laporan Kematian Satwa Liar Dilindungi dan Tidak Dilindungi</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold">Kepada Yth.</p>
+              <p>Kepala Balai Konservasi Sumber Daya Alam</p>
+              <p>Kalimantan Timur</p>
+              <p class="italic">Di Samarinda</p>
+            </div>
+          </div>
+
+          <p class="text-xs mb-4 text-slate-900">Dengan hormat,</p>
+          <p class="text-xs mb-4 text-slate-900">Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk kemudian dapat dilakukan pemeriksaan pasca-kematian (nekropsi) dengan data sebagai berikut:</p>
+
+          <table class="w-full text-xs border border-slate-300 border-collapse mb-6 text-slate-900">
+            <thead>
+              <tr class="bg-slate-100 font-bold text-center">
+                <th class="p-2 border border-slate-300" style="width: 5%">No</th>
+                <th class="p-2 border border-slate-300" style="width: 35%">Jenis Satwa (Indonesia/Latin)</th>
+                <th class="p-2 border border-slate-300" style="width: 10%">Jumlah</th>
+                <th class="p-2 border border-slate-300" style="width: 15%">Tgl. Kematian</th>
+                <th class="p-2 border border-slate-300" style="width: 15%">Sebab Kematian</th>
+                <th class="p-2 border border-slate-300" style="width: 20%">No. BAP Penitipan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <p class="text-xs mb-8 text-slate-900">Demikian laporan kematian ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+
+          <div class="flex justify-end text-xs text-slate-900">
+            <div class="text-center w-64">
+              <p>Hormat kami,</p>
+              <p class="font-bold mb-16">${kuratorTitle}</p>
+              <p class="font-bold underline">${kuratorSignee}</p>
+              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
+            </div>
+          </div>
+        `;
+      } else if (type === "kesehatan") {
+        let rowsHtml = '';
+        localDB.master.forEach((st, idx) => {
+          rowsHtml += `
+            <tr class="border-b border-slate-300">
+              <td class="p-2 border border-slate-300 text-center">${idx + 1}</td>
+              <td class="p-2 border border-slate-300 font-bold">${st.nama}</td>
+              <td class="p-2 border border-slate-300 italic font-medium">${st.latin}</td>
+              <td class="p-2 border border-slate-300 text-center font-bold">${st.jumlah} ekor</td>
+            </tr>
+          `;
+        });
+
+        reportArea.innerHTML = `
+          <div class="border-b-4 border-double border-slate-900 pb-4 text-center mb-6 text-slate-900">
+            <h1 class="text-2xl font-black uppercase tracking-wide">PT. Satwa Gunung Bayan Lestari</h1>
+            <p class="text-xs font-bold text-slate-500">Lembaga Konservasi / Taman Satwa - Kecamatan Tabang, Kabupaten Kutai Kartanegara</p>
+            <p class="text-[11px] text-slate-400">Provinsi Kalimantan Timur, Indonesia</p>
+          </div>
+
+          <div class="text-center mb-6 text-slate-900">
+            <h2 class="text-sm font-extrabold underline tracking-wide uppercase">Surat Keterangan Kesehatan Hewan</h2>
+            <p class="text-xs">Nomor: 03/SKKH-VET/VI/2026</p>
+          </div>
+
+          <p class="text-xs mb-4 text-slate-900">Yang bertanda tangan di bawah ini, saya <strong>${docName}</strong> sebagai Dokter Hewan di Lembaga Konservasi PT. Satwa Gunung Bayan Lestari menerangkan bahwa pada hari ini telah dilakukan pemeriksaan menyeluruh terhadap satwa koleksi sebagai berikut:</p>
+
+          <table class="w-full text-xs border border-slate-300 border-collapse mb-6 text-slate-900">
+            <thead>
+              <tr class="bg-slate-100 font-bold">
+                <th class="p-2 border border-slate-300" style="width: 10%">No</th>
+                <th class="p-2 border border-slate-300" style="width: 45%">Nama Jenis Satwa</th>
+                <th class="p-2 border border-slate-300" style="width: 30%">Nama Ilmiah</th>
+                <th class="p-2 border border-slate-300" style="width: 15%">Jumlah</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <p class="text-xs font-bold bg-blue-50 text-blue-800 p-3 rounded-xl border border-blue-200 mb-6">Menyatakan bahwa seluruh satwa yang tertera di atas dalam kondisi SEHAT secara klinis, prima, serta tidak menunjukkan gejala-gejala penyakit menular.</p>
+
+          <p class="text-xs mb-8 text-slate-900">Demikian Surat Keterangan Kesehatan Hewan (SKKH) ini dibuat dengan sebenar-benarnya untuk dipergunakan sebagaimana mestinya.</p>
+
+          <div class="flex justify-end text-xs text-slate-900">
+            <div class="text-center w-64">
+              <p>Tabang, ${formattedDateStr}</p>
+              <p class="font-bold mb-16">Dokter Hewan LK</p>
+              <p class="font-bold underline">${docName}</p>
+              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
+            </div>
+          </div>
+        `;
+      } else if (type === "mutasi_bulanan") {
+        let rowsHtml = '';
+        localDB.master.forEach((st, idx) => {
+          let lahirBulanIni = localDB.kelahiran.filter(k => k.nama === st.nama).reduce((acc, curr) => acc + curr.jumlah, 0);
+          let matiBulanIni = localDB.kematian.filter(k => k.nama === st.nama).reduce((acc, curr) => acc + curr.jumlah, 0);
+          let indukAwal = st.jumlah - lahirBulanIni + matiBulanIni;
+
+          rowsHtml += `
+            <tr class="border border-slate-400 text-slate-900 text-[10px]">
+              <td class="p-1.5 border border-slate-400 text-center">${idx + 1}</td>
+              <td class="p-1.5 border border-slate-400 font-semibold">${st.nama} <br><span class="text-[9px] font-normal italic">${st.latin}</span></td>
+              <td class="p-1.5 border border-slate-400 text-center font-bold">${indukAwal}</td>
+              <td class="p-1.5 border border-slate-400 text-center">0</td>
+              <td class="p-1.5 border border-slate-400 text-center text-slate-600">${st.asal}</td>
+              <td class="p-1.5 border border-slate-400 text-center font-bold text-emerald-600">${lahirBulanIni > 0 ? lahirBulanIni : '-'}</td>
+              <td class="p-1.5 border border-slate-400 text-center">-</td>
+              <td class="p-1.5 border border-slate-400 text-center">-</td>
+              <td class="p-1.5 border border-slate-400 text-center font-bold text-rose-600">${matiBulanIni > 0 ? matiBulanIni : '-'}</td>
+              <td class="p-1.5 border border-slate-400 text-center font-bold">${st.jumlah}</td>
+              <td class="p-1.5 border border-slate-400 text-center">0</td>
+              <td class="p-1.5 border border-slate-400 text-[9px]">${st.keterangan || st.status}</td>
+            </tr>
+          `;
+        });
+
+        reportArea.innerHTML = `
+          <div class="text-slate-900 pb-4 text-center mb-6">
+            <h1 class="text-base font-bold uppercase tracking-wide">LAPORAN BULANAN MUTASI LEMBAGA KONSERVASI SATWA</h1>
+            <p class="text-xs font-bold text-slate-500">PT. SATWA GUNUNG BAYAN LESTARI &bull; BULAN: ${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-[11px] mb-4 text-slate-900">
+            <div>
+              <p>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></p>
+              <p>SK. LEMBAGA KONSERVASI : S.542/KK/2026</p>
+              <p>ALAMAT KANTOR : Kec. Tabang, Kab. Kutai Kartanegara</p>
+            </div>
+            <div class="text-right">
+              <p>SK. PENGEDAR DN : TERSEDIA</p>
+              <p>SK. PENGEDAR LN : -</p>
+            </div>
+          </div>
+
+          <table class="w-full text-[10px] border-collapse border border-slate-400 mb-6 text-slate-900">
+            <thead>
+              <tr class="bg-slate-100 text-center font-bold">
+                <th rowspan="2" class="p-1 border border-slate-400" style="width: 3%">No.</th>
+                <th rowspan="2" class="p-1 border border-slate-400" style="width: 25%">Nama Jenis Satwa</th>
+                <th rowspan="2" class="p-1 border border-slate-400" style="width: 7%">Jumlah Induk (Awal)</th>
+                <th rowspan="2" class="p-1 border border-slate-400" style="width: 7%">Jumlah Anak (Awal)</th>
+                <th rowspan="2" class="p-1 border border-slate-400" style="width: 10%">Asal-usul Induk</th>
+                <th colspan="4" class="p-1 border border-slate-400">Jumlah Mutasi Bulan Ini</th>
+                <th colspan="2" class="p-1 border border-slate-400">Jumlah Akhir Bulan Ini</th>
+                <th rowspan="2" class="p-1 border border-slate-400" style="width: 12%">Keterangan</th>
+              </tr>
+              <tr class="bg-slate-50 text-center font-semibold text-[8px]">
+                <th class="p-1 border border-slate-400 text-emerald-600">Tambah (Induk)</th>
+                <th class="p-1 border border-slate-400 text-emerald-600">Tambah (Anak)</th>
+                <th class="p-1 border border-slate-400 text-rose-600">Kurang (Induk)</th>
+                <th class="p-1 border border-slate-400 text-rose-600">Kurang (Anak)</th>
+                <th class="p-1 border border-slate-400">Induk</th>
+                <th class="p-1 border border-slate-400">Anakan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <div class="flex justify-end text-xs text-slate-900 mt-6">
+            <div class="text-center w-64">
+              <p>Pimpinan Lembaga Konservasi / Kurator Utama,</p>
+              <p class="font-bold mb-16">${kuratorTitle}</p>
+              <p class="font-bold underline">${kuratorSignee}</p>
+              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
+            </div>
+          </div>
+        `;
+      } else if (type === "logbook_aves" || type === "logbook_mamalia" || type === "logbook_reptil") {
+        let categoryName = type === "logbook_aves" ? "AVES / BURUNG" : (type === "logbook_reptil" ? "REPTIL" : "MAMALIA");
+        let filterKelas = type === "logbook_aves" ? "Aves" : (type === "logbook_reptil" ? "Reptil" : "Mamalia");
+        
+        let filteredSatwa = localDB.master.filter(s => s.kelas === filterKelas);
+        let logbookRows = '';
+        
+        filteredSatwa.forEach((st, idx) => {
+          logbookRows += `
+            <tr class="border border-slate-400 text-slate-900 text-xs">
+              <td class="p-2 border border-slate-400 text-center" rowspan="3">${idx + 1}</td>
+              <td class="p-2 border border-slate-400 text-center font-medium">Senin, ${formattedDateStr} <br> Pagi 07:00</td>
+              <td class="p-2 border border-slate-400">Pemberian pakan rutin harian, multivitamin cair, serta pembersihan total sanitasi kandang ${st.kandang}.</td>
+              <td class="p-2 border border-slate-400 text-center text-emerald-600 font-bold">Sehat Klinis</td>
+              <td class="p-2 border border-slate-400 text-center font-bold">${st.jumlah}</td>
+              <td class="p-2 border border-slate-400 text-xs">${st.keterangan || 'Kondisi Prima'}</td>
+            </tr>
+            <tr class="border border-slate-400 text-slate-900 text-xs">
+              <td class="p-2 border border-slate-400 text-center font-medium">Siang 12:00</td>
+              <td class="p-2 border border-slate-400">Pemeriksaan visual rutin oleh Dokter Hewan, pencatatan suhu, dan penyemprotan desinfektan di koridor luar.</td>
+              <td class="p-2 border border-slate-400 text-center text-emerald-600 font-bold">Sehat Klinis</td>
+              <td class="p-2 border border-slate-400 text-center font-bold">${st.jumlah}</td>
+              <td class="p-2 border border-slate-400 text-xs">Monitoring perilaku aktif</td>
+            </tr>
+            <tr class="border border-slate-400 text-slate-900 text-xs">
+              <td class="p-2 border border-slate-400 text-center font-medium">Sore 16:30</td>
+              <td class="p-2 border border-slate-400">Pemberian pakan sore / ekstra fooding, kontrol gerendel/gembok pintu kandang ganda, memastikan keamanan malam.</td>
+              <td class="p-2 border border-slate-400 text-center text-emerald-600 font-bold">Sehat Klinis</td>
+              <td class="p-2 border border-slate-400 text-center font-bold">${st.jumlah}</td>
+              <td class="p-2 border border-slate-400 text-xs">Kandang terkunci aman</td>
+            </tr>
+          `;
+        });
+
+        reportArea.innerHTML = `
+          <div class="text-slate-900 pb-4 text-center mb-6">
+            <h1 class="text-base font-bold uppercase tracking-wide">BUKU CATATAN HARIAN (LOGBOOK) LEMBAGA KONSERVASI JENIS ${categoryName}</h1>
+            <p class="text-xs font-bold text-slate-500">PT. SATWA GUNUNG BAYAN LESTARI &bull; ${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-[11px] mb-4 text-slate-900">
+            <div>
+              <p>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></p>
+              <p>SK. LEMBAGA KONSERVASI : S.542/KK/2026</p>
+              <p>ALAMAT KANTOR : Kec. Tabang, Kab. Kutai Kartanegara</p>
+            </div>
+            <div class="text-right">
+              <p>SK. PENGEDAR DN : TERSEDIA</p>
+              <p>BULAN/TAHUN : ${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}</p>
+            </div>
+          </div>
+
+          <table class="w-full text-xs border-collapse border border-slate-400 mb-6 text-slate-900">
+            <thead>
+              <tr class="bg-slate-100 font-bold text-center">
+                <th class="p-2 border border-slate-400" style="width: 5%">No.</th>
+                <th class="p-2 border border-slate-400" style="width: 20%">Waktu (hari, tanggal, jam)</th>
+                <th class="p-2 border border-slate-400" style="width: 40%">Aktivitas Pemeliharaan / Perawatan</th>
+                <th class="p-2 border border-slate-400" style="width: 15%">Kondisi Satwa</th>
+                <th class="p-2 border border-slate-400" style="width: 10%">Jumlah (Ekor)</th>
+                <th class="p-2 border border-slate-400" style="width: 10%">Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${logbookRows || '<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">Tidak ada satwa kelas ini dalam basis data lembaga konservasi.</td></tr>'}
+            </tbody>
+          </table>
+
+          <div class="flex justify-end text-xs text-slate-900 mt-6">
+            <div class="text-center w-64">
+              <p>Disahkan oleh,</p>
+              <p class="font-bold mb-16">Pimpinan Lembaga Konservasi / Kurator Utama</p>
+              <p class="font-bold underline">${kuratorSignee}</p>
+              <p class="text-[10px] text-slate-500">${kuratorTitle}</p>
+            </div>
+          </div>
+        `;
+      } else if (type === "studbook") {
+        let rowsHtml = '';
+        localDB.kelahiran.forEach((kl, idx) => {
+          rowsHtml += `
+            <tr class="border border-slate-400 text-slate-900 text-[10px]">
+              <td class="p-1.5 border border-slate-400 text-center">${idx + 1}</td>
+              <!-- Jantan -->
+              <td class="p-1.5 border border-slate-400 text-center font-semibold">F0</td>
+              <td class="p-1.5 border border-slate-400 text-center">1</td>
+              <td class="p-1.5 border border-slate-400 text-center font-mono text-[9px]">Noband</td>
+              <!-- Betina -->
+              <td class="p-1.5 border border-slate-400 text-center font-semibold">F0</td>
+              <td class="p-1.5 border border-slate-400 text-center">1</td>
+              <td class="p-1.5 border border-slate-400 text-center font-mono text-[9px]">Noband</td>
+              
+              <td class="p-1.5 border border-slate-400 text-center">Lembaga Konservasi</td>
+              <td class="p-1.5 border border-slate-400 text-center">2024</td>
+              <td class="p-1.5 border border-slate-400 text-center font-semibold text-blue-600">A-1</td>
+              
+              <!-- Anakan -->
+              <td class="p-1.5 border border-slate-400 text-center font-bold text-purple-700">${kl.kelamin}</td>
+              <td class="p-1.5 border border-slate-400 text-center font-semibold">F1</td>
+              <td class="p-1.5 border border-slate-400 text-center font-bold text-emerald-600">${kl.jumlah}</td>
+              <td class="p-1.5 border border-slate-400 text-center font-mono text-[9px]">${kl.tag}</td>
+              <td class="p-1.5 border border-slate-400 text-[9px]">${kl.ket || '-'}</td>
+            </tr>
+          `;
+        });
+
+        reportArea.innerHTML = `
+          <div class="text-center mb-6 text-slate-900">
+            <h1 class="text-base font-bold uppercase tracking-wide">BUKU INDUK (STUDBOOK) KOLEKSI SATWA LEMBAGA KONSERVASI</h1>
+            <p class="text-xs font-bold text-slate-500">PT. SATWA GUNUNG BAYAN LESTARI</p>
+            <p class="text-[10px] text-slate-400">Kecamatan Tabang, Kabupaten Kutai Kartanegara, Kalimantan Timur</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-[11px] mb-4 text-slate-900">
+            <div>
+              <p>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></p>
+              <p>ALAMAT KANTOR : Tabang, Kukar, Kalimantan Timur</p>
+              <p>NO. KANDANG INDUKAN : -</p>
+            </div>
+            <div class="text-right">
+              <p>SK. LEMBAGA KONSERVASI : S.542/KK/2026</p>
+              <p>TANGGAL LAPORAN : <strong>${formattedDateStr}</strong></p>
+              <p>KELAS SATWA : AVES / MAMALIA / REPTIL</p>
+            </div>
+          </div>
+
+          <table class="w-full text-[9px] border-collapse border border-slate-400 mb-6 text-slate-900">
+            <thead>
+              <tr class="bg-slate-100 text-center font-bold">
+                <th rowspan="2" class="p-1.5 border border-slate-400">No.</th>
+                <th colspan="3" class="p-1.5 border border-slate-400">Indukan Jantan</th>
+                <th colspan="3" class="p-1.5 border border-slate-400">Indukan Betina</th>
+                <th rowspan="2" class="p-1.5 border border-slate-400">Asal Usul</th>
+                <th rowspan="2" class="p-1.5 border border-slate-400">Waktu Peroleh</th>
+                <th rowspan="2" class="p-1.5 border border-slate-400">No. Kandang</th>
+                <th colspan="4" class="p-1.5 border border-slate-400">Anakan / Keturunan</th>
+                <th rowspan="2" class="p-1.5 border border-slate-400">Keterangan / BAP Lahir</th>
+              </tr>
+              <tr class="bg-slate-50 text-center font-semibold text-[8px]">
+                <th class="p-1 border border-slate-400">Gen</th>
+                <th class="p-1 border border-slate-400">Jml</th>
+                <th class="p-1 border border-slate-400">Tagging</th>
+                <th class="p-1 border border-slate-400">Gen</th>
+                <th class="p-1 border border-slate-400">Jml</th>
+                <th class="p-1 border border-slate-400">Tagging</th>
+                <th class="p-1 border border-slate-400">Sex</th>
+                <th class="p-1 border border-slate-400">Gen</th>
+                <th class="p-1 border border-slate-400">Jml</th>
+                <th class="p-1 border border-slate-400">BAP / Tag</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml || '<tr><td colspan="15" class="p-4 text-center text-slate-400 italic">Belum ada anakan baru lembaga konservasi terdaftar.</td></tr>'}
+            </tbody>
+          </table>
+
+          <div class="flex justify-end text-xs mt-6 text-slate-900">
+            <div class="text-center w-64">
+              <p>Disahkan oleh,</p>
+              <p class="font-bold mb-16">Pimpinan Lembaga Konservasi / Kurator Utama</p>
+              <p class="font-bold underline">${kuratorSignee}</p>
+              <p class="text-[10px] text-slate-500">${kuratorTitle}</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function printReport() {
+      window.print();
+    }
+
+    // === INTERACTIVE QR CODE GENERATOR ===
+    function generateQRCodePreview() {
+      const selectedNama = document.getElementById("qr-satwa-select").value;
+      const satwa = localDB.master.find(s => s.nama === selectedNama);
+      if (satwa) {
+        document.getElementById("qr-preview-title").innerText = satwa.nama;
+        document.getElementById("qr-preview-reg").innerText = satwa.id;
+
+        const qrContainer = document.getElementById("qr-svg-container");
+        qrContainer.innerHTML = `
+          <svg class="w-28 h-28 text-slate-900" viewBox="0 0 100 100">
+            <rect width="100" height="100" fill="white"/>
+            <rect x="5" y="5" width="25" height="25" fill="#2563eb" stroke="white" stroke-width="3"/>
+            <rect x="10" y="10" width="15" height="15" fill="white"/>
+            <rect x="13" y="13" width="9" height="9" fill="#2563eb"/>
+
+            <rect x="70" y="5" width="25" height="25" fill="#2563eb" stroke="white" stroke-width="3"/>
+            <rect x="75" y="10" width="15" height="15" fill="white"/>
+            <rect x="78" y="13" width="9" height="9" fill="#2563eb"/>
+
+            <rect x="5" y="70" width="25" height="25" fill="#2563eb" stroke="white" stroke-width="3"/>
+            <rect x="10" y="75" width="15" height="15" fill="white"/>
+            <rect x="13" y="78" width="9" height="9" fill="#2563eb"/>
+
+            <g fill="#1e3a8a">
+              <rect x="35" y="10" width="5" height="5"/>
+              <rect x="45" y="15" width="10" height="5"/>
+              <rect x="60" y="20" width="5" height="10"/>
+              <rect x="35" y="30" width="15" height="5"/>
+              <rect x="55" y="40" width="5" height="10"/>
+              <rect x="10" y="45" width="10" height="5"/>
+              <rect x="30" y="50" width="5" height="15"/>
+              <rect x="45" y="60" width="15" height="5"/>
+              <rect x="65" y="55" width="10" height="10"/>
+              <rect x="75" y="45" width="15" height="5"/>
+              <rect x="80" y="60" width="5" height="15"/>
+              <rect x="40" y="80" width="10" height="10"/>
+            </g>
+          </svg>
+        `;
+      }
+    }
+
+    function triggerSimulatedScan() {
+      const selectedNama = document.getElementById("simulate-scan-select").value;
+      const satwa = localDB.master.find(s => s.nama === selectedNama);
+      if (satwa) {
+        document.getElementById("scan-res-nama").innerText = satwa.nama;
+        document.getElementById("scan-res-latin").innerText = satwa.latin;
+        document.getElementById("scan-res-populasi").innerText = `${satwa.jumlah} ekor`;
+        document.getElementById("scan-res-kandang").innerText = satwa.kandang;
+
+        document.getElementById("scan-result-card").classList.remove("hidden");
+        showToast("QR Code Berhasil Di-scan!", "success");
+      }
+    }
+
+    function deleteSatwa(id) {
+      localDB.master = localDB.master.filter(s => s.id !== id);
+      saveToLocalStorage();
+      renderAllTables();
+      populateSelectDropdowns();
+      updateDashboardStats();
+      showToast("Satwa dihapus dari master data.", "success");
+    }
+
+    function deleteKematian(index) {
+      localDB.kematian.splice(index, 1);
+      saveToLocalStorage();
+      renderAllTables();
+      updateDashboardStats();
+      showToast("Arsip kematian berhasil dihapus.", "success");
+    }
+
+    // =============================================
+    // INTEGRASI GOOGLE APPS SCRIPT / SPREADSHEET
+    // Ganti nilai APPS_SCRIPT_URL dengan URL Web App
+    // yang Anda dapatkan setelah deploy Code.gs
+    // =============================================
+    const APPS_SCRIPT_URL = localStorage.getItem('sgbl_api_url') || "";
+
+    /**
+     * Ambil semua data dari Google Spreadsheet via Apps Script
+     */
+    async function loadFromSpreadsheet() {
+      if (!APPS_SCRIPT_URL) {
+        showToast("API URL belum diatur. Klik tombol ⚙ Sinkronisasi.", "error");
+        return;
+      }
+      try {
+        showToast("Memuat data dari Spreadsheet...", "success");
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=getData`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        
+        if (data.master && data.master.length > 0) {
+          // Konversi jumlah ke number
+          data.master = data.master.map(s => ({ ...s, jumlah: Number(s.jumlah) || 0 }));
+          data.kelahiran = (data.kelahiran || []).map(k => ({ ...k, jumlah: Number(k.jumlah) || 0 }));
+          data.kematian = (data.kematian || []).map(k => ({ ...k, jumlah: Number(k.jumlah) || 0 }));
+          data.titipan = (data.titipan || []).map(t => ({ ...t, jumlah: Number(t.jumlah) || 0 }));
+          
+          localDB.master = data.master;
+          localDB.kelahiran = data.kelahiran || [];
+          localDB.kematian = data.kematian || [];
+          localDB.titipan = data.titipan || [];
+          localDB.mutasi = data.mutasi || [];
+          
+          saveToLocalStorage();
+          renderAllTables();
+          populateSelectDropdowns();
+          updateDashboardStats();
+          renderCharts();
+          showToast("✅ Data berhasil dimuat dari Spreadsheet!", "success");
+        } else {
+          showToast("Spreadsheet kosong atau belum ada data.", "error");
+        }
+      } catch (err) {
+        showToast("Gagal memuat dari Spreadsheet: " + err.message, "error");
+      }
+    }
+
+    /**
+     * Sinkronisasi semua data lokal ke Google Spreadsheet
+     */
+    async function syncToSpreadsheet() {
+      if (!APPS_SCRIPT_URL) {
+        showToast("API URL belum diatur!", "error");
+        return;
+      }
+      try {
+        showToast("Menyinkronkan data ke Spreadsheet...", "success");
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "syncAll", db: localDB })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        showToast("✅ Sinkronisasi ke Spreadsheet berhasil!", "success");
+      } catch (err) {
+        showToast("Gagal sinkronisasi: " + err.message, "error");
+      }
+    }
+
+    /**
+     * Tampilkan dialog untuk mengatur URL Apps Script
+     */
+    function showApiSettings() {
+      const current = localStorage.getItem('sgbl_api_url') || "";
+      const url = prompt(
+        "Masukkan URL Web App Google Apps Script Anda:\n\n" +
+        "(Contoh: https://script.google.com/macros/s/ABC123.../exec)\n\n" +
+        "Cara mendapatkan URL: Deploy Code.gs sebagai Web App di Apps Script",
+        current
+      );
+      if (url !== null && url.trim() !== "") {
+        localStorage.setItem('sgbl_api_url', url.trim());
+        location.reload();
+      }
+    }
+  </script>
+
+  <!-- TOMBOL SINKRONISASI (muncul di pojok kanan bawah) -->
+  <div id="sync-fab" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 no-print">
+    <button onclick="loadFromSpreadsheet()" 
+      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all"
+      title="Muat data dari Google Spreadsheet">
+      <i class="fa-solid fa-cloud-arrow-down"></i>
+      <span>Muat dari Sheet</span>
+    </button>
+    <button onclick="syncToSpreadsheet()" 
+      class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-600/30 transition-all"
+      title="Simpan semua data ke Google Spreadsheet">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <span>Simpan ke Sheet</span>
+    </button>
+    <button onclick="showApiSettings()" 
+      class="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg transition-all"
+      title="Atur URL Apps Script API">
+      <i class="fa-solid fa-gear"></i>
+      <span>⚙ API URL</span>
+    </button>
+  </div>
+</body>
+</html>
