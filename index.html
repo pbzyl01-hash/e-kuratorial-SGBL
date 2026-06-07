@@ -2122,12 +2122,7 @@
       showToast("Arsip kematian berhasil dihapus.", "success");
     }
 
-    // =============================================
-    // INTEGRASI GOOGLE APPS SCRIPT / SPREADSHEET
-    // Ganti nilai APPS_SCRIPT_URL dengan URL Web App
-    // yang Anda dapatkan setelah deploy Code.gs
-    // =============================================
-    const APPS_SCRIPT_URL = localStorage.getItem('sgbl_api_url') || "";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykJM36-T1ICBsKI9ma7ttXECx0bbwS-DTmY9IJkU9l76VwvITHFmzdmJbPQz5XPCsdrQ/exec";
 
     /**
      * Ambil semua data dari Google Spreadsheet via Apps Script
@@ -2191,45 +2186,7 @@
         showToast("Gagal sinkronisasi: " + err.message, "error");
       }
     }
-
-    /**
-     * Tampilkan dialog untuk mengatur URL Apps Script
-     */
-    function showApiSettings() {
-      const current = localStorage.getItem('sgbl_api_url') || "";
-      const url = prompt(
-        "Masukkan URL Web App Google Apps Script Anda:\n\n" +
-        "(Contoh: https://script.google.com/macros/s/ABC123.../exec)\n\n" +
-        "Cara mendapatkan URL: Deploy Code.gs sebagai Web App di Apps Script",
-        current
-      );
-      if (url !== null && url.trim() !== "") {
-        localStorage.setItem('sgbl_api_url', url.trim());
-        location.reload();
-      }
     }
   </script>
-
-  <!-- TOMBOL SINKRONISASI (muncul di pojok kanan bawah) -->
-  <div id="sync-fab" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 no-print">
-    <button onclick="loadFromSpreadsheet()" 
-      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all"
-      title="Muat data dari Google Spreadsheet">
-      <i class="fa-solid fa-cloud-arrow-down"></i>
-      <span>Muat dari Sheet</span>
-    </button>
-    <button onclick="syncToSpreadsheet()" 
-      class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-600/30 transition-all"
-      title="Simpan semua data ke Google Spreadsheet">
-      <i class="fa-solid fa-cloud-arrow-up"></i>
-      <span>Simpan ke Sheet</span>
-    </button>
-    <button onclick="showApiSettings()" 
-      class="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg transition-all"
-      title="Atur URL Apps Script API">
-      <i class="fa-solid fa-gear"></i>
-      <span>⚙ API URL</span>
-    </button>
-  </div>
 </body>
 </html>
