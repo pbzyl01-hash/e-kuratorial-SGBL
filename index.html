@@ -220,10 +220,7 @@
           <i class="fa-solid fa-print w-5 text-center text-indigo-500"></i>
           <span>Laporan BKSDA</span>
         </button>
-        <button onclick="switchTab('qrcode')" data-tab="qrcode" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
-          <i class="fa-solid fa-qrcode w-5 text-center text-teal-500"></i>
-          <span>QR Code Kandang</span>
-        </button>
+
       </nav>
 
       <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
@@ -400,6 +397,7 @@
                 <option value="">Semua Status</option>
                 <option value="Dilindungi">Dilindungi</option>
                 <option value="Tidak Dilindungi">Tidak Dilindungi</option>
+                <option value="Eksotis">Eksotis</option>
               </select>
               <select id="master-filter-kelas" onchange="filterMasterTable()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
                 <option value="">Semua Kelas</option>
@@ -639,81 +637,7 @@
           </div>
         </section>
 
-        <!-- 8. QR CODE SCANNER & GENERATOR TAB -->
-        <section id="tab-qrcode" class="space-y-6 hidden fade-in">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Generator -->
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm space-y-4">
-              <h3 class="font-bold text-lg"><i class="fa-solid fa-qrcode mr-2 text-brand-500"></i>Cetak QR Code Kandang Satwa</h3>
-              <p class="text-xs text-slate-400">Pilih individu satwa untuk membuat kode QR yang dapat diunduh & ditempel di papan edukasi kandang.</p>
-              
-              <div class="space-y-3">
-                <div>
-                  <label class="block text-xs font-bold text-slate-500 mb-1">Pilih Satwa</label>
-                  <select id="qr-satwa-select" onchange="generateQRCodePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
-                    <!-- Loaded dynamically -->
-                  </select>
-                </div>
-              </div>
 
-              <!-- Preview Frame -->
-              <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center text-center">
-                <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200 flex items-center justify-center mb-3">
-                  <div id="qr-svg-container"></div>
-                </div>
-                <h4 id="qr-preview-title" class="font-bold text-sm text-slate-800 dark:text-slate-200">Kasuari Gelambir-ganda</h4>
-                <p id="qr-preview-reg" class="text-xs text-slate-400">REG-003</p>
-                <button onclick="printSingleQR()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-200 dark:hover:bg-slate-300 dark:text-slate-950 text-white rounded-xl text-xs font-bold transition-all">
-                  <i class="fa-solid fa-print mr-1"></i>Cetak QR Satwa
-                </button>
-              </div>
-            </div>
-
-            <!-- Scanner Simulator -->
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col justify-between">
-              <div>
-                <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-circle-nodes mr-2 text-brand-500"></i>Simulasi Pemindai QR Lapangan</h3>
-                <p class="text-xs text-slate-400 mb-4">Pindai QR Code kandang untuk melihat data populasi harian & riwayat secara instan.</p>
-                
-                <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center text-center">
-                  <div class="w-16 h-16 bg-brand-500/10 text-brand-500 rounded-full flex items-center justify-center mb-3 animate-pulse">
-                    <i class="fa-solid fa-camera text-2xl"></i>
-                  </div>
-                  <p class="text-xs font-semibold mb-3 text-slate-600 dark:text-slate-400">Kamera Pemindai Siap</p>
-                  <select id="simulate-scan-select" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none mb-3 text-slate-700 dark:text-slate-300">
-                    <!-- Loaded dynamically -->
-                  </select>
-                  <button onclick="triggerSimulatedScan()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition-all">
-                    Pindai & Tampilkan Data
-                  </button>
-                </div>
-              </div>
-
-              <!-- Scan Results Display -->
-              <div id="scan-result-card" class="hidden mt-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-brand-200 dark:border-brand-900/40 space-y-2">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 bg-brand-500/20 text-brand-500 rounded-lg flex items-center justify-center text-sm font-bold">
-                    <i class="fa-solid fa-circle-check"></i>
-                  </div>
-                  <div>
-                    <h5 id="scan-res-nama" class="font-bold text-xs">Kasuari Gelambir-ganda</h5>
-                    <p id="scan-res-latin" class="text-[10px] text-slate-400 italic">Casuarius casuarius</p>
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-slate-200 dark:border-slate-700">
-                  <div>
-                    <span class="text-slate-400">Populasi:</span>
-                    <span id="scan-res-populasi" class="font-bold ml-1">8 ekor</span>
-                  </div>
-                  <div>
-                    <span class="text-slate-400">Kandang:</span>
-                    <span id="scan-res-kandang" class="font-bold ml-1">Kandang Utama</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
       </main>
 
@@ -751,7 +675,6 @@
             <option value="Aves">Aves</option>
             <option value="Mamalia">Mamalia</option>
             <option value="Reptil">Reptil</option>
-            <option value="Eksotis">Eksotis</option>
           </select>
         </div>
         <div>
@@ -759,6 +682,7 @@
           <select id="ms-status" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Dilindungi">Dilindungi Undang-Undang</option>
             <option value="Tidak Dilindungi">Tidak Dilindungi</option>
+            <option value="Eksotis">Eksotis</option>
           </select>
         </div>
       </div>
@@ -1094,7 +1018,7 @@
 
     // === NAVIGATION AND TAB ROUTING ===
     function switchTab(tabId) {
-      const tabs = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi', 'laporan', 'qrcode'];
+      const tabs = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi', 'laporan'];
       tabs.forEach(t => {
         document.getElementById(`tab-${t}`).classList.add("hidden");
       });
@@ -1118,8 +1042,7 @@
         'kematian': 'Arsip Kematian & BAP Satwa',
         'titipan': 'Satwa Titipan Negara',
         'mutasi': 'Mutasi Pemindahan Satwa',
-        'laporan': 'Pembuat Laporan Resmi BKSDA',
-        'qrcode': 'Cetak QR Code Informasi'
+        'laporan': 'Pembuat Laporan Resmi BKSDA'
       };
       document.getElementById("header-title").innerText = titles[tabId];
 
@@ -1142,7 +1065,7 @@
 
     // === POPULATE ALL SELECT DROPDOWNS ===
     function populateSelectDropdowns() {
-      const dropdowns = ['kl-satwa', 'km-satwa', 'tp-satwa', 'mt-satwa', 'qr-satwa-select', 'simulate-scan-select'];
+      const dropdowns = ['kl-satwa', 'km-satwa', 'tp-satwa', 'mt-satwa'];
       dropdowns.forEach(id => {
         const select = document.getElementById(id);
         if (select) {
@@ -1155,7 +1078,6 @@
           });
         }
       });
-      generateQRCodePreview();
     }
 
     // === TOAST NOTIFICATION ===
@@ -1239,15 +1161,16 @@
       }
 
       const totalDilindungi = localDB.master.filter(s => s.status === 'Dilindungi').reduce((acc, s) => acc + s.jumlah, 0);
-      const totalTidakDilindungi = localDB.master.filter(s => s.status !== 'Dilindungi').reduce((acc, s) => acc + s.jumlah, 0);
+      const totalTidakDilindungi = localDB.master.filter(s => s.status === 'Tidak Dilindungi').reduce((acc, s) => acc + s.jumlah, 0);
+      const totalEksotisChart = localDB.master.filter(s => s.status === 'Eksotis').reduce((acc, s) => acc + s.jumlah, 0);
 
       proporsiChartInstance = new Chart(propCtx2d, {
         type: 'doughnut',
         data: {
-          labels: ['Dilindungi UU', 'Tidak Dilindungi'],
+          labels: ['Dilindungi UU', 'Tidak Dilindungi', 'Eksotis'],
           datasets: [{
-            data: [totalDilindungi, totalTidakDilindungi],
-            backgroundColor: ['#2563eb', '#94a3b8'],
+            data: [totalDilindungi, totalTidakDilindungi, totalEksotisChart],
+            backgroundColor: ['#2563eb', '#94a3b8', '#14b8a6'],
             borderWidth: 0
           }]
         },
@@ -1271,14 +1194,14 @@
       const totalMati = localDB.kematian.reduce((acc, curr) => acc + curr.jumlah, 0);
       const totalTitip = localDB.titipan.reduce((acc, curr) => acc + curr.jumlah, 0);
       const totalDilindungi = localDB.master.filter(s => s.status === 'Dilindungi').reduce((acc, curr) => acc + curr.jumlah, 0);
-      const totalTidakDilindungi = localDB.master.filter(s => s.status !== 'Dilindungi').reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalTidakDilindungi = localDB.master.filter(s => s.status === 'Tidak Dilindungi').reduce((acc, curr) => acc + curr.jumlah, 0);
+      const totalEksotis = localDB.master.filter(s => s.status === 'Eksotis').reduce((acc, curr) => acc + curr.jumlah, 0);
 
       document.getElementById("stat-total-populasi").innerText = totalPop;
       document.getElementById("stat-kelahiran").innerText = totalLahir;
       document.getElementById("stat-kematian").innerText = totalMati;
       document.getElementById("stat-titipan").innerText = totalTitip;
       document.getElementById("stat-dilindungi").innerText = totalDilindungi;
-      const totalEksotis = localDB.master.filter(s => s.kelas === 'Eksotis').reduce((acc, curr) => acc + curr.jumlah, 0);
       document.getElementById("stat-tidak-dilindungi").innerText = totalTidakDilindungi;
       document.getElementById("stat-eksotis").innerText = totalEksotis;
     }
@@ -1307,7 +1230,9 @@
           <td class="p-4">
             <span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${
               satwa.status === 'Dilindungi' 
-                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800' 
+                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800'
+                : satwa.status === 'Eksotis'
+                ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-800'
                 : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
             }">${satwa.status}</span>
           </td>
@@ -2132,62 +2057,6 @@
       window.print();
     }
 
-    // === INTERACTIVE QR CODE GENERATOR ===
-    function generateQRCodePreview() {
-      const selectedNama = document.getElementById("qr-satwa-select").value;
-      const satwa = localDB.master.find(s => s.nama === selectedNama);
-      if (satwa) {
-        document.getElementById("qr-preview-title").innerText = satwa.nama;
-        document.getElementById("qr-preview-reg").innerText = satwa.id;
-
-        const qrContainer = document.getElementById("qr-svg-container");
-        qrContainer.innerHTML = `
-          <svg class="w-28 h-28 text-slate-900" viewBox="0 0 100 100">
-            <rect width="100" height="100" fill="white"/>
-            <rect x="5" y="5" width="25" height="25" fill="#2563eb" stroke="white" stroke-width="3"/>
-            <rect x="10" y="10" width="15" height="15" fill="white"/>
-            <rect x="13" y="13" width="9" height="9" fill="#2563eb"/>
-
-            <rect x="70" y="5" width="25" height="25" fill="#2563eb" stroke="white" stroke-width="3"/>
-            <rect x="75" y="10" width="15" height="15" fill="white"/>
-            <rect x="78" y="13" width="9" height="9" fill="#2563eb"/>
-
-            <rect x="5" y="70" width="25" height="25" fill="#2563eb" stroke="white" stroke-width="3"/>
-            <rect x="10" y="75" width="15" height="15" fill="white"/>
-            <rect x="13" y="78" width="9" height="9" fill="#2563eb"/>
-
-            <g fill="#1e3a8a">
-              <rect x="35" y="10" width="5" height="5"/>
-              <rect x="45" y="15" width="10" height="5"/>
-              <rect x="60" y="20" width="5" height="10"/>
-              <rect x="35" y="30" width="15" height="5"/>
-              <rect x="55" y="40" width="5" height="10"/>
-              <rect x="10" y="45" width="10" height="5"/>
-              <rect x="30" y="50" width="5" height="15"/>
-              <rect x="45" y="60" width="15" height="5"/>
-              <rect x="65" y="55" width="10" height="10"/>
-              <rect x="75" y="45" width="15" height="5"/>
-              <rect x="80" y="60" width="5" height="15"/>
-              <rect x="40" y="80" width="10" height="10"/>
-            </g>
-          </svg>
-        `;
-      }
-    }
-
-    function triggerSimulatedScan() {
-      const selectedNama = document.getElementById("simulate-scan-select").value;
-      const satwa = localDB.master.find(s => s.nama === selectedNama);
-      if (satwa) {
-        document.getElementById("scan-res-nama").innerText = satwa.nama;
-        document.getElementById("scan-res-latin").innerText = satwa.latin;
-        document.getElementById("scan-res-populasi").innerText = `${satwa.jumlah} ekor`;
-        document.getElementById("scan-res-kandang").innerText = satwa.kandang;
-
-        document.getElementById("scan-result-card").classList.remove("hidden");
-        showToast("QR Code Berhasil Di-scan!", "success");
-      }
-    }
 
     function deleteSatwa(id) {
       const satwa = localDB.master.find(s => s.id === id);
