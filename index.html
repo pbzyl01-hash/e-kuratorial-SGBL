@@ -2188,6 +2188,9 @@
     }
 
     function deleteSatwa(id) {
+      const satwa = localDB.master.find(s => s.id === id);
+      const nama = satwa ? satwa.nama : id;
+      if (!confirm(`Hapus "${nama}" dari master data? Tindakan ini tidak dapat dibatalkan.`)) return;
       localDB.master = localDB.master.filter(s => s.id !== id);
       saveToLocalStorage();
       renderAllTables();
@@ -2197,6 +2200,7 @@
     }
 
     function deleteKematian(index) {
+      if (!confirm("Hapus data kematian ini? Tindakan ini tidak dapat dibatalkan.")) return;
       localDB.kematian.splice(index, 1);
       saveToLocalStorage();
       renderAllTables();
@@ -2273,16 +2277,32 @@
     function editKelahiran(idx) {
       const kl = localDB.kelahiran[idx];
       if (!kl) return;
-      document.getElementById("kl-satwa").value = kl.nama;
+      // Populate dropdown — tunggu sampai options terisi
+      const sel = document.getElementById("kl-satwa");
+      if (sel && sel.querySelector(`option[value="${kl.nama}"]`)) {
+        sel.value = kl.nama;
+      } else if (sel) {
+        const opt = document.createElement("option");
+        opt.value = kl.nama; opt.textContent = kl.nama;
+        sel.appendChild(opt);
+        sel.value = kl.nama;
+      }
       document.getElementById("kl-jumlah").value = kl.jumlah;
       document.getElementById("kl-tag").value = kl.tag;
       document.getElementById("kl-tanggal").value = kl.tanggal;
-      document.getElementById("kl-ket").value = kl.ket;
-      document.getElementById("kl-kelamin").value = kl.kelamin;
+      document.getElementById("kl-keterangan").value = kl.ket || "";
       document.getElementById("add-kelahiran-modal").dataset.editIdx = idx;
       const header = document.querySelector("#add-kelahiran-modal h3");
       header.innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Kelahiran';
       openModal('add-kelahiran-modal');
+    }
+    function deleteKelahiran(idx) {
+      if (!confirm("Hapus data kelahiran ini? Tindakan ini tidak dapat dibatalkan.")) return;
+      localDB.kelahiran.splice(idx, 1);
+      saveToLocalStorage();
+      renderAllTables();
+      updateDashboardStats();
+      showToast("Data kelahiran berhasil dihapus.", "success");
     }
 
     // ============ EDIT & DELETE: KEMATIAN ============
@@ -2315,7 +2335,7 @@
       openModal('add-titipan-modal');
     }
     function deleteTitipan(idx) {
-      if (!confirm("Hapus data titipan ini?")) return;
+      if (!confirm("Hapus data titipan ini? Tindakan ini tidak dapat dibatalkan.")) return;
       localDB.titipan.splice(idx, 1);
       saveToLocalStorage();
       renderAllTables();
@@ -2339,7 +2359,7 @@
       openModal('add-mutasi-modal');
     }
     function deleteMutasi(idx) {
-      if (!confirm("Hapus data mutasi ini?")) return;
+      if (!confirm("Hapus data mutasi ini? Tindakan ini tidak dapat dibatalkan.")) return;
       localDB.mutasi.splice(idx, 1);
       saveToLocalStorage();
       renderAllTables();
