@@ -352,6 +352,19 @@
                 <span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 px-2 py-0.5 rounded font-bold">Bebas</span>
               </div>
             </div>
+            <!-- Satwa Eksotis -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Satwa Eksotis</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-teal-600">
+                  <i class="fa-solid fa-dragon text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-eksotis" class="text-3xl font-extrabold text-teal-500">0</span>
+                <span class="text-[10px] bg-teal-50 dark:bg-teal-950/40 text-teal-500 px-2 py-0.5 rounded font-bold">Eksotis</span>
+              </div>
+            </div>
           </div>
 
           <!-- Charts Section -->
@@ -447,6 +460,7 @@
                     <th class="p-4">Tag / No. ID</th>
                     <th class="p-4">Jenis Kelamin</th>
                     <th class="p-4">Keterangan</th>
+                    <th class="p-4 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="kelahiran-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
@@ -515,6 +529,7 @@
                     <th class="p-4">Jumlah</th>
                     <th class="p-4">Asal Instansi</th>
                     <th class="p-4">Status</th>
+                    <th class="p-4 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="titipan-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
@@ -550,6 +565,7 @@
                     <th class="p-4">Ke Lokasi</th>
                     <th class="p-4">Tanggal</th>
                     <th class="p-4">Petugas Lapangan</th>
+                    <th class="p-4 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="mutasi-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
@@ -733,6 +749,7 @@
             <option value="Aves">Aves</option>
             <option value="Mamalia">Mamalia</option>
             <option value="Reptil">Reptil</option>
+            <option value="Eksotis">Eksotis</option>
           </select>
         </div>
         <div>
@@ -1259,7 +1276,9 @@
       document.getElementById("stat-kematian").innerText = totalMati;
       document.getElementById("stat-titipan").innerText = totalTitip;
       document.getElementById("stat-dilindungi").innerText = totalDilindungi;
+      const totalEksotis = localDB.master.filter(s => s.kelas === 'Eksotis').reduce((acc, curr) => acc + curr.jumlah, 0);
       document.getElementById("stat-tidak-dilindungi").innerText = totalTidakDilindungi;
+      document.getElementById("stat-eksotis").innerText = totalEksotis;
     }
 
     // === RENDER ALL TABLES ===
@@ -1302,7 +1321,7 @@
       // 2. Kelahiran Satwa
       const lahirBody = document.getElementById("kelahiran-table-body");
       lahirBody.innerHTML = '';
-      localDB.kelahiran.forEach(kl => {
+      localDB.kelahiran.forEach((kl, idx) => {
         const row = document.createElement("tr");
         row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
         row.innerHTML = `
@@ -1315,6 +1334,10 @@
           <td class="p-4 font-mono text-xs">${kl.tag}</td>
           <td class="p-4 text-xs font-bold text-slate-500">${kl.kelamin}</td>
           <td class="p-4 text-xs text-slate-400">${kl.ket}</td>
+          <td class="p-4 text-center">
+            <button onclick="editKelahiran(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+            <button onclick="deleteKelahiran(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+          </td>
         `;
         lahirBody.appendChild(row);
       });
@@ -1335,7 +1358,8 @@
           <td class="p-4"><span class="text-xs bg-rose-50 dark:bg-rose-950/20 text-rose-500 font-bold px-2 py-0.5 rounded">${km.sebab}</span></td>
           <td class="p-4 text-xs font-mono text-slate-400 truncate max-w-[150px]" title="${km.bap}">${km.bap}</td>
           <td class="p-4 text-center">
-            <button onclick="deleteKematian(${idx})" class="text-slate-400 hover:text-rose-500"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="editKematian(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+            <button onclick="deleteKematian(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
           </td>
         `;
         matiBody.appendChild(row);
@@ -1344,7 +1368,7 @@
       // 4. Satwa Titipan
       const titipBody = document.getElementById("titipan-table-body");
       titipBody.innerHTML = '';
-      localDB.titipan.forEach(tp => {
+      localDB.titipan.forEach((tp, idx) => {
         const row = document.createElement("tr");
         row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
         row.innerHTML = `
@@ -1357,6 +1381,10 @@
           <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${tp.jumlah} ekor</td>
           <td class="p-4 text-xs font-bold text-slate-500">${tp.asal}</td>
           <td class="p-4"><span class="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-bold">${tp.status}</span></td>
+          <td class="p-4 text-center">
+            <button onclick="editTitipan(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+            <button onclick="deleteTitipan(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+          </td>
         `;
         titipBody.appendChild(row);
       });
@@ -1364,7 +1392,7 @@
       // 5. Mutasi Satwa
       const mutasiBody = document.getElementById("mutasi-table-body");
       mutasiBody.innerHTML = '';
-      localDB.mutasi.forEach(mt => {
+      localDB.mutasi.forEach((mt, idx) => {
         const row = document.createElement("tr");
         row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
         row.innerHTML = `
@@ -1375,6 +1403,10 @@
           <td class="p-4 text-xs text-slate-800 dark:text-slate-100 font-semibold">${mt.tujuan}</td>
           <td class="p-4 text-xs">${mt.tanggal}</td>
           <td class="p-4 text-xs font-bold text-slate-500">${mt.petugas}</td>
+          <td class="p-4 text-center">
+            <button onclick="editMutasi(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+            <button onclick="deleteMutasi(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+          </td>
         `;
         mutasiBody.appendChild(row);
       });
@@ -1485,16 +1517,29 @@
       const jumlah = parseInt(document.getElementById("kl-jumlah").value);
       const tag = document.getElementById("kl-tag").value;
       const ket = document.getElementById("kl-keterangan").value;
+      const kelamin = document.getElementById("kl-kelamin") ? document.getElementById("kl-kelamin").value : "Unknown";
 
+      const modal = document.getElementById("add-kelahiran-modal");
+      const editIdx = modal.dataset.editIdx;
       const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      const latin = satwaObj ? satwaObj.latin : satwaNama;
+      const kelas = satwaObj ? satwaObj.kelas : "";
+
+      if (editIdx !== undefined && editIdx !== "") {
+        // Mode EDIT: tidak ubah populasi
+        delete modal.dataset.editIdx;
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-baby-carriage mr-2"></i>Catat Kelahiran Baru';
+        localDB.kelahiran[parseInt(editIdx)] = { nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin, ket };
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
+        showToast("Data kelahiran berhasil diperbarui!", "success");
+        document.getElementById("add-kelahiran-form").reset();
+        return;
+      }
+
       if (satwaObj) {
         satwaObj.jumlah += jumlah;
-        localDB.kelahiran.unshift({ nama: satwaNama, latin: satwaObj.latin, kelas: satwaObj.kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket });
-
-        saveToLocalStorage();
-        renderAllTables();
-        updateDashboardStats();
-        closeAllModals();
+        localDB.kelahiran.unshift({ nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket });
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
         showToast("Laporan kelahiran baru telah disimpan!", "success");
         document.getElementById("add-kelahiran-form").reset();
       }
@@ -1508,19 +1553,30 @@
       const sebab = document.getElementById("km-sebab").value;
       const bap = document.getElementById("km-bap").value;
 
+      const modal = document.getElementById("add-kematian-modal");
+      const editIdx = modal.dataset.editIdx;
       const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      const latin = satwaObj ? satwaObj.latin : satwaNama;
+
+      if (editIdx !== undefined && editIdx !== "") {
+        // Mode EDIT: tidak ubah populasi
+        delete modal.dataset.editIdx;
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-skull-crossbones mr-2"></i>Catat Kematian Satwa';
+        localDB.kematian[parseInt(editIdx)] = { nama: satwaNama, latin, jumlah, tanggal, sebab, bap };
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
+        showToast("Data kematian berhasil diperbarui!", "success");
+        document.getElementById("add-kematian-form").reset();
+        return;
+      }
+
       if (satwaObj) {
         if (satwaObj.jumlah < jumlah) {
           showToast("Jumlah kematian tidak boleh melebihi populasi saat ini!", "error");
           return;
         }
         satwaObj.jumlah -= jumlah;
-        localDB.kematian.unshift({ nama: satwaNama, latin: satwaObj.latin, jumlah, tanggal, sebab, bap });
-
-        saveToLocalStorage();
-        renderAllTables();
-        updateDashboardStats();
-        closeAllModals();
+        localDB.kematian.unshift({ nama: satwaNama, latin, jumlah, tanggal, sebab, bap });
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
         showToast("Kematian satwa berhasil dicatat.", "success");
         document.getElementById("add-kematian-form").reset();
       }
@@ -1534,15 +1590,26 @@
       const jumlah = parseInt(document.getElementById("tp-jumlah").value);
       const tanggal = document.getElementById("tp-tanggal").value;
 
+      const modal = document.getElementById("add-titipan-modal");
+      const editIdx = modal.dataset.editIdx;
       const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      const latin = satwaObj ? satwaObj.latin : satwaNama;
+
+      if (editIdx !== undefined && editIdx !== "") {
+        // Mode EDIT: tidak ubah populasi
+        delete modal.dataset.editIdx;
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-handshake-angle mr-2"></i>Catat Satwa Titipan BKSDA';
+        localDB.titipan[parseInt(editIdx)] = { bap, nama: satwaNama, latin, tanggal, jumlah, asal, status: "Titipan" };
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
+        showToast("Data titipan berhasil diperbarui!", "success");
+        document.getElementById("add-titipan-form").reset();
+        return;
+      }
+
       if (satwaObj) {
         satwaObj.jumlah += jumlah;
-        localDB.titipan.unshift({ bap, nama: satwaNama, latin: satwaObj.latin, tanggal, jumlah, asal, status: "Titipan" });
-
-        saveToLocalStorage();
-        renderAllTables();
-        updateDashboardStats();
-        closeAllModals();
+        localDB.titipan.unshift({ bap, nama: satwaNama, latin, tanggal, jumlah, asal, status: "Titipan" });
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
         showToast("Arsip titipan berhasil dimasukkan.", "success");
         document.getElementById("add-titipan-form").reset();
       }
@@ -1557,13 +1624,24 @@
       const tujuan = document.getElementById("mt-tujuan").value;
       const petugas = document.getElementById("mt-petugas").value;
 
+      const modal = document.getElementById("add-mutasi-modal");
+      const editIdx = modal.dataset.editIdx;
+
+      if (editIdx !== undefined && editIdx !== "") {
+        // Mode EDIT: pertahankan ID lama
+        delete modal.dataset.editIdx;
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-route mr-2"></i>Catat Pemindahan Mutasi';
+        const oldId = localDB.mutasi[parseInt(editIdx)].id;
+        localDB.mutasi[parseInt(editIdx)] = { id: oldId, nama: satwaNama, jenis, asal, tujuan, tanggal, petugas };
+        saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
+        showToast("Data mutasi berhasil diperbarui!", "success");
+        document.getElementById("add-mutasi-form").reset();
+        return;
+      }
+
       const newId = `MUT-00${localDB.mutasi.length + 1}`;
       localDB.mutasi.unshift({ id: newId, nama: satwaNama, jenis, asal, tujuan, tanggal, petugas });
-
-      saveToLocalStorage();
-      renderAllTables();
-      updateDashboardStats();
-      closeAllModals();
+      saveToLocalStorage(); renderAllTables(); updateDashboardStats(); closeAllModals();
       showToast("Berhasil mencatat mutasi pemindahan satwa.", "success");
       document.getElementById("add-mutasi-form").reset();
     }
@@ -2190,6 +2268,85 @@
         showToast("Gagal sinkronisasi: " + err.message, "error");
       }
     }
+
+    // ============ EDIT & DELETE: KELAHIRAN ============
+    function editKelahiran(idx) {
+      const kl = localDB.kelahiran[idx];
+      if (!kl) return;
+      document.getElementById("kl-satwa").value = kl.nama;
+      document.getElementById("kl-jumlah").value = kl.jumlah;
+      document.getElementById("kl-tag").value = kl.tag;
+      document.getElementById("kl-tanggal").value = kl.tanggal;
+      document.getElementById("kl-ket").value = kl.ket;
+      document.getElementById("kl-kelamin").value = kl.kelamin;
+      document.getElementById("add-kelahiran-modal").dataset.editIdx = idx;
+      const header = document.querySelector("#add-kelahiran-modal h3");
+      header.innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Kelahiran';
+      openModal('add-kelahiran-modal');
+    }
+
+    // ============ EDIT & DELETE: KEMATIAN ============
+    function editKematian(idx) {
+      const km = localDB.kematian[idx];
+      if (!km) return;
+      document.getElementById("km-satwa").value = km.nama;
+      document.getElementById("km-tanggal").value = km.tanggal;
+      document.getElementById("km-jumlah").value = km.jumlah;
+      document.getElementById("km-sebab").value = km.sebab;
+      document.getElementById("km-bap").value = km.bap;
+      document.getElementById("add-kematian-modal").dataset.editIdx = idx;
+      const header = document.querySelector("#add-kematian-modal h3");
+      header.innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Kematian';
+      openModal('add-kematian-modal');
+    }
+
+    // ============ EDIT & DELETE: TITIPAN ============
+    function editTitipan(idx) {
+      const tp = localDB.titipan[idx];
+      if (!tp) return;
+      document.getElementById("tp-bap").value = tp.bap;
+      document.getElementById("tp-asal").value = tp.asal;
+      document.getElementById("tp-satwa").value = tp.nama;
+      document.getElementById("tp-jumlah").value = tp.jumlah;
+      document.getElementById("tp-tanggal").value = tp.tanggal;
+      document.getElementById("add-titipan-modal").dataset.editIdx = idx;
+      const header = document.querySelector("#add-titipan-modal h3");
+      header.innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Titipan';
+      openModal('add-titipan-modal');
+    }
+    function deleteTitipan(idx) {
+      if (!confirm("Hapus data titipan ini?")) return;
+      localDB.titipan.splice(idx, 1);
+      saveToLocalStorage();
+      renderAllTables();
+      updateDashboardStats();
+      showToast("Data titipan berhasil dihapus.", "success");
+    }
+
+    // ============ EDIT & DELETE: MUTASI ============
+    function editMutasi(idx) {
+      const mt = localDB.mutasi[idx];
+      if (!mt) return;
+      document.getElementById("mt-satwa").value = mt.nama;
+      document.getElementById("mt-jenis").value = mt.jenis;
+      document.getElementById("mt-tanggal").value = mt.tanggal;
+      document.getElementById("mt-asal").value = mt.asal;
+      document.getElementById("mt-tujuan").value = mt.tujuan;
+      document.getElementById("mt-petugas").value = mt.petugas;
+      document.getElementById("add-mutasi-modal").dataset.editIdx = idx;
+      const header = document.querySelector("#add-mutasi-modal h3");
+      header.innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Mutasi';
+      openModal('add-mutasi-modal');
+    }
+    function deleteMutasi(idx) {
+      if (!confirm("Hapus data mutasi ini?")) return;
+      localDB.mutasi.splice(idx, 1);
+      saveToLocalStorage();
+      renderAllTables();
+      updateDashboardStats();
+      showToast("Data mutasi berhasil dihapus.", "success");
+    }
+
   </script>
 
   <!-- MODAL GANTI PIN -->
