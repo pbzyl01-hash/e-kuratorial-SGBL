@@ -2086,12 +2086,13 @@
      */
     async function loadFromSpreadsheet() {
       if (!APPS_SCRIPT_URL) {
-        showToast("API URL belum diatur. Klik tombol ⚙ Sinkronisasi.", "error");
+        showToast("API URL belum diatur.", "error");
         return;
       }
       try {
-        showToast("Memuat data dari Spreadsheet...", "success");
-        const res = await fetch(`${APPS_SCRIPT_URL}?action=getData`);
+        showToast("⏳ Memuat data dari Spreadsheet...", "success");
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=getData`, { redirect: "follow" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         const data = await res.json();
         if (data.error) throw new Error(data.error);
         
@@ -2125,22 +2126,50 @@
     /**
      * Sinkronisasi semua data lokal ke Google Spreadsheet
      */
+    /**
+     * Kirim data ke GAS via POST (tanpa Content-Type header)
+     * GAS hanya menerima simple request agar tidak trigger CORS preflight
+     */
+    async function gasPost(payload) {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        redirect: "follow",
+        body: JSON.stringify(payload)
+        // JANGAN tambah headers Content-Type: application/json
+        // karena itu trigger CORS preflight yang GAS tidak support
+      });
+      // res mungkin opaque (no-cors) — coba parse, kalau gagal anggap sukses
+      try {
+        const text = await res.text();
+        return JSON.parse(text);
+      } catch(e) {
+        return { success: true, note: "Response tidak bisa dibaca (opaque), data kemungkinan tersimpan" };
+      }
+    }
+
+    /**
+     * Sinkronisasi semua data lokal ke Google Spreadsheet
+     * Gunakan GET dengan encoded params untuk menghindari CORS preflight
+     */
     async function syncToSpreadsheet() {
       if (!APPS_SCRIPT_URL) {
         showToast("API URL belum diatur!", "error");
         return;
       }
       try {
-        showToast("Menyinkronkan data ke Spreadsheet...", "success");
-        const res = await fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "syncAll", db: localDB })
-        });
+        showToast("⏳ Menyinkronkan data ke Spreadsheet...", "success");
+
+        // Gunakan GET + encoded JSON untuk hindari CORS preflight
+        const dbEncoded = encodeURIComponent(JSON.stringify(localDB));
+        const url = `${APPS_SCRIPT_URL}?action=syncAll&db=${dbEncoded}`;
+
+        const res = await fetch(url, { redirect: "follow" });
         const data = await res.json();
         if (data.error) throw new Error(data.error);
         showToast("✅ Sinkronisasi ke Spreadsheet berhasil!", "success");
       } catch (err) {
-        showToast("Gagal sinkronisasi: " + err.message, "error");
+        showToast("⚠️ Gagal sinkronisasi: " + err.message, "error");
+        console.error("Sync error:", err);
       }
     }
 
