@@ -597,50 +597,86 @@
         <section id="tab-laporan" class="space-y-6 hidden fade-in">
           <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <!-- Selector Panel -->
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm space-y-4">
-              <h4 class="font-bold text-slate-800 dark:text-white">Pengaturan Generator Laporan</h4>
-              
-              <div class="space-y-3">
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm space-y-4">
+              <h4 class="font-bold text-slate-800 dark:text-white text-sm">⚙️ Generator Laporan</h4>
+
+              <!-- Grup: Laporan Bulanan -->
+              <div>
+                <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1.5">📋 Laporan Bulanan</p>
+                <div class="space-y-1">
+                  <button onclick="setReportType('kelahiran')" data-rtype="kelahiran" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 transition-all text-slate-700 dark:text-slate-300">Surat Laporan Kelahiran (A4 Portrait)</button>
+                  <button onclick="setReportType('kematian')" data-rtype="kematian" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 transition-all text-slate-700 dark:text-slate-300">Surat Laporan Kematian (A4 Portrait)</button>
+                  <button onclick="setReportType('mutasi_bulanan')" data-rtype="mutasi_bulanan" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 transition-all text-slate-700 dark:text-slate-300">Laporan Mutasi Bulanan (A4 Landscape)</button>
+                </div>
+              </div>
+
+              <!-- Grup: Laporan Triwulan -->
+              <div>
+                <p class="text-[10px] font-black text-violet-600 uppercase tracking-widest mb-1.5">📊 Laporan Triwulan</p>
+                <div class="space-y-1">
+                  <button onclick="setReportType('rekap_kelahiran_triwulan')" data-rtype="rekap_kelahiran_triwulan" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:border-violet-300 transition-all text-slate-700 dark:text-slate-300">Rekap Kelahiran Triwulan (A4 Portrait)</button>
+                  <button onclick="setReportType('rekap_kematian_triwulan')" data-rtype="rekap_kematian_triwulan" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:border-violet-300 transition-all text-slate-700 dark:text-slate-300">Rekap Kematian Triwulan (A4 Portrait)</button>
+                  <button onclick="setReportType('mutasi_triwulan')" data-rtype="mutasi_triwulan" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:border-violet-300 transition-all text-slate-700 dark:text-slate-300">Laporan Mutasi Triwulan (A4 Landscape)</button>
+                </div>
+              </div>
+
+              <!-- Grup: Buku Catatan & Induk -->
+              <div>
+                <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1.5">📖 Buku Catatan & Induk</p>
+                <div class="space-y-1">
+                  <button onclick="setReportType('logbook_aves')" data-rtype="logbook_aves" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-300 transition-all text-slate-700 dark:text-slate-300">Logbook Aves / Burung (A4 Portrait)</button>
+                  <button onclick="setReportType('logbook_mamalia')" data-rtype="logbook_mamalia" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-300 transition-all text-slate-700 dark:text-slate-300">Logbook Mamalia Besar (A4 Portrait)</button>
+                  <button onclick="setReportType('logbook_mamalia_pet')" data-rtype="logbook_mamalia_pet" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-300 transition-all text-slate-700 dark:text-slate-300">Logbook Mamalia Pet (A4 Portrait)</button>
+                  <button onclick="setReportType('logbook_reptil')" data-rtype="logbook_reptil" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-300 transition-all text-slate-700 dark:text-slate-300">Logbook Reptil Pet (A4 Portrait)</button>
+                  <button onclick="setReportType('studbook')" data-rtype="studbook" class="report-type-btn w-full text-left px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:border-emerald-300 transition-all text-slate-700 dark:text-slate-300">Buku Induk Studbook (A4 Landscape)</button>
+                </div>
+              </div>
+
+              <input type="hidden" id="report-type" value="kelahiran">
+
+              <div class="pt-2 border-t border-slate-100 dark:border-slate-700/50 space-y-2">
                 <div>
-                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Format Laporan</label>
-                  <select id="report-type" onchange="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
-                    <option value="kelahiran">Laporan Kelahiran Satwa ke BKSDA (A4 Portrait)</option>
-                    <option value="kematian">Laporan Kematian Satwa ke BKSDA (A4 Portrait)</option>
-                    <option value="kesehatan">Surat Keterangan Kesehatan Hewan - SKKH (A4 Portrait)</option>
-                    <option value="mutasi_bulanan">Laporan Bulanan Mutasi Lembaga Konservasi (A4 Landscape)</option>
-                    <option value="logbook_aves">Buku Catatan Harian Lembaga Konservasi - Aves (A4 Portrait)</option>
-                    <option value="logbook_mamalia">Buku Catatan Harian Lembaga Konservasi - Mamalia (A4 Portrait)</option>
-                    <option value="logbook_reptil">Buku Catatan Harian Lembaga Konservasi - Reptil (A4 Portrait)</option>
-                    <option value="studbook">Buku Induk (Studbook) Lembaga Konservasi (A4 Landscape)</option>
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal / Periode Laporan</label>
+                  <input type="date" id="report-date" value="2026-06-08" onchange="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                </div>
+
+                <!-- Nomor Surat - hanya untuk kelahiran/kematian -->
+                <div id="nomor-surat-container">
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nomor Surat</label>
+                  <input type="text" id="report-nomor-surat" value="" placeholder="Contoh: 01/SGBL/LK/VI/2026" oninput="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none text-slate-700 dark:text-slate-300">
+                </div>
+
+                <!-- Triwulan selector -->
+                <div id="triwulan-container" class="hidden">
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Pilih Triwulan</label>
+                  <select id="report-triwulan" onchange="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                    <option value="1">Triwulan I (Jan – Mar)</option>
+                    <option value="2">Triwulan II (Apr – Jun)</option>
+                    <option value="3">Triwulan III (Jul – Sep)</option>
+                    <option value="4">Triwulan IV (Okt – Des)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Pilih Tanggal Laporan</label>
-                  <input type="date" id="report-date" value="2026-06-08" onchange="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
-                </div>
-
-                <div id="doctor-input-container" class="hidden">
-                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Nama Dokter Hewan (SKKH)</label>
-                  <input type="text" id="report-doctor-name" value="drh. Rayni Septianingsih" oninput="generateSelectedReport()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
-                </div>
-
-                <div>
-                  <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Penanggung Jawab Laporan</label>
-                  <div class="p-3 bg-slate-100 dark:bg-slate-900 rounded-xl text-xs font-semibold text-slate-500">
-                    <i class="fa-solid fa-lock mr-1.5 text-blue-500"></i>Yonas Adestira Ichti
+                  <label class="block text-xs font-bold text-slate-400 mb-1 uppercase">Penanggung Jawab</label>
+                  <div class="p-2 bg-slate-100 dark:bg-slate-900 rounded-xl text-xs font-semibold text-slate-500">
+                    <i class="fa-solid fa-lock mr-1 text-blue-500"></i>Yonas Adestira Ichti
                   </div>
                 </div>
               </div>
 
-              <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 space-y-2">
-                <button onclick="generateSelectedReport()" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/10">
-                  <i class="fa-solid fa-arrows-rotate animate-spin" style="animation-duration: 8s;"></i>
-                  <span>Perbarui Draft</span>
+              <div class="space-y-2">
+                <button onclick="generateSelectedReport()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-md">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                  <span>Perbarui Preview</span>
                 </button>
                 <button onclick="printReport()" class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
                   <i class="fa-solid fa-print"></i>
                   <span>Cetak / Ekspor PDF</span>
+                </button>
+                <button onclick="downloadReportDocx()" class="w-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
+                  <i class="fa-solid fa-file-word text-blue-600"></i>
+                  <span>Unduh Word (.docx)</span>
                 </button>
                 <a href="https://drive.google.com/drive/folders/1fpCSQca5nzDEIBMQI90bB1nISDh7aadu?usp=sharing" target="_blank" rel="noopener noreferrer"
                   class="w-full flex items-center justify-center gap-2 bg-white hover:bg-blue-50 dark:bg-slate-900 dark:hover:bg-blue-950/30 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 py-2.5 rounded-xl text-sm font-bold transition-all group">
@@ -1624,42 +1660,43 @@
       document.getElementById("add-mutasi-form").reset();
     }
 
-    // === STREAMING_CHUNK: Mengatur Orientasi Cetak Kertas A4 Dinamis (Portrait / Landscape) ===
+    // === LAPORAN GENERATOR ===
+
+    function setReportType(type) {
+      document.getElementById('report-type').value = type;
+      document.querySelectorAll('.report-type-btn').forEach(btn => {
+        const isActive = btn.dataset.rtype === type;
+        btn.classList.toggle('bg-blue-600', isActive && ['kelahiran','kematian','mutasi_bulanan'].includes(type));
+        btn.classList.toggle('bg-violet-600', isActive && ['rekap_kelahiran_triwulan','rekap_kematian_triwulan','mutasi_triwulan'].includes(type));
+        btn.classList.toggle('bg-emerald-600', isActive && ['logbook_aves','logbook_mamalia','logbook_mamalia_pet','logbook_reptil','studbook'].includes(type));
+        btn.classList.toggle('text-white', isActive);
+        btn.classList.toggle('border-transparent', isActive);
+      });
+      const triwulanTypes = ['rekap_kelahiran_triwulan','rekap_kematian_triwulan','mutasi_triwulan'];
+      const nomorTypes = ['kelahiran','kematian'];
+      document.getElementById('triwulan-container').classList.toggle('hidden', !triwulanTypes.includes(type));
+      document.getElementById('nomor-surat-container').classList.toggle('hidden', !nomorTypes.includes(type));
+      generateSelectedReport();
+    }
+
     function generateSelectedReport() {
       const type = document.getElementById("report-type").value;
       const rawDate = document.getElementById("report-date").value;
-      const doctorInputContainer = document.getElementById("doctor-input-container");
-      
-      if (type === "kesehatan") {
-        doctorInputContainer.classList.remove("hidden");
-      } else {
-        doctorInputContainer.classList.add("hidden");
-      }
+      const nomorSurat = document.getElementById("report-nomor-surat")?.value || "";
+      const triwulan = parseInt(document.getElementById("report-triwulan")?.value || "1");
 
-      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
       const d = new Date(rawDate);
       const formattedDateStr = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      const bulanTahun = `${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
 
-      // Locked Signee for BKSDA Reports
       const kuratorSignee = "Yonas Adestira Ichti";
       const kuratorTitle = "Kurator";
-
-      // Doctor's name dynamically input
-      const docName = document.getElementById("report-doctor-name").value || "drh. Rayni Septianingsih";
-
       const reportArea = document.getElementById("print-area");
 
-      // Menentukan layout cetak kertas A4 Portrait atau Landscape secara Dinamis
-      const isLandscape = (type === "studbook" || type === "mutasi_bulanan");
-      
+      const isLandscape = ["studbook","mutasi_bulanan","mutasi_triwulan"].includes(type);
       let styleElement = document.getElementById('dynamic-print-style');
-      if (!styleElement) {
-        styleElement = document.createElement('style');
-        styleElement.id = 'dynamic-print-style';
-        document.head.appendChild(styleElement);
-      }
-      
-      // Inject Rule Cetak Khusus & Ganti Class Tampilan Simulasi Layar Komputer
+      if (!styleElement) { styleElement = document.createElement('style'); styleElement.id = 'dynamic-print-style'; document.head.appendChild(styleElement); }
       if (isLandscape) {
         styleElement.innerHTML = '@page { size: A4 landscape; margin: 15mm; }';
         reportArea.className = "paper-sim mx-auto text-sm leading-relaxed overflow-x-auto no-scrollbar w-full max-w-[297mm] min-h-[210mm] shadow-lg bg-white text-black transition-all";
@@ -1668,440 +1705,591 @@
         reportArea.className = "paper-sim mx-auto text-sm leading-relaxed overflow-x-auto no-scrollbar w-full max-w-[210mm] min-h-[297mm] shadow-lg bg-white text-black transition-all";
       }
 
+      const LOGO = "data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAQABgADASIAAhEBAxEB/8QAHAABAAEFAQEAAAAAAAAAAAAAAAUBAgMEBwYI/8QAWBABAAIBAgIFBgUOCQwBBAIDAAECAwQREiEFMUFRYQYTInGBkQcyQqGxFCM2UlVicnOCkrLB0dIVFhczU5Oio+IkNUNUdIOUpLPC0/BjJjRl4SXDREWE/8QAHAEBAAEFAQEAAAAAAAAAAAAAAAYBBAUHCAMC/8QARxEBAAECAwEKCAsIAgIDAAAAAAECAwQFESEGBxIxQVFxgaGxExU0NWGRwdEXIjIzQlJTcnOy0hQWVJKi4fDxI8JD4mJjgv/aAAwDAQACEQMRAD8A+MgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf//Z";
+      function kopSurat(compact=false) {
+        const sz = compact ? "54px" : "68px", ts = compact ? "14px" : "18px", br = compact ? "2px solid #1e3a5f" : "3px double #1e3a5f";
+        return `<div style="border-bottom:${br};padding-bottom:10px;margin-bottom:14px;display:flex;align-items:center;gap:14px;"><img src="${LOGO}" style="width:${sz};height:${sz};object-fit:contain;flex-shrink:0;" alt="Logo"><div style="flex:1;text-align:center;"><div style="font-size:${ts};font-weight:900;color:#1e3a5f;text-transform:uppercase;">PT. Satwa Gunung Bayan Lestari</div><div style="font-size:10px;font-weight:700;color:#1e3a5f;">LEMBAGA KONSERVASI</div><div style="font-size:9px;color:#444;margin-top:2px;">JLN. MT. Haryono, Balikpapan Baru Blok D-4 No.9-10, Kel. Damai Baru,<br>Kec. Balikpapan Selatan, Kota Balikpapan, Kalimantan Timur – 76114</div></div></div>`;
+      }
+
+      // -------------------------------------------------------
+      // SURAT LAPORAN KELAHIRAN
+      // -------------------------------------------------------
       if (type === "kelahiran") {
         let rowsHtml = '';
         localDB.kelahiran.forEach((kl, idx) => {
-          rowsHtml += `
-            <tr class="border-b border-slate-300">
-              <td class="p-2 border border-slate-300 text-center">${idx + 1}</td>
-              <td class="p-2 border border-slate-300 font-bold">${kl.nama} <br><span class="text-xs italic font-normal">${kl.latin}</span></td>
-              <td class="p-2 border border-slate-300 text-center font-bold">${kl.jumlah} ekor</td>
-              <td class="p-2 border border-slate-300 text-center font-mono">${kl.tag}</td>
-              <td class="p-2 border border-slate-300 text-center">${kl.tanggal}</td>
-              <td class="p-2 border border-slate-300 text-center">${kl.kelamin}</td>
-              <td class="p-2 border border-slate-300 text-xs">${kl.ket || '-'}</td>
-            </tr>
-          `;
+          rowsHtml += `<tr>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${kl.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${kl.latin}</span></td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.jumlah} ekor</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;font-family:monospace;">${kl.tag || '-'}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tanggal}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.kelamin}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;">${kl.ket || '-'}</td>
+          </tr>`;
         });
 
         reportArea.innerHTML = `
-          <div class="border-b-4 border-double border-slate-900 pb-4 text-center mb-6 text-slate-900">
-            <h1 class="text-2xl font-black uppercase tracking-wide">PT. Satwa Gunung Bayan Lestari</h1>
-            <p class="text-xs font-bold text-slate-500">Lembaga Konservasi / Taman Satwa - Kecamatan Tabang, Kabupaten Kutai Kartanegara</p>
-            <p class="text-[11px] text-slate-400">Provinsi Kalimantan Timur, Indonesia</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 text-xs mb-6 text-slate-900">
-            <div>
-              <p><strong>Tabang, ${formattedDateStr}</strong></p>
-              <p>Nomor : 03/SGBL/ZOO/IV/2026</p>
-              <p>Lampiran : -</p>
-              <p>Perihal : Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi</p>
+          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+            ${kopSurat()}
+            <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:11px;">
+              <div>
+                <div>Nomor &nbsp;&nbsp;&nbsp;: ${nomorSurat || '............/SGBL/LK/...../2026'}</div>
+                <div>Lampiran : -</div>
+                <div>Perihal &nbsp;&nbsp;: <strong>Laporan Kelahiran Satwa Liar</strong></div>
+              </div>
+              <div style="text-align:right;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div style="margin-top:6px;"><strong>Kepada Yth.</strong></div>
+                <div>Kepala Balai Konservasi Sumber Daya Alam</div>
+                <div>Kalimantan Timur</div>
+                <div style="font-style:italic;">Di Samarinda</div>
+              </div>
             </div>
-            <div class="text-right">
-              <p class="font-bold">Kepada Yth.</p>
-              <p>Kepala Balai Konservasi Sumber Daya Alam</p>
-              <p>Kalimantan Timur</p>
-              <p class="italic">Di Samarinda</p>
+            <div style="margin-bottom:8px;">Dengan hormat,</div>
+            <div style="margin-bottom:12px;text-align:justify;line-height:1.6;">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk dapat dilakukan pemeriksaan dengan data sebagai berikut:</div>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+              <thead>
+                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:11%">Jumlah</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:13%">No. Tag / ID</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:13%">Tgl. Lahir</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:10%">Kelamin</th>
+                  <th style="border:1px solid #ccc;padding:6px;">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml || '<tr><td colspan="7" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data kelahiran</td></tr>'}</tbody>
+            </table>
+            <div style="margin-bottom:20px;text-align:justify;line-height:1.6;">Demikian laporan kelahiran ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</div>
+            <div style="display:flex;justify-content:flex-end;">
+              <div style="text-align:center;width:200px;">
+                <div>Hormat kami,</div>
+                <div style="font-weight:700;margin-top:4px;">${kuratorTitle}</div>
+                <div style="height:60px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:10px;color:#555;">PT. Satwa Gunung Bayan Lestari</div>
+              </div>
             </div>
-          </div>
+          </div>`;
 
-          <p class="text-xs mb-4 text-slate-900">Dengan hormat,</p>
-          <p class="text-xs mb-4 text-slate-900">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk dapat dilakukan pemeriksaan dengan data sebagai berikut:</p>
-
-          <table class="w-full text-xs border border-slate-300 border-collapse mb-6 text-slate-900">
-            <thead>
-              <tr class="bg-slate-100 font-bold text-center">
-                <th class="p-2 border border-slate-300" style="width: 5%">No</th>
-                <th class="p-2 border border-slate-300" style="width: 35%">Jenis Satwa (Indonesia/Latin)</th>
-                <th class="p-2 border border-slate-300" style="width: 12%">Jumlah</th>
-                <th class="p-2 border border-slate-300" style="width: 12%">No. Tag / ID</th>
-                <th class="p-2 border border-slate-300" style="width: 12%">Tgl. Lahir</th>
-                <th class="p-2 border border-slate-300" style="width: 10%">Kelamin</th>
-                <th class="p-2 border border-slate-300" style="width: 14%">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-
-          <p class="text-xs mb-8 text-slate-900">Demikian laporan kelahiran ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
-
-          <div class="flex justify-end text-xs text-slate-900">
-            <div class="text-center w-64">
-              <p>Hormat kami,</p>
-              <p class="font-bold mb-16">${kuratorTitle}</p>
-              <p class="font-bold underline">${kuratorSignee}</p>
-              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
-            </div>
-          </div>
-        `;
+      // -------------------------------------------------------
+      // SURAT LAPORAN KEMATIAN
+      // -------------------------------------------------------
       } else if (type === "kematian") {
         let rowsHtml = '';
         localDB.kematian.forEach((km, idx) => {
-          rowsHtml += `
-            <tr class="border-b border-slate-300">
-              <td class="p-2 border border-slate-300 text-center">${idx + 1}</td>
-              <td class="p-2 border border-slate-300 font-bold">${km.nama} <br><span class="text-xs italic font-normal">${km.latin}</span></td>
-              <td class="p-2 border border-slate-300 text-center font-bold">${km.jumlah} ekor</td>
-              <td class="p-2 border border-slate-300 text-center font-mono">${km.tanggal}</td>
-              <td class="p-2 border border-slate-300 text-center text-rose-600 font-bold">${km.sebab}</td>
-              <td class="p-2 border border-slate-300 text-xs font-mono">${km.bap}</td>
-            </tr>
-          `;
+          rowsHtml += `<tr>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${km.latin}</span></td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.jumlah} ekor</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.tanggal}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;color:#c0392b;font-weight:600;">${km.sebab}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;font-family:monospace;">${km.bap || '-'}</td>
+          </tr>`;
         });
 
         reportArea.innerHTML = `
-          <div class="border-b-4 border-double border-slate-900 pb-4 text-center mb-6 text-slate-900">
-            <h1 class="text-2xl font-black uppercase tracking-wide">PT. Satwa Gunung Bayan Lestari</h1>
-            <p class="text-xs font-bold text-slate-500">Lembaga Konservasi / Taman Satwa - Kecamatan Tabang, Kabupaten Kutai Kartanegara</p>
-            <p class="text-[11px] text-slate-400">Provinsi Kalimantan Timur, Indonesia</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 text-xs mb-6 text-slate-900">
-            <div>
-              <p><strong>Tabang, ${formattedDateStr}</strong></p>
-              <p>Nomor : 12/SGBL-BAK/ZOO/II/2026</p>
-              <p>Lampiran : -</p>
-              <p>Perihal : Laporan Kematian Satwa Liar Dilindungi dan Tidak Dilindungi</p>
+          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+            ${kopSurat()}
+            <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:11px;">
+              <div>
+                <div>Nomor &nbsp;&nbsp;&nbsp;: ${nomorSurat || '............/SGBL/LK/...../2026'}</div>
+                <div>Lampiran : -</div>
+                <div>Perihal &nbsp;&nbsp;: <strong>Laporan Kematian Satwa Liar</strong></div>
+              </div>
+              <div style="text-align:right;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div style="margin-top:6px;"><strong>Kepada Yth.</strong></div>
+                <div>Kepala Balai Konservasi Sumber Daya Alam</div>
+                <div>Kalimantan Timur</div>
+                <div style="font-style:italic;">Di Samarinda</div>
+              </div>
             </div>
-            <div class="text-right">
-              <p class="font-bold">Kepada Yth.</p>
-              <p>Kepala Balai Konservasi Sumber Daya Alam</p>
-              <p>Kalimantan Timur</p>
-              <p class="italic">Di Samarinda</p>
+            <div style="margin-bottom:8px;">Dengan hormat,</div>
+            <div style="margin-bottom:12px;text-align:justify;line-height:1.6;">Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk kemudian dapat dilakukan pemeriksaan pasca-kematian (nekropsi) dengan data sebagai berikut:</div>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+              <thead>
+                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:10%">Jumlah</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:14%">Tgl. Kematian</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:18%">Sebab Kematian</th>
+                  <th style="border:1px solid #ccc;padding:6px;">No. BAP</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml || '<tr><td colspan="6" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data kematian</td></tr>'}</tbody>
+            </table>
+            <div style="margin-bottom:20px;text-align:justify;line-height:1.6;">Demikian laporan kematian ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</div>
+            <div style="display:flex;justify-content:flex-end;">
+              <div style="text-align:center;width:200px;">
+                <div>Hormat kami,</div>
+                <div style="font-weight:700;margin-top:4px;">${kuratorTitle}</div>
+                <div style="height:60px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:10px;color:#555;">PT. Satwa Gunung Bayan Lestari</div>
+              </div>
             </div>
-          </div>
+          </div>`;
 
-          <p class="text-xs mb-4 text-slate-900">Dengan hormat,</p>
-          <p class="text-xs mb-4 text-slate-900">Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk kemudian dapat dilakukan pemeriksaan pasca-kematian (nekropsi) dengan data sebagai berikut:</p>
-
-          <table class="w-full text-xs border border-slate-300 border-collapse mb-6 text-slate-900">
-            <thead>
-              <tr class="bg-slate-100 font-bold text-center">
-                <th class="p-2 border border-slate-300" style="width: 5%">No</th>
-                <th class="p-2 border border-slate-300" style="width: 35%">Jenis Satwa (Indonesia/Latin)</th>
-                <th class="p-2 border border-slate-300" style="width: 10%">Jumlah</th>
-                <th class="p-2 border border-slate-300" style="width: 15%">Tgl. Kematian</th>
-                <th class="p-2 border border-slate-300" style="width: 15%">Sebab Kematian</th>
-                <th class="p-2 border border-slate-300" style="width: 20%">No. BAP Penitipan</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-
-          <p class="text-xs mb-8 text-slate-900">Demikian laporan kematian ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
-
-          <div class="flex justify-end text-xs text-slate-900">
-            <div class="text-center w-64">
-              <p>Hormat kami,</p>
-              <p class="font-bold mb-16">${kuratorTitle}</p>
-              <p class="font-bold underline">${kuratorSignee}</p>
-              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
-            </div>
-          </div>
-        `;
-      } else if (type === "kesehatan") {
-        let rowsHtml = '';
-        localDB.master.forEach((st, idx) => {
-          rowsHtml += `
-            <tr class="border-b border-slate-300">
-              <td class="p-2 border border-slate-300 text-center">${idx + 1}</td>
-              <td class="p-2 border border-slate-300 font-bold">${st.nama}</td>
-              <td class="p-2 border border-slate-300 italic font-medium">${st.latin}</td>
-              <td class="p-2 border border-slate-300 text-center font-bold">${st.jumlah} ekor</td>
-            </tr>
-          `;
-        });
-
-        reportArea.innerHTML = `
-          <div class="border-b-4 border-double border-slate-900 pb-4 text-center mb-6 text-slate-900">
-            <h1 class="text-2xl font-black uppercase tracking-wide">PT. Satwa Gunung Bayan Lestari</h1>
-            <p class="text-xs font-bold text-slate-500">Lembaga Konservasi / Taman Satwa - Kecamatan Tabang, Kabupaten Kutai Kartanegara</p>
-            <p class="text-[11px] text-slate-400">Provinsi Kalimantan Timur, Indonesia</p>
-          </div>
-
-          <div class="text-center mb-6 text-slate-900">
-            <h2 class="text-sm font-extrabold underline tracking-wide uppercase">Surat Keterangan Kesehatan Hewan</h2>
-            <p class="text-xs">Nomor: 03/SKKH-VET/VI/2026</p>
-          </div>
-
-          <p class="text-xs mb-4 text-slate-900">Yang bertanda tangan di bawah ini, saya <strong>${docName}</strong> sebagai Dokter Hewan di Lembaga Konservasi PT. Satwa Gunung Bayan Lestari menerangkan bahwa pada hari ini telah dilakukan pemeriksaan menyeluruh terhadap satwa koleksi sebagai berikut:</p>
-
-          <table class="w-full text-xs border border-slate-300 border-collapse mb-6 text-slate-900">
-            <thead>
-              <tr class="bg-slate-100 font-bold">
-                <th class="p-2 border border-slate-300" style="width: 10%">No</th>
-                <th class="p-2 border border-slate-300" style="width: 45%">Nama Jenis Satwa</th>
-                <th class="p-2 border border-slate-300" style="width: 30%">Nama Ilmiah</th>
-                <th class="p-2 border border-slate-300" style="width: 15%">Jumlah</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-
-          <p class="text-xs font-bold bg-blue-50 text-blue-800 p-3 rounded-xl border border-blue-200 mb-6">Menyatakan bahwa seluruh satwa yang tertera di atas dalam kondisi SEHAT secara klinis, prima, serta tidak menunjukkan gejala-gejala penyakit menular.</p>
-
-          <p class="text-xs mb-8 text-slate-900">Demikian Surat Keterangan Kesehatan Hewan (SKKH) ini dibuat dengan sebenar-benarnya untuk dipergunakan sebagaimana mestinya.</p>
-
-          <div class="flex justify-end text-xs text-slate-900">
-            <div class="text-center w-64">
-              <p>Tabang, ${formattedDateStr}</p>
-              <p class="font-bold mb-16">Dokter Hewan LK</p>
-              <p class="font-bold underline">${docName}</p>
-              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
-            </div>
-          </div>
-        `;
+      // -------------------------------------------------------
+      // LAPORAN MUTASI BULANAN
+      // -------------------------------------------------------
       } else if (type === "mutasi_bulanan") {
         let rowsHtml = '';
         localDB.master.forEach((st, idx) => {
-          let lahirBulanIni = localDB.kelahiran.filter(k => k.nama === st.nama).reduce((acc, curr) => acc + curr.jumlah, 0);
-          let matiBulanIni = localDB.kematian.filter(k => k.nama === st.nama).reduce((acc, curr) => acc + curr.jumlah, 0);
-          let indukAwal = st.jumlah - lahirBulanIni + matiBulanIni;
-
-          rowsHtml += `
-            <tr class="border border-slate-400 text-slate-900 text-[10px]">
-              <td class="p-1.5 border border-slate-400 text-center">${idx + 1}</td>
-              <td class="p-1.5 border border-slate-400 font-semibold">${st.nama} <br><span class="text-[9px] font-normal italic">${st.latin}</span></td>
-              <td class="p-1.5 border border-slate-400 text-center font-bold">${indukAwal}</td>
-              <td class="p-1.5 border border-slate-400 text-center">0</td>
-              <td class="p-1.5 border border-slate-400 text-center text-slate-600">${st.asal}</td>
-              <td class="p-1.5 border border-slate-400 text-center font-bold text-emerald-600">${lahirBulanIni > 0 ? lahirBulanIni : '-'}</td>
-              <td class="p-1.5 border border-slate-400 text-center">-</td>
-              <td class="p-1.5 border border-slate-400 text-center">-</td>
-              <td class="p-1.5 border border-slate-400 text-center font-bold text-rose-600">${matiBulanIni > 0 ? matiBulanIni : '-'}</td>
-              <td class="p-1.5 border border-slate-400 text-center font-bold">${st.jumlah}</td>
-              <td class="p-1.5 border border-slate-400 text-center">0</td>
-              <td class="p-1.5 border border-slate-400 text-[9px]">${st.keterangan || st.status}</td>
-            </tr>
-          `;
+          const lahir = localDB.kelahiran.filter(k=>k.nama===st.nama).reduce((a,c)=>a+c.jumlah,0);
+          const mati = localDB.kematian.filter(k=>k.nama===st.nama).reduce((a,c)=>a+c.jumlah,0);
+          const awal = st.jumlah - lahir + mati;
+          rowsHtml += `<tr style="font-size:10px;">
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;font-weight:600;">${st.nama}<br><span style="font-style:italic;font-weight:400;font-size:9px;">${st.latin}</span></td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;font-weight:700;">${awal}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">0</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">${st.asal||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;color:#16a34a;font-weight:700;">${lahir||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">-</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">-</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;color:#dc2626;font-weight:700;">${mati||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;font-weight:700;">${st.jumlah}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">0</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;font-size:9px;">${st.keterangan||st.status||'-'}</td>
+          </tr>`;
         });
 
         reportArea.innerHTML = `
-          <div class="text-slate-900 pb-4 text-center mb-6">
-            <h1 class="text-base font-bold uppercase tracking-wide">LAPORAN BULANAN MUTASI LEMBAGA KONSERVASI SATWA</h1>
-            <p class="text-xs font-bold text-slate-500">PT. SATWA GUNUNG BAYAN LESTARI &bull; BULAN: ${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 text-[11px] mb-4 text-slate-900">
-            <div>
-              <p>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></p>
-              <p>SK. LEMBAGA KONSERVASI : S.542/KK/2026</p>
-              <p>ALAMAT KANTOR : Kec. Tabang, Kab. Kutai Kartanegara</p>
+          <div style="padding:18px 22px;font-family:Arial,sans-serif;font-size:10px;color:#111;background:#fff;">
+            ${kopSurat(true)}
+            <div style="text-align:center;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:900;text-transform:uppercase;color:#1e3a5f;">LAPORAN BULANAN MUTASI LEMBAGA KONSERVASI PT. SGBL</div>
+              <div style="font-size:10px;font-weight:700;margin-top:2px;">BULAN: ${bulanTahun}</div>
             </div>
-            <div class="text-right">
-              <p>SK. PENGEDAR DN : TERSEDIA</p>
-              <p>SK. PENGEDAR LN : -</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:10px;">
+              <div>
+                <div>NAMA PERUSAHAAN &nbsp;&nbsp;: <strong>PT. Satwa Gunung Bayan Lestari</strong></div>
+                <div>SK. LK &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: S.542/KK/2026</div>
+                <div>ALAMAT KANTOR &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Kec. Tabang, Kab. Kutai Kartanegara</div>
+              </div>
+              <div style="text-align:right;">
+                <div>ALAMAT PENANGKARAN : Kec. Tabang, Kukar, Kaltim</div>
+                <div>BULAN / TAHUN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${bulanTahun}</div>
+              </div>
             </div>
-          </div>
-
-          <table class="w-full text-[10px] border-collapse border border-slate-400 mb-6 text-slate-900">
-            <thead>
-              <tr class="bg-slate-100 text-center font-bold">
-                <th rowspan="2" class="p-1 border border-slate-400" style="width: 3%">No.</th>
-                <th rowspan="2" class="p-1 border border-slate-400" style="width: 25%">Nama Jenis Satwa</th>
-                <th rowspan="2" class="p-1 border border-slate-400" style="width: 7%">Jumlah Induk (Awal)</th>
-                <th rowspan="2" class="p-1 border border-slate-400" style="width: 7%">Jumlah Anak (Awal)</th>
-                <th rowspan="2" class="p-1 border border-slate-400" style="width: 10%">Asal-usul Induk</th>
-                <th colspan="4" class="p-1 border border-slate-400">Jumlah Mutasi Bulan Ini</th>
-                <th colspan="2" class="p-1 border border-slate-400">Jumlah Akhir Bulan Ini</th>
-                <th rowspan="2" class="p-1 border border-slate-400" style="width: 12%">Keterangan</th>
-              </tr>
-              <tr class="bg-slate-50 text-center font-semibold text-[8px]">
-                <th class="p-1 border border-slate-400 text-emerald-600">Tambah (Induk)</th>
-                <th class="p-1 border border-slate-400 text-emerald-600">Tambah (Anak)</th>
-                <th class="p-1 border border-slate-400 text-rose-600">Kurang (Induk)</th>
-                <th class="p-1 border border-slate-400 text-rose-600">Kurang (Anak)</th>
-                <th class="p-1 border border-slate-400">Induk</th>
-                <th class="p-1 border border-slate-400">Anakan</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-
-          <div class="flex justify-end text-xs text-slate-900 mt-6">
-            <div class="text-center w-64">
-              <p>Pimpinan Lembaga Konservasi / Kurator Utama,</p>
-              <p class="font-bold mb-16">${kuratorTitle}</p>
-              <p class="font-bold underline">${kuratorSignee}</p>
-              <p class="text-[10px] text-slate-500">PT. Satwa Gunung Bayan Lestari</p>
+            <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:12px;">
+              <thead>
+                <tr style="background:#dce6f1;font-weight:bold;text-align:center;">
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:3%">No.</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:24%">Nama Jenis Satwa</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:7%">Jml Induk Awal</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:7%">Jml Anak Awal</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:10%">Asal-usul Induk</th>
+                  <th colspan="4" style="border:1px solid #888;padding:4px;">Jumlah Mutasi Bulan Ini</th>
+                  <th colspan="2" style="border:1px solid #888;padding:4px;">Jumlah Akhir</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">Keterangan</th>
+                </tr>
+                <tr style="background:#eaf0f8;font-size:8.5px;text-align:center;">
+                  <th style="border:1px solid #888;padding:3px;color:#16a34a;">+Induk</th>
+                  <th style="border:1px solid #888;padding:3px;color:#16a34a;">+Anak</th>
+                  <th style="border:1px solid #888;padding:3px;color:#dc2626;">-Induk</th>
+                  <th style="border:1px solid #888;padding:3px;color:#dc2626;">-Anak</th>
+                  <th style="border:1px solid #888;padding:3px;">Induk</th>
+                  <th style="border:1px solid #888;padding:3px;">Anakan</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml||'<tr><td colspan="12" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data</td></tr>'}</tbody>
+            </table>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <div style="text-align:center;width:200px;">
+                <div>Pimpinan LK / Kurator Utama,</div>
+                <div style="height:55px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:9px;color:#555;">${kuratorTitle}</div>
+              </div>
             </div>
-          </div>
-        `;
-      } else if (type === "logbook_aves" || type === "logbook_mamalia" || type === "logbook_reptil") {
-        let categoryName = type === "logbook_aves" ? "AVES / BURUNG" : (type === "logbook_reptil" ? "REPTIL" : "MAMALIA");
-        let filterKelas = type === "logbook_aves" ? "Aves" : (type === "logbook_reptil" ? "Reptil" : "Mamalia");
-        
-        let filteredSatwa = localDB.master.filter(s => s.kelas === filterKelas);
+          </div>`;
+
+      // -------------------------------------------------------
+      // REKAP KELAHIRAN TRIWULAN
+      // -------------------------------------------------------
+      } else if (type === "rekap_kelahiran_triwulan") {
+        const triwulanMonths = { 1:["Januari","Februari","Maret"], 2:["April","Mei","Juni"], 3:["Juli","Agustus","September"], 4:["Oktober","November","Desember"] };
+        const tw = triwulanMonths[triwulan];
+        let rowsHtml = '';
+        localDB.kelahiran.forEach((kl, idx) => {
+          rowsHtml += `<tr>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${kl.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${kl.latin}</span></td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.jumlah} ekor</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tag||'-'}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tanggal}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.kelamin}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;">${kl.ket||'-'}</td>
+          </tr>`;
+        });
+        reportArea.innerHTML = `
+          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+            ${kopSurat()}
+            <div style="text-align:center;margin-bottom:14px;">
+              <div style="font-size:13px;font-weight:900;text-transform:uppercase;text-decoration:underline;">REKAP LAPORAN KELAHIRAN SATWA</div>
+              <div style="font-size:11px;font-weight:700;margin-top:3px;">TRIWULAN ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]}) TAHUN ${d.getFullYear()}</div>
+              <div style="font-size:10px;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari – Lembaga Konservasi</div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+              <thead>
+                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:11%">Jumlah</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:13%">No. Tag / ID</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:13%">Tgl. Lahir</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:10%">Kelamin</th>
+                  <th style="border:1px solid #ccc;padding:6px;">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml||'<tr><td colspan="7" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data</td></tr>'}</tbody>
+            </table>
+            <div style="margin-bottom:20px;line-height:1.6;">Demikian rekap laporan kelahiran triwulan ini kami sampaikan untuk keperluan pelaporan berkala kepada BKSDA Kalimantan Timur.</div>
+            <div style="display:flex;justify-content:flex-end;">
+              <div style="text-align:center;width:200px;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div style="font-weight:700;margin-top:4px;">${kuratorTitle}</div>
+                <div style="height:60px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:10px;color:#555;">PT. Satwa Gunung Bayan Lestari</div>
+              </div>
+            </div>
+          </div>`;
+
+      // -------------------------------------------------------
+      // REKAP KEMATIAN TRIWULAN
+      // -------------------------------------------------------
+      } else if (type === "rekap_kematian_triwulan") {
+        const triwulanMonths = { 1:["Januari","Februari","Maret"], 2:["April","Mei","Juni"], 3:["Juli","Agustus","September"], 4:["Oktober","November","Desember"] };
+        const tw = triwulanMonths[triwulan];
+        let rowsHtml = '';
+        localDB.kematian.forEach((km, idx) => {
+          rowsHtml += `<tr>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${km.latin}</span></td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.jumlah} ekor</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.tanggal}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;color:#c0392b;font-weight:600;">${km.sebab}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;font-family:monospace;">${km.bap||'-'}</td>
+          </tr>`;
+        });
+        reportArea.innerHTML = `
+          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+            ${kopSurat()}
+            <div style="text-align:center;margin-bottom:14px;">
+              <div style="font-size:13px;font-weight:900;text-transform:uppercase;text-decoration:underline;">REKAP LAPORAN KEMATIAN SATWA</div>
+              <div style="font-size:11px;font-weight:700;margin-top:3px;">TRIWULAN ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]}) TAHUN ${d.getFullYear()}</div>
+              <div style="font-size:10px;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari – Lembaga Konservasi</div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+              <thead>
+                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:10%">Jumlah</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:14%">Tgl. Kematian</th>
+                  <th style="border:1px solid #ccc;padding:6px;width:18%">Sebab Kematian</th>
+                  <th style="border:1px solid #ccc;padding:6px;">No. BAP</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml||'<tr><td colspan="6" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data</td></tr>'}</tbody>
+            </table>
+            <div style="margin-bottom:20px;line-height:1.6;">Demikian rekap laporan kematian triwulan ini kami sampaikan untuk keperluan pelaporan berkala kepada BKSDA Kalimantan Timur.</div>
+            <div style="display:flex;justify-content:flex-end;">
+              <div style="text-align:center;width:200px;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div style="font-weight:700;margin-top:4px;">${kuratorTitle}</div>
+                <div style="height:60px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:10px;color:#555;">PT. Satwa Gunung Bayan Lestari</div>
+              </div>
+            </div>
+          </div>`;
+
+      // -------------------------------------------------------
+      // MUTASI TRIWULAN
+      // -------------------------------------------------------
+      } else if (type === "mutasi_triwulan") {
+        const triwulanMonths = { 1:["Januari","Februari","Maret"], 2:["April","Mei","Juni"], 3:["Juli","Agustus","September"], 4:["Oktober","November","Desember"] };
+        const tw = triwulanMonths[triwulan];
+        let rowsHtml = '';
+        localDB.master.forEach((st, idx) => {
+          const lahir = localDB.kelahiran.filter(k=>k.nama===st.nama).reduce((a,c)=>a+c.jumlah,0);
+          const mati = localDB.kematian.filter(k=>k.nama===st.nama).reduce((a,c)=>a+c.jumlah,0);
+          const awal = st.jumlah - lahir + mati;
+          rowsHtml += `<tr style="font-size:9.5px;">
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;font-weight:600;">${st.nama}<br><span style="font-style:italic;font-weight:400;font-size:8.5px;">${st.latin}</span></td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;font-weight:700;">${awal}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">0</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">${st.asal||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;color:#16a34a;font-weight:700;">${lahir||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">-</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">-</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;color:#dc2626;font-weight:700;">${mati||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;font-weight:700;">${st.jumlah}</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;text-align:center;">0</td>
+            <td style="border:1px solid #aaa;padding:4px 5px;font-size:8.5px;">${st.keterangan||st.status||'-'}</td>
+          </tr>`;
+        });
+        reportArea.innerHTML = `
+          <div style="padding:18px 22px;font-family:Arial,sans-serif;font-size:10px;color:#111;background:#fff;">
+            ${kopSurat(true)}
+            <div style="text-align:center;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:900;text-transform:uppercase;color:#1e3a5f;">LAPORAN MUTASI TRIWULAN ${['I','II','III','IV'][triwulan-1]} LEMBAGA KONSERVASI PT. SGBL</div>
+              <div style="font-size:10px;font-weight:700;margin-top:2px;">PERIODE: ${tw[0].toUpperCase()} – ${tw[2].toUpperCase()} ${d.getFullYear()}</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:10px;">
+              <div>
+                <div>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></div>
+                <div>SK. LK &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: S.542/KK/2026</div>
+                <div>ALAMAT KANTOR &nbsp;&nbsp;: Kec. Tabang, Kab. Kutai Kartanegara</div>
+              </div>
+              <div style="text-align:right;">
+                <div>TRIWULAN : ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]})</div>
+                <div>TAHUN &nbsp;&nbsp;&nbsp;&nbsp;: ${d.getFullYear()}</div>
+              </div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:9px;margin-bottom:12px;">
+              <thead>
+                <tr style="background:#dce6f1;font-weight:bold;text-align:center;">
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:3%">No.</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:24%">Nama Jenis Satwa</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:7%">Jml Induk Awal</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:7%">Jml Anak Awal</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;width:10%">Asal-usul</th>
+                  <th colspan="4" style="border:1px solid #888;padding:4px;">Mutasi Triwulan</th>
+                  <th colspan="2" style="border:1px solid #888;padding:4px;">Jumlah Akhir</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">Keterangan</th>
+                </tr>
+                <tr style="background:#eaf0f8;font-size:8px;text-align:center;">
+                  <th style="border:1px solid #888;padding:3px;color:#16a34a;">+Induk</th>
+                  <th style="border:1px solid #888;padding:3px;color:#16a34a;">+Anak</th>
+                  <th style="border:1px solid #888;padding:3px;color:#dc2626;">-Induk</th>
+                  <th style="border:1px solid #888;padding:3px;color:#dc2626;">-Anak</th>
+                  <th style="border:1px solid #888;padding:3px;">Induk</th>
+                  <th style="border:1px solid #888;padding:3px;">Anakan</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml||'<tr><td colspan="12" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data</td></tr>'}</tbody>
+            </table>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <div style="text-align:center;width:200px;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div>Pimpinan LK / Kurator Utama,</div>
+                <div style="height:55px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:9px;color:#555;">${kuratorTitle}</div>
+              </div>
+            </div>
+          </div>`;
+
+      // -------------------------------------------------------
+      // LOGBOOK (Aves, Mamalia Besar, Mamalia Pet, Reptil)
+      // -------------------------------------------------------
+      } else if (["logbook_aves","logbook_mamalia","logbook_mamalia_pet","logbook_reptil"].includes(type)) {
+        const labelMap = { logbook_aves:"AVES / BURUNG", logbook_mamalia:"MAMALIA BESAR", logbook_mamalia_pet:"MAMALIA PET", logbook_reptil:"REPTIL PET" };
+        const classMap = { logbook_aves:"Aves", logbook_mamalia:"Mamalia", logbook_mamalia_pet:"Mamalia", logbook_reptil:"Reptil" };
+        const categoryName = labelMap[type];
+        const cls = classMap[type];
+        const filtered = localDB.master.filter(st => st.kelas === cls || st.jenis === cls || (type==='logbook_aves' && ['Burung','Aves'].some(x=>st.kelas?.includes(x)||st.jenis?.includes(x))) );
         let logbookRows = '';
-        
-        filteredSatwa.forEach((st, idx) => {
-          logbookRows += `
-            <tr class="border border-slate-400 text-slate-900 text-xs">
-              <td class="p-2 border border-slate-400 text-center" rowspan="3">${idx + 1}</td>
-              <td class="p-2 border border-slate-400 text-center font-medium">Senin, ${formattedDateStr} <br> Pagi 07:00</td>
-              <td class="p-2 border border-slate-400">Pemberian pakan rutin harian, multivitamin cair, serta pembersihan total sanitasi kandang ${st.kandang}.</td>
-              <td class="p-2 border border-slate-400 text-center text-emerald-600 font-bold">Sehat Klinis</td>
-              <td class="p-2 border border-slate-400 text-center font-bold">${st.jumlah}</td>
-              <td class="p-2 border border-slate-400 text-xs">${st.keterangan || 'Kondisi Prima'}</td>
-            </tr>
-            <tr class="border border-slate-400 text-slate-900 text-xs">
-              <td class="p-2 border border-slate-400 text-center font-medium">Siang 12:00</td>
-              <td class="p-2 border border-slate-400">Pemeriksaan visual rutin oleh Dokter Hewan, pencatatan suhu, dan penyemprotan desinfektan di koridor luar.</td>
-              <td class="p-2 border border-slate-400 text-center text-emerald-600 font-bold">Sehat Klinis</td>
-              <td class="p-2 border border-slate-400 text-center font-bold">${st.jumlah}</td>
-              <td class="p-2 border border-slate-400 text-xs">Monitoring perilaku aktif</td>
-            </tr>
-            <tr class="border border-slate-400 text-slate-900 text-xs">
-              <td class="p-2 border border-slate-400 text-center font-medium">Sore 16:30</td>
-              <td class="p-2 border border-slate-400">Pemberian pakan sore / ekstra fooding, kontrol gerendel/gembok pintu kandang ganda, memastikan keamanan malam.</td>
-              <td class="p-2 border border-slate-400 text-center text-emerald-600 font-bold">Sehat Klinis</td>
-              <td class="p-2 border border-slate-400 text-center font-bold">${st.jumlah}</td>
-              <td class="p-2 border border-slate-400 text-xs">Kandang terkunci aman</td>
-            </tr>
-          `;
+        (filtered.length ? filtered : localDB.master).forEach((st, idx) => {
+          logbookRows += `<tr>
+            <td style="border:1px solid #aaa;padding:5px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #aaa;padding:5px;"></td>
+            <td style="border:1px solid #aaa;padding:5px;font-weight:600;">${st.nama} (${st.jumlah} ekor)<br><span style="font-style:italic;font-weight:400;font-size:9px;">${st.latin}</span></td>
+            <td style="border:1px solid #aaa;padding:5px;text-align:center;">Sehat</td>
+            <td style="border:1px solid #aaa;padding:5px;text-align:center;">${st.jumlah}</td>
+            <td style="border:1px solid #aaa;padding:5px;font-size:9px;">${st.keterangan||'-'}</td>
+          </tr>`;
         });
 
         reportArea.innerHTML = `
-          <div class="text-slate-900 pb-4 text-center mb-6">
-            <h1 class="text-base font-bold uppercase tracking-wide">BUKU CATATAN HARIAN (LOGBOOK) LEMBAGA KONSERVASI JENIS ${categoryName}</h1>
-            <p class="text-xs font-bold text-slate-500">PT. SATWA GUNUNG BAYAN LESTARI &bull; ${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 text-[11px] mb-4 text-slate-900">
-            <div>
-              <p>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></p>
-              <p>SK. LEMBAGA KONSERVASI : S.542/KK/2026</p>
-              <p>ALAMAT KANTOR : Kec. Tabang, Kab. Kutai Kartanegara</p>
+          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+            ${kopSurat()}
+            <div style="text-align:center;margin-bottom:12px;">
+              <div style="font-size:13px;font-weight:900;text-transform:uppercase;">BUKU CATATAN HARIAN (LOGBOOK) PENANGKARAN JENIS ${categoryName}</div>
+              <div style="font-size:10px;font-weight:700;color:#555;margin-top:3px;">PT. Satwa Gunung Bayan Lestari – ${bulanTahun}</div>
             </div>
-            <div class="text-right">
-              <p>SK. PENGEDAR DN : TERSEDIA</p>
-              <p>BULAN/TAHUN : ${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:10px;">
+              <div>
+                <div>NAMA PERUSAHAAN &nbsp;: <strong>PT. Satwa Gunung Bayan Lestari</strong></div>
+                <div>SK. LEMBAGA KONSERVASI : S.542/KK/2026</div>
+                <div>ALAMAT KANTOR &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Balikpapan, Kalimantan Timur</div>
+                <div>ALAMAT PENANGKARAN : Kec. Tabang, Kab. Kutai Kartanegara</div>
+              </div>
+              <div style="text-align:right;">
+                <div>KANDANG &nbsp;&nbsp;&nbsp;: Penangkaran / Kawin / Dewasa</div>
+                <div>JENIS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${categoryName}</div>
+                <div>BULAN/TAHUN: ${bulanTahun}</div>
+              </div>
             </div>
-          </div>
-
-          <table class="w-full text-xs border-collapse border border-slate-400 mb-6 text-slate-900">
-            <thead>
-              <tr class="bg-slate-100 font-bold text-center">
-                <th class="p-2 border border-slate-400" style="width: 5%">No.</th>
-                <th class="p-2 border border-slate-400" style="width: 20%">Waktu (hari, tanggal, jam)</th>
-                <th class="p-2 border border-slate-400" style="width: 40%">Aktivitas Pemeliharaan / Perawatan</th>
-                <th class="p-2 border border-slate-400" style="width: 15%">Kondisi Satwa</th>
-                <th class="p-2 border border-slate-400" style="width: 10%">Jumlah (Ekor)</th>
-                <th class="p-2 border border-slate-400" style="width: 10%">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${logbookRows || '<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">Tidak ada satwa kelas ini dalam basis data lembaga konservasi.</td></tr>'}
-            </tbody>
-          </table>
-
-          <div class="flex justify-end text-xs text-slate-900 mt-6">
-            <div class="text-center w-64">
-              <p>Disahkan oleh,</p>
-              <p class="font-bold mb-16">Pimpinan Lembaga Konservasi / Kurator Utama</p>
-              <p class="font-bold underline">${kuratorSignee}</p>
-              <p class="text-[10px] text-slate-500">${kuratorTitle}</p>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+              <thead>
+                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #aaa;padding:6px;width:5%">No.</th>
+                  <th style="border:1px solid #aaa;padding:6px;width:22%">Waktu (hari, tanggal, jam)</th>
+                  <th style="border:1px solid #aaa;padding:6px;width:38%">Aktivitas Pemeliharaan / Perawatan</th>
+                  <th style="border:1px solid #aaa;padding:6px;width:15%">Kondisi Satwa</th>
+                  <th style="border:1px solid #aaa;padding:6px;width:10%">Jumlah (Ekor)</th>
+                  <th style="border:1px solid #aaa;padding:6px;">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>${logbookRows||'<tr><td colspan="6" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data satwa</td></tr>'}</tbody>
+            </table>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <div style="text-align:center;width:220px;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div>Pimpinan Lembaga Konservasi / Kurator Utama,</div>
+                <div style="height:60px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:10px;color:#555;">${kuratorTitle}</div>
+              </div>
             </div>
-          </div>
-        `;
+          </div>`;
+
+      // -------------------------------------------------------
+      // STUDBOOK
+      // -------------------------------------------------------
       } else if (type === "studbook") {
         let rowsHtml = '';
         localDB.kelahiran.forEach((kl, idx) => {
-          rowsHtml += `
-            <tr class="border border-slate-400 text-slate-900 text-[10px]">
-              <td class="p-1.5 border border-slate-400 text-center">${idx + 1}</td>
-              <!-- Jantan -->
-              <td class="p-1.5 border border-slate-400 text-center font-semibold">F0</td>
-              <td class="p-1.5 border border-slate-400 text-center">1</td>
-              <td class="p-1.5 border border-slate-400 text-center font-mono text-[9px]">Noband</td>
-              <!-- Betina -->
-              <td class="p-1.5 border border-slate-400 text-center font-semibold">F0</td>
-              <td class="p-1.5 border border-slate-400 text-center">1</td>
-              <td class="p-1.5 border border-slate-400 text-center font-mono text-[9px]">Noband</td>
-              
-              <td class="p-1.5 border border-slate-400 text-center">Lembaga Konservasi</td>
-              <td class="p-1.5 border border-slate-400 text-center">2024</td>
-              <td class="p-1.5 border border-slate-400 text-center font-semibold text-blue-600">A-1</td>
-              
-              <!-- Anakan -->
-              <td class="p-1.5 border border-slate-400 text-center font-bold text-purple-700">${kl.kelamin}</td>
-              <td class="p-1.5 border border-slate-400 text-center font-semibold">F1</td>
-              <td class="p-1.5 border border-slate-400 text-center font-bold text-emerald-600">${kl.jumlah}</td>
-              <td class="p-1.5 border border-slate-400 text-center font-mono text-[9px]">${kl.tag}</td>
-              <td class="p-1.5 border border-slate-400 text-[9px]">${kl.ket || '-'}</td>
-            </tr>
-          `;
+          rowsHtml += `<tr style="font-size:9.5px;">
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">F0</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">1</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;font-size:8px;">-</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">F0</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">1</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;font-size:8px;">-</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">LK/Penangkaran</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">${kl.tanggal||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;font-weight:700;">A-${idx+1}</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">${kl.kelamin}</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;">F1</td>
+            <td style="border:1px solid #aaa;padding:4px;text-align:center;font-weight:700;">${kl.jumlah}</td>
+            <td style="border:1px solid #aaa;padding:4px;font-size:8px;font-family:monospace;">${kl.tag||'-'}</td>
+            <td style="border:1px solid #aaa;padding:4px;font-size:8px;">${kl.ket||'-'}</td>
+          </tr>`;
         });
-
         reportArea.innerHTML = `
-          <div class="text-center mb-6 text-slate-900">
-            <h1 class="text-base font-bold uppercase tracking-wide">BUKU INDUK (STUDBOOK) KOLEKSI SATWA LEMBAGA KONSERVASI</h1>
-            <p class="text-xs font-bold text-slate-500">PT. SATWA GUNUNG BAYAN LESTARI</p>
-            <p class="text-[10px] text-slate-400">Kecamatan Tabang, Kabupaten Kutai Kartanegara, Kalimantan Timur</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 text-[11px] mb-4 text-slate-900">
-            <div>
-              <p>NAMA PERUSAHAAN : <strong>PT. Satwa Gunung Bayan Lestari</strong></p>
-              <p>ALAMAT KANTOR : Tabang, Kukar, Kalimantan Timur</p>
-              <p>NO. KANDANG INDUKAN : -</p>
+          <div style="padding:18px 22px;font-family:Arial,sans-serif;font-size:10px;color:#111;background:#fff;">
+            ${kopSurat(true)}
+            <div style="text-align:center;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:900;text-transform:uppercase;color:#1e3a5f;">BUKU INDUK (STUDBOOK) KOLEKSI SATWA LEMBAGA KONSERVASI</div>
+              <div style="font-size:10px;font-weight:700;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari</div>
             </div>
-            <div class="text-right">
-              <p>SK. LEMBAGA KONSERVASI : S.542/KK/2026</p>
-              <p>TANGGAL LAPORAN : <strong>${formattedDateStr}</strong></p>
-              <p>KELAS SATWA : AVES / MAMALIA / REPTIL</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:10px;">
+              <div>
+                <div>NAMA PERUSAHAAN &nbsp;&nbsp;&nbsp;: <strong>PT. Satwa Gunung Bayan Lestari</strong></div>
+                <div>SK. LEMBAGA KONSERVASI : S.542/KK/2026</div>
+                <div>ALAMAT KANTOR &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Balikpapan, Kalimantan Timur</div>
+                <div>ALAMAT PENANGKARAN : Kec. Tabang, Kab. Kutai Kartanegara</div>
+              </div>
+              <div style="text-align:right;">
+                <div>NO. KANDANG INDUKAN : -</div>
+                <div>JENIS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Semua Kelas</div>
+                <div>TANGGAL LAPORAN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <strong>${formattedDateStr}</strong></div>
+              </div>
             </div>
-          </div>
-
-          <table class="w-full text-[9px] border-collapse border border-slate-400 mb-6 text-slate-900">
-            <thead>
-              <tr class="bg-slate-100 text-center font-bold">
-                <th rowspan="2" class="p-1.5 border border-slate-400">No.</th>
-                <th colspan="3" class="p-1.5 border border-slate-400">Indukan Jantan</th>
-                <th colspan="3" class="p-1.5 border border-slate-400">Indukan Betina</th>
-                <th rowspan="2" class="p-1.5 border border-slate-400">Asal Usul</th>
-                <th rowspan="2" class="p-1.5 border border-slate-400">Waktu Peroleh</th>
-                <th rowspan="2" class="p-1.5 border border-slate-400">No. Kandang</th>
-                <th colspan="4" class="p-1.5 border border-slate-400">Anakan / Keturunan</th>
-                <th rowspan="2" class="p-1.5 border border-slate-400">Keterangan / BAP Lahir</th>
-              </tr>
-              <tr class="bg-slate-50 text-center font-semibold text-[8px]">
-                <th class="p-1 border border-slate-400">Gen</th>
-                <th class="p-1 border border-slate-400">Jml</th>
-                <th class="p-1 border border-slate-400">Tagging</th>
-                <th class="p-1 border border-slate-400">Gen</th>
-                <th class="p-1 border border-slate-400">Jml</th>
-                <th class="p-1 border border-slate-400">Tagging</th>
-                <th class="p-1 border border-slate-400">Sex</th>
-                <th class="p-1 border border-slate-400">Gen</th>
-                <th class="p-1 border border-slate-400">Jml</th>
-                <th class="p-1 border border-slate-400">BAP / Tag</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml || '<tr><td colspan="15" class="p-4 text-center text-slate-400 italic">Belum ada anakan baru lembaga konservasi terdaftar.</td></tr>'}
-            </tbody>
-          </table>
-
-          <div class="flex justify-end text-xs mt-6 text-slate-900">
-            <div class="text-center w-64">
-              <p>Disahkan oleh,</p>
-              <p class="font-bold mb-16">Pimpinan Lembaga Konservasi / Kurator Utama</p>
-              <p class="font-bold underline">${kuratorSignee}</p>
-              <p class="text-[10px] text-slate-500">${kuratorTitle}</p>
+            <table style="width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:12px;">
+              <thead>
+                <tr style="background:#dce6f1;font-weight:bold;text-align:center;">
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">No.</th>
+                  <th colspan="3" style="border:1px solid #888;padding:4px;">Indukan Jantan</th>
+                  <th colspan="3" style="border:1px solid #888;padding:4px;">Indukan Betina</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">Asal Usul</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">Waktu Perolehan</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">No. Kandang</th>
+                  <th colspan="4" style="border:1px solid #888;padding:4px;">Anakan / Keturunan</th>
+                  <th rowspan="2" style="border:1px solid #888;padding:4px;">Ket / BAP Lahir</th>
+                </tr>
+                <tr style="background:#eaf0f8;font-size:7.5px;text-align:center;">
+                  <th style="border:1px solid #888;padding:3px;">Generasi</th>
+                  <th style="border:1px solid #888;padding:3px;">Jumlah</th>
+                  <th style="border:1px solid #888;padding:3px;">Tagging</th>
+                  <th style="border:1px solid #888;padding:3px;">Generasi</th>
+                  <th style="border:1px solid #888;padding:3px;">Jumlah</th>
+                  <th style="border:1px solid #888;padding:3px;">Tagging</th>
+                  <th style="border:1px solid #888;padding:3px;">Sex</th>
+                  <th style="border:1px solid #888;padding:3px;">Generasi</th>
+                  <th style="border:1px solid #888;padding:3px;">Jumlah</th>
+                  <th style="border:1px solid #888;padding:3px;">BAP/Tag</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml||'<tr><td colspan="15" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada anakan terdaftar</td></tr>'}</tbody>
+            </table>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <div style="text-align:center;width:200px;">
+                <div>Balikpapan, ${formattedDateStr}</div>
+                <div>Pimpinan LK / Kurator Utama,</div>
+                <div style="height:55px;"></div>
+                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
+                <div style="font-size:9px;color:#555;">${kuratorTitle}</div>
+              </div>
             </div>
-          </div>
-        `;
+          </div>`;
       }
+    }
+    function downloadReportDocx() {
+      const printArea = document.getElementById("print-area");
+      const type = document.getElementById("report-type").value;
+      const typeLabels = {
+        kelahiran: "Laporan_Kelahiran",
+        kematian: "Laporan_Kematian",
+        mutasi_bulanan: "Laporan_Mutasi_Bulanan",
+        rekap_kelahiran_triwulan: "Rekap_Kelahiran_Triwulan",
+        rekap_kematian_triwulan: "Rekap_Kematian_Triwulan",
+        mutasi_triwulan: "Laporan_Mutasi_Triwulan",
+        logbook_aves: "Logbook_Aves",
+        logbook_mamalia: "Logbook_Mamalia",
+        logbook_mamalia_pet: "Logbook_Mamalia_Pet",
+        logbook_reptil: "Logbook_Reptil",
+        studbook: "Studbook"
+      };
+      const filename = (typeLabels[type] || "Laporan") + "_SGBL.doc";
+
+      const rawDate = document.getElementById("report-date").value;
+      const d = new Date(rawDate);
+      const isLandscape = ["studbook","mutasi_bulanan","mutasi_triwulan"].includes(type);
+
+      const pageStyle = isLandscape
+        ? `@page { size: 297mm 210mm; margin: 15mm; } body { width: 267mm; }`
+        : `@page { size: 210mm 297mm; margin: 15mm; } body { width: 180mm; }`;
+
+      const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+        xmlns:w="urn:schemas-microsoft-com:office:word"
+        xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+          <meta charset="utf-8">
+          <title>${filename}</title>
+          <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+          <style>
+            ${pageStyle}
+            body { font-family: Arial, sans-serif; font-size: 11pt; color: #000; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #888; padding: 4pt 6pt; }
+          </style>
+        </head>
+        <body>${printArea.innerHTML}</body>
+      </html>`;
+
+      const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("✅ File Word berhasil diunduh!", "success");
     }
 
     function printReport() {
