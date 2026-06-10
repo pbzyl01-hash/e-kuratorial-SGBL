@@ -158,7 +158,7 @@
 
         </div>
 
-        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white py-3 rounded-xl font-semibold shadow-lg shadow-brand-600/35 transition-all flex items-center justify-center gap-2 mt-2">
+        <button type="button" onclick="handleLogin(event)" style="background:#2563eb;color:#fff;width:100%;padding:12px;border-radius:12px;font-weight:700;font-size:15px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;box-shadow:0 4px 14px rgba(37,99,235,0.4);" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
           <span>Masuk Sistem</span>
           <i class="fa-solid fa-circle-chevron-right"></i>
         </button>
@@ -1053,18 +1053,23 @@
     }
 
     function handleLogin(e) {
-      e.preventDefault();
-      const pin = document.getElementById("login-password").value;
+      if (e && e.preventDefault) e.preventDefault();
+      const pin = document.getElementById("login-password").value.trim();
       const savedPin = localStorage.getItem('sgbl_pin') || "1234";
+
+      if (!pin) {
+        alert("Masukkan PIN terlebih dahulu.");
+        return;
+      }
 
       if (pin === savedPin) {
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("main-layout").classList.remove("hidden");
-        showToast("Sesi berhasil dibuka. Selamat bekerja Kurator!", "success");
-        updateDashboardStats();
-        setTimeout(renderCharts, 100);
+        try { showToast("Sesi berhasil dibuka. Selamat bekerja Kurator!", "success"); } catch(err) {}
+        try { updateDashboardStats(); } catch(err) {}
+        try { setTimeout(renderCharts, 100); } catch(err) {}
       } else {
-        showToast("PIN Sandi salah! Periksa kembali PIN Anda.", "error");
+        alert("PIN Sandi salah! PIN default adalah 1234.");
       }
     }
 
