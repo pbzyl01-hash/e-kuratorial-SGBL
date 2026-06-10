@@ -1701,59 +1701,70 @@
         let rowsHtml = '';
         localDB.kelahiran.forEach((kl, idx) => {
           rowsHtml += `<tr>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${kl.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${kl.latin}</span></td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.jumlah} ekor</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;font-family:monospace;">${kl.tag || '-'}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tanggal}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.kelamin}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;">${kl.ket || '-'}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${idx+1}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${kl.nama}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;font-style:italic;">${kl.latin}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${kl.jumlah} ekor</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;text-decoration:underline;">${kl.tag || 'Noband'}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${kl.tanggal}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${kl.kelamin || 'Unknown'}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${kl.ket || '-'}</td>
           </tr>`;
         });
 
         reportArea.innerHTML = `
-          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+          <div style="padding:28px 36px;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;">
             ${kopSurat()}
-            <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:11px;">
-              <div>
-                <div>Nomor &nbsp;&nbsp;&nbsp;: ${nomorSurat || '............/SGBL/LK/...../2026'}</div>
-                <div>Lampiran : -</div>
-                <div>Perihal &nbsp;&nbsp;: <strong>Laporan Kelahiran Satwa Liar</strong></div>
-              </div>
-              <div style="text-align:right;">
-                <div>Balikpapan, ${formattedDateStr}</div>
-                <div style="margin-top:6px;"><strong>Kepada Yth.</strong></div>
-                <div>Kepala Balai Konservasi Sumber Daya Alam</div>
-                <div>Kalimantan Timur</div>
-                <div style="font-style:italic;">Di Samarinda</div>
-              </div>
+            <div style="text-align:right;margin-top:20px;margin-bottom:18px;font-size:12pt;">
+              Tabang, ${formattedDateStr}
             </div>
-            <div style="margin-bottom:8px;">Dengan hormat,</div>
-            <div style="margin-bottom:12px;text-align:justify;line-height:1.6;">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk dapat dilakukan pemeriksaan dengan data sebagai berikut:</div>
-            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+            <table style="border:none;font-size:12pt;margin-bottom:18px;border-collapse:collapse;">
+              <tr>
+                <td style="padding:2px 0;width:100px;border:none;vertical-align:top;">Nomor</td>
+                <td style="padding:2px 6px;border:none;vertical-align:top;">:</td>
+                <td style="padding:2px 0;border:none;font-weight:bold;text-decoration:underline;">${nomorSurat || '.........../SGBL/ZOO/...../2026'}</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;border:none;vertical-align:top;">Lampiran</td>
+                <td style="padding:2px 6px;border:none;vertical-align:top;">:</td>
+                <td style="padding:2px 0;border:none;">-</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;border:none;text-decoration:underline;vertical-align:top;">Perihal</td>
+                <td style="padding:2px 6px;border:none;vertical-align:top;">:</td>
+                <td style="padding:2px 0;border:none;">Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;">Kepada Yth.</div>
+            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</div>
+            <div style="margin-bottom:2px;">di -</div>
+            <div style="padding-left:64px;margin-bottom:22px;">Samarinda</div>
+            <div style="margin-bottom:14px;">Dengan Hormat,</div>
+            <div style="margin-bottom:20px;text-align:justify;line-height:1.8;">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara,&nbsp;&nbsp; Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut.</div>
+            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
               <thead>
-                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
-                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:11%">Jumlah</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:13%">No. Tag / ID</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:13%">Tgl. Lahir</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:10%">Kelamin</th>
-                  <th style="border:1px solid #ccc;padding:6px;">Keterangan</th>
+                <tr style="font-weight:bold;text-align:center;">
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No</th>
+                  <th colspan="2" style="border:1px solid #000;padding:6px 8px;">Nama Jenis</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Jumlah<br>(ekor)</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No.<br>Tag/ID</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Tanggal<br>Lahir</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Jenis<br><span style="text-decoration:underline;">Kelamin</span></th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Ket.</th>
+                </tr>
+                <tr style="font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #000;padding:5px 8px;">Indonesia</th>
+                  <th style="border:1px solid #000;padding:5px 8px;">Latin</th>
                 </tr>
               </thead>
-              <tbody>${rowsHtml || '<tr><td colspan="7" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data kelahiran</td></tr>'}</tbody>
+              <tbody>${rowsHtml || '<tr><td colspan="8" style="padding:14px;text-align:center;color:#888;font-style:italic;border:1px solid #000;">Belum ada data kelahiran</td></tr>'}</tbody>
             </table>
-            <div style="margin-bottom:20px;text-align:justify;line-height:1.6;">Demikian laporan kelahiran ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</div>
-            <div style="display:flex;justify-content:flex-end;">
-              <div style="text-align:center;width:200px;">
-                <div>Hormat kami,</div>
-                <div style="font-weight:700;margin-top:4px;">${kuratorTitle}</div>
-                <div style="height:60px;"></div>
-                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
-                <div style="font-size:10px;color:#555;">PT. Satwa Gunung Bayan Lestari</div>
-              </div>
-            </div>
+            <div style="margin-bottom:22px;line-height:1.8;">Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.</div>
+            <div style="margin-bottom:3px;">Hormat Kami,</div>
+            <div style="margin-bottom:70px;">PT. Satwa Gunung Bayan Lestari,</div>
+            <div style="font-weight:bold;text-decoration:underline;margin-bottom:2px;">${kuratorSignee}</div>
+            <div style="margin-bottom:30px;">${kuratorTitle}</div>
+            <div style="font-size:11pt;border-top:1px solid #999;padding-top:8px;color:#333;">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
           </div>`;
 
       // -------------------------------------------------------
