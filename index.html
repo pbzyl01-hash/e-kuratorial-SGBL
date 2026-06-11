@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   <link rel="icon" type="image/png" href="favicon.png">
-<head>  
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -262,11 +262,6 @@
         </button>
 
         <div class="pt-2 pb-1"><div class="border-t border-slate-200 dark:border-slate-700/80"></div></div>
-
-        <button onclick="loadFromSpreadsheet()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20">
-          <i class="fa-solid fa-arrows-rotate w-5 text-center text-brand-500"></i>
-          <span>Ambil dari Spreadsheet</span>
-        </button>
 
         <a href="https://drive.google.com/drive/folders/1fpCSQca5nzDEIBMQI90bB1nISDh7aadu?usp=sharing" target="_blank" rel="noopener noreferrer"
           class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 dark:hover:text-blue-400 group">
@@ -1006,7 +1001,7 @@
       <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400"><i class="fa-solid fa-key mr-2"></i>Ganti PIN Sandi</h3>
       <button onclick="closeChangePinModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <form id="change-pin-form" onsubmit="handleChangePin(event)" class="space-y-4">
+    <form id="change-pin-form" onsubmit="event.preventDefault();" class="space-y-4">
       <div>
         <label class="block text-xs font-bold mb-1.5 text-slate-600 dark:text-slate-400">PIN Sandi Lama</label>
         <div class="relative">
@@ -1031,13 +1026,15 @@
       <div id="cp-error" class="hidden text-xs text-rose-500 font-semibold bg-rose-50 dark:bg-rose-950/20 px-3 py-2 rounded-lg"></div>
       <div class="pt-2 flex justify-end gap-2">
         <button type="button" onclick="closeChangePinModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold">Simpan PIN Baru</button>
+        <button type="button" onclick="handleChangePin(event)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold">Simpan PIN Baru</button>
       </div>
     </form>
   </div>
 
   <!-- JAVASCRIPT SYSTEM & ENGINE -->
   <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbykJM36-T1ICBsKI9ma7ttXECx0bbwS-DTmY9IJkU9l76VwvITHFmzdmJbPQz5XPCsdrQ/exec";
+
     let localDB = {
       master: JSON.parse(localStorage.getItem('sgbl_master')) || [
         { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", jumlah: 20, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Kondisi Sehat" },
@@ -1098,9 +1095,7 @@
       updateDashboardStats();
       
       // Ambil otomatis dari Google Sheets secara asinkronus
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        loadFromSpreadsheet();
-      }
+      loadFromSpreadsheet();
     };
 
     function saveToLocalStorage() {
@@ -1111,9 +1106,10 @@
       localStorage.setItem('sgbl_mutasi', JSON.stringify(localDB.mutasi));
     }
 
-    // Google Apps Script Async synchronization
+    // Google Apps Script Async synchronization with REST API fallback for Vercel/Local
     function saveAndSync() {
       saveToLocalStorage();
+      
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(function() {
@@ -1123,6 +1119,25 @@
             showToast("Sinkronisasi gagal: " + err, "error");
           })
           .saveDataToSheets(localDB);
+      } else if (API_URL) {
+        showToast("⏳ Menyelaraskan ke Spreadsheet cloud...", "success");
+        fetch(API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain"
+          },
+          body: JSON.stringify({
+            action: "syncAll",
+            db: localDB
+          })
+        })
+        .then(() => {
+          showToast("✅ Database Cloud berhasil diselaraskan!", "success");
+        })
+        .catch(err => {
+          showToast("Gagal menyelaraskan ke Cloud: " + err.message, "error");
+        });
       }
     }
 
@@ -1955,47 +1970,46 @@
       }
     }
 
-    // Google Sheets loader via Apps Script
+    // Google Sheets loader via Apps Script Web App JSON API (fallback)
     async function loadFromSpreadsheet() {
-      if (typeof google === 'undefined' || !google.script) {
-        showToast("Lingkungan lokal aktif.", "success");
-        return;
-      }
-      try {
-        showToast("⏳ Membaca database spreadsheet...", "success");
+      showToast("⏳ Membaca database spreadsheet...", "success");
+      
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
-          .withSuccessHandler(function(data) {
-            if (data && data.master && data.master.length > 0) {
-              localDB.master = data.master;
-              localDB.kelahiran = data.kelahiran || [];
-              localDB.kematian = data.kematian || [];
-              localDB.titipan = data.titipan || [];
-              localDB.mutasi = data.mutasi || [];
-              
-              saveToLocalStorage();
-              renderAllTables();
-              populateSelectDropdowns();
-              updateDashboardStats();
-              renderCharts();
-              showToast("✅ Berhasil memuat data dari Spreadsheet!", "success");
-            }
-          })
+          .withSuccessHandler(handleSpreadsheetData)
           .withFailureHandler(function(err) {
             showToast("Gagal memuat spreadsheet: " + err, "error");
           })
           .getDataFromSheets();
-      } catch (err) {
-        showToast("Gagal memanggil Apps Script: " + err.message, "error");
+      } else if (API_URL) {
+        fetch(`${API_URL}?action=getData`)
+          .then(res => res.json())
+          .then(handleSpreadsheetData)
+          .catch(err => {
+            showToast("Gagal menyinkronkan data dari cloud: " + err.message, "error");
+          });
+      }
+    }
+
+    function handleSpreadsheetData(data) {
+      if (data && data.master && data.master.length > 0) {
+        localDB.master = data.master;
+        localDB.kelahiran = data.kelahiran || [];
+        localDB.kematian = data.kematian || [];
+        localDB.titipan = data.titipan || [];
+        localDB.mutasi = data.mutasi || [];
+        
+        saveToLocalStorage();
+        renderAllTables();
+        populateSelectDropdowns();
+        updateDashboardStats();
+        renderCharts();
+        showToast("✅ Berhasil memuat data dari Spreadsheet!", "success");
       }
     }
 
     // MENGIRIM DATA DAN MEMBUAT GOOGLE DOC BERDASARKAN TEMPLATE PENGGUNA
     function downloadViaGoogleDocTemplate() {
-      if (typeof google === 'undefined' || !google.script) {
-        showToast("Fitur Google Doc Template hanya berjalan di Google Apps Script.", "error");
-        return;
-      }
-      
       const type = document.getElementById("report-type").value;
       const rawDate = document.getElementById("report-date").value;
       const nomorSurat = document.getElementById("report-nomor-surat")?.value || "";
@@ -2003,24 +2017,52 @@
 
       showToast("⏳ Sedang memproses dokumen Google Doc...", "success");
       
-      google.script.run
-        .withSuccessHandler(function(res) {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (res && res.status === "success") {
+              showToast("✅ Berhasil membuat Laporan Google Doc!", "success");
+              window.open(res.url, "_blank");
+            } else {
+              showToast("Gagal membuat laporan: " + res.message, "error");
+            }
+          })
+          .withFailureHandler(function(err) {
+            showToast("Koneksi gagal: " + err, "error");
+          })
+          .generateOfficialReportDoc(type, rawDate, nomorSurat, triwulan, localDB);
+      } else if (API_URL) {
+        // Fallback untuk Vercel / Eksternal environment
+        fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            action: "generateReport",
+            type: type,
+            rawDate: rawDate,
+            nomorSurat: nomorSurat,
+            triwulan: triwulan,
+            db: localDB
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
           if (res && res.status === "success") {
-            showToast("✅ Berhasil membuat Laporan Google Doc!", "success");
+            showToast("✅ Berhasil ekspor Laporan Google Doc!", "success");
             window.open(res.url, "_blank");
           } else {
             showToast("Gagal membuat laporan: " + res.message, "error");
           }
         })
-        .withFailureHandler(function(err) {
-          showToast("Koneksi gagal: " + err, "error");
-        })
-        .generateOfficialReportDoc(type, rawDate, nomorSurat, triwulan, localDB);
+        .catch(err => {
+          showToast("Gagal menghubungi Google Apps Script: " + err.message, "error");
+        });
+      }
     }
 
     // GANTI PIN LOGIKA - Diperbaiki untuk menghentikan reload dan menyinkronkan data secara persisten
     function handleChangePin(e) {
-      e.preventDefault(); // Mencegah reload form default
+      if (e) e.preventDefault(); // Mencegah reload form default
       const oldPin = document.getElementById("cp-old").value.trim();
       const newPin = document.getElementById("cp-new").value.trim();
       const confirmPin = document.getElementById("cp-confirm").value.trim();
@@ -2148,7 +2190,6 @@
 
     function downloadReportDocx() {
       showToast("Mengekspor laporan ke dokumen Word lokal...", "success");
-      // Fallback ekspor HTML manual ke doc Word lokal
       const headerHTML = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><title>Ekspor Laporan</title></head><body>";
       const footerHTML = "</body></html>";
       const sourceHTML = headerHTML + document.getElementById("print-area").innerHTML + footerHTML;
