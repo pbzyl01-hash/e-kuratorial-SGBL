@@ -29,10 +29,13 @@
   </script>
   <style>
     /* === CRITICAL: Login / App toggle === */
-    #login-screen  { display: flex !important; }
-    #main-layout   { display: none !important; }
-    #login-screen.app-hidden  { display: none !important; }
-    #main-layout.app-visible  { display: flex !important; }
+    body #login-screen  { display: flex !important; }
+    body #main-layout   { display: none !important; }
+    body #login-screen.app-hidden  { display: none !important; }
+    body #main-layout.app-visible  { display: flex !important; flex-direction: column; min-height: 100vh; }
+    @media (min-width: 768px) {
+      body #main-layout.app-visible { flex-direction: row !important; }
+    }
   </style>
   <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -192,7 +195,7 @@
   </div>
 
   <!-- MAIN LAYOUT (Hidden initially) -->
-  <div id="main-layout" style="display:none;" class="flex-1 flex flex-col md:flex-row min-h-screen">
+  <div id="main-layout" class="flex-1 flex flex-col md:flex-row min-h-screen">
     
     <!-- SIDEBAR -->
     <aside class="w-full md:w-64 bg-white dark:bg-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 flex flex-col shadow-sm z-20">
@@ -1086,11 +1089,18 @@
 
       if (pin === savedPin) {
         errEl.style.display = "none";
-        document.getElementById("login-screen").classList.add("app-hidden");
-        document.getElementById("main-layout").classList.add("app-visible");
+        const ls = document.getElementById("login-screen");
+        const ml = document.getElementById("main-layout");
+        ls.classList.add("app-hidden");
+        ls.setAttribute("style","display:none!important");
+        ml.classList.add("app-visible");
+        ml.removeAttribute("style");
+        // Force browser reflow
+        void ml.offsetHeight;
         try { showToast("Selamat bekerja, Kurator!", "success"); } catch(e) {}
         try { updateDashboardStats(); } catch(e) {}
-        try { setTimeout(renderCharts, 200); } catch(e) {}
+        try { renderAllTables(); } catch(e) {}
+        try { setTimeout(renderCharts, 300); } catch(e) {}
       } else {
         errEl.textContent = "PIN salah! PIN default: 1234";
         errEl.style.display = "block";
