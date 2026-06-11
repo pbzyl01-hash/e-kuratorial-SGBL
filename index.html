@@ -122,50 +122,64 @@
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- LOGIN SCREEN -->
-  <div id="login-screen" class="flex-1 flex items-center justify-center p-4 min-h-screen relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #1e3a8a 70%, #0f172a 100%);">
-    <div class="absolute inset-0 bg-brand-900/10 backdrop-blur-sm"></div>
-    <div class="w-full max-w-md bg-white/95 dark:bg-slate-800/95 p-8 rounded-3xl shadow-2xl relative z-10 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-md transform transition-all hover:scale-[1.01]">
-      <div class="text-center mb-8">
-        <div class="w-20 h-20 bg-brand-500/10 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-500/30 shadow-lg shadow-brand-500/10">
-          <i class="fa-solid fa-compass text-4xl text-blue-600"></i>
+  <div id="login-screen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#1e3a8a 70%,#0f172a 100%);">
+    <div style="width:100%;max-width:420px;background:#fff;border-radius:24px;padding:36px 32px;box-shadow:0 25px 60px rgba(0,0,0,0.4);">
+      <!-- Logo -->
+      <div style="text-align:center;margin-bottom:28px;">
+        <div style="width:72px;height:72px;background:#eff6ff;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid #bfdbfe;">
+          <i class="fa-solid fa-compass" style="font-size:32px;color:#2563eb;"></i>
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white neon-pulse">e-Kuratorial Satwa</h1>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-semibold">Satwa Gunung Bayan Lestari</p>
+        <div style="font-size:24px;font-weight:900;color:#0f172a;letter-spacing:-0.5px;">e-Kuratorial Satwa</div>
+        <div style="font-size:13px;color:#64748b;margin-top:4px;font-weight:600;">Satwa Gunung Bayan Lestari</div>
       </div>
 
-      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">Username</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-              <i class="fa-solid fa-user-shield"></i>
-            </span>
-            <input type="text" id="login-username" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm transition-all" placeholder="Masukkan username" required>
-          </div>
+      <!-- Username -->
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#475569;margin-bottom:6px;">Username</label>
+        <div style="position:relative;">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;">
+            <i class="fa-solid fa-user-shield"></i>
+          </span>
+          <input type="text" id="login-username" placeholder="Masukkan username"
+            style="width:100%;padding:12px 12px 12px 38px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;color:#0f172a;outline:none;box-sizing:border-box;background:#f8fafc;"
+            onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e2e8f0'"
+            onkeydown="if(event.key==='Enter')document.getElementById('login-password').focus()">
         </div>
+      </div>
 
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">PIN Sandi</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-              <i class="fa-solid fa-key"></i>
-            </span>
-            <input type="password" id="login-password" autocomplete="off" class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm transition-all" placeholder="Masukkan PIN" required>
-            <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-brand-500" title="Mata Elang Pengintai">
-              <i id="password-toggle-icon" class="fa-solid fa-eye-slash text-blue-600"></i>
-            </button>
-          </div>
-
+      <!-- PIN -->
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#475569;margin-bottom:6px;">PIN Sandi</label>
+        <div style="position:relative;">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;">
+            <i class="fa-solid fa-key"></i>
+          </span>
+          <input type="password" id="login-password" placeholder="Masukkan PIN" autocomplete="off"
+            style="width:100%;padding:12px 44px 12px 38px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;color:#0f172a;outline:none;box-sizing:border-box;background:#f8fafc;"
+            onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e2e8f0'"
+            onkeydown="if(event.key==='Enter')doLogin()">
+          <button type="button" onclick="togglePasswordVisibility()"
+            style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8;padding:4px;">
+            <i id="password-toggle-icon" class="fa-solid fa-eye-slash"></i>
+          </button>
         </div>
+      </div>
 
-        <button type="button" onclick="handleLogin(event)" style="background:#2563eb;color:#fff;width:100%;padding:12px;border-radius:12px;font-weight:700;font-size:15px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;box-shadow:0 4px 14px rgba(37,99,235,0.4);" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
-          <span>Masuk Sistem</span>
-          <i class="fa-solid fa-circle-chevron-right"></i>
-        </button>
-      </form>
+      <!-- Error message -->
+      <div id="login-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:16px;text-align:center;">
+        PIN salah. Silakan coba lagi.
+      </div>
 
-      <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-center text-xs text-slate-400">
-        &copy; 2026 PT. Satwa Gunung Bayan Lestari • Tabang, Kukar
+      <!-- Submit Button -->
+      <button type="button" onclick="doLogin()"
+        style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:background .2s;"
+        onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+        <span>Masuk Sistem</span>
+        <i class="fa-solid fa-circle-chevron-right"></i>
+      </button>
+
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;color:#94a3b8;">
+        &copy; 2026 PT. Satwa Gunung Bayan Lestari &bull; Tabang, Kukar
       </div>
     </div>
   </div>
@@ -1052,25 +1066,36 @@
       }
     }
 
-    function handleLogin(e) {
-      if (e && e.preventDefault) e.preventDefault();
+    function doLogin() {
       const pin = document.getElementById("login-password").value.trim();
       const savedPin = localStorage.getItem('sgbl_pin') || "1234";
+      const errEl = document.getElementById("login-error");
 
       if (!pin) {
-        alert("Masukkan PIN terlebih dahulu.");
+        errEl.textContent = "Masukkan PIN terlebih dahulu.";
+        errEl.style.display = "block";
         return;
       }
 
       if (pin === savedPin) {
-        document.getElementById("login-screen").classList.add("hidden");
+        errEl.style.display = "none";
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("main-layout").style.display = "flex";
         document.getElementById("main-layout").classList.remove("hidden");
-        try { showToast("Sesi berhasil dibuka. Selamat bekerja Kurator!", "success"); } catch(err) {}
-        try { updateDashboardStats(); } catch(err) {}
-        try { setTimeout(renderCharts, 100); } catch(err) {}
+        try { showToast("Selamat bekerja, Kurator!", "success"); } catch(e) {}
+        try { updateDashboardStats(); } catch(e) {}
+        try { setTimeout(renderCharts, 200); } catch(e) {}
       } else {
-        alert("PIN Sandi salah! PIN default adalah 1234.");
+        errEl.textContent = "PIN salah! PIN default: 1234";
+        errEl.style.display = "block";
+        document.getElementById("login-password").value = "";
+        document.getElementById("login-password").focus();
       }
+    }
+
+    function handleLogin(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      doLogin();
     }
 
     function handleLogout() {
