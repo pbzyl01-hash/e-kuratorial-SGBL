@@ -1115,8 +1115,12 @@
     }
 
     function handleLogout() {
-      document.getElementById("main-layout").classList.remove("app-visible");
-      document.getElementById("login-screen").classList.remove("app-hidden");
+      const ml = document.getElementById("main-layout");
+      const ls = document.getElementById("login-screen");
+      ml.classList.remove("app-visible");
+      ml.setAttribute("style", "display:none!important");
+      ls.classList.remove("app-hidden");
+      ls.removeAttribute("style");
       document.getElementById("login-password").value = "";
       try { showToast("Berhasil logout dari sistem.", "success"); } catch(e) {}
     }
@@ -1743,9 +1747,8 @@
         var subSz   = compact ? "10px"  : "11.5px";
         var addrSz  = compact ? "9px"   : "10px";
         var logoSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 130" width="' + logoSz + '" height="' + logoSz + '" style="flex-shrink:0;">'
-          + '<ellipse cx="100" cy="65" rx="94" ry="60" fill="#fff" stroke="#000" stroke-width="6"/>'
-          + '<ellipse cx="100" cy="65" rx="84" ry="52" fill="#fff" stroke="#000" stroke-width="2"/>'
-          + '<text x="100" y="86" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="52" fill="#e00000" letter-spacing="3">SGBL</text>'
+          + '<ellipse cx="100" cy="65" rx="94" ry="60" fill="#fff" stroke="#000" stroke-width="7"/>'
+          + '<text x="100" y="88" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="56" fill="#e00000" letter-spacing="3">SGBL</text>'
           + '</svg>';
         return '<div style="margin-bottom:0;padding-bottom:0;">'
           + '<div style="display:flex;align-items:center;gap:18px;padding-bottom:8px;">'
@@ -1808,7 +1811,7 @@
             <div style="padding-left:64px;margin-bottom:22px;">Samarinda</div>
             <div style="margin-bottom:14px;">Dengan Hormat,</div>
             <div style="margin-bottom:20px;text-align:justify;line-height:1.8;">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara,&nbsp;&nbsp; Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut.</div>
-            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12pt;margin-bottom:20px;">
               <thead>
                 <tr style="font-weight:bold;text-align:center;">
                   <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No</th>
@@ -1831,7 +1834,7 @@
             <div style="margin-bottom:70px;">PT. Satwa Gunung Bayan Lestari,</div>
             <div style="font-weight:bold;text-decoration:underline;margin-bottom:2px;">${kuratorSignee}</div>
             <div style="margin-bottom:30px;">${kuratorTitle}</div>
-            <div style="font-size:11pt;border-top:1px solid #999;padding-top:8px;color:#333;">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
+            <div style="font-size:12pt;border-top:1px solid #999;padding-top:8px;color:#333;">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
           </div>`;
 
       // -------------------------------------------------------
@@ -1880,7 +1883,7 @@
             <div style="padding-left:64px;margin-bottom:22px;">Samarinda</div>
             <div style="margin-bottom:14px;">Dengan Hormat,</div>
             <div style="margin-bottom:20px;text-align:justify;line-height:1.8;">Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara,&nbsp;&nbsp; Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan pasca-kematian (nekropsi) dengan data sebagai berikut.</div>
-            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12pt;margin-bottom:20px;">
               <thead>
                 <tr style="font-weight:bold;text-align:center;">
                   <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No</th>
@@ -1902,7 +1905,7 @@
             <div style="margin-bottom:70px;">PT. Satwa Gunung Bayan Lestari,</div>
             <div style="font-weight:bold;text-decoration:underline;margin-bottom:2px;">${kuratorSignee}</div>
             <div style="margin-bottom:30px;">${kuratorTitle}</div>
-            <div style="font-size:11pt;border-top:1px solid #999;padding-top:8px;color:#333;">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
+            <div style="font-size:12pt;border-top:1px solid #999;padding-top:8px;color:#333;">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
           </div>`;
 
       // -------------------------------------------------------
@@ -1991,7 +1994,7 @@
         localDB.kelahiran.forEach((kl, idx) => {
           rowsHtml += `<tr>
             <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${idx+1}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${kl.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${kl.latin}</span></td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${kl.nama}<br><span style="font-style:italic;font-weight:400;font-size:12pt;">${kl.latin}</span></td>
             <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.jumlah} ekor</td>
             <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tag||'-'}</td>
             <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tanggal}</td>
@@ -2007,7 +2010,7 @@
               <div style="font-size:11px;font-weight:700;margin-top:3px;">TRIWULAN ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]}) TAHUN ${d.getFullYear()}</div>
               <div style="font-size:10px;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari – Lembaga Konservasi</div>
             </div>
-            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12pt;margin-bottom:20px;">
               <thead>
                 <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
                   <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
@@ -2043,11 +2046,11 @@
         localDB.kematian.forEach((km, idx) => {
           rowsHtml += `<tr>
             <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${idx+1}</td>
-            <td style="border:1px solid #000;padding:5px 7px;font-weight:600;vertical-align:middle;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${km.latin}</span></td>
+            <td style="border:1px solid #000;padding:5px 7px;font-weight:600;vertical-align:middle;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:12pt;">${km.latin}</span></td>
             <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.jumlah} ekor</td>
             <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.tanggal}</td>
             <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.sebab}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;font-family:monospace;">${km.bap||'-'}</td>
+            <td style="border:1px solid #ccc;padding:5px 6px;font-size:12pt;font-family:'Times New Roman',Times,serif;">${km.bap||'-'}</td>
           </tr>`;
         });
         reportArea.innerHTML = `
@@ -2058,7 +2061,7 @@
               <div style="font-size:11px;font-weight:700;margin-top:3px;">TRIWULAN ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]}) TAHUN ${d.getFullYear()}</div>
               <div style="font-size:10px;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari – Lembaga Konservasi</div>
             </div>
-            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12pt;margin-bottom:20px;">
               <thead>
                 <tr style="font-weight:bold;text-align:center;">
                   <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No</th>
@@ -2206,7 +2209,7 @@
                 <div>BULAN/TAHUN: ${bulanTahun}</div>
               </div>
             </div>
-            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12pt;margin-bottom:20px;">
               <thead>
                 <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
                   <th style="border:1px solid #aaa;padding:6px;width:5%">No.</th>
