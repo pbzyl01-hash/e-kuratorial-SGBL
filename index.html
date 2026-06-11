@@ -294,6 +294,62 @@
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+
+    /* ── Dark mode: pastikan semua teks terlihat ── */
+    .dark .glass-card-3d .text-slate-400 {
+      color: #cbd5e1 !important; /* slate-300 */
+    }
+    /* Header tabel dark */
+    .dark thead th {
+      color: #94a3b8 !important;
+    }
+    /* Body tabel dark */
+    .dark tbody td {
+      color: #e2e8f0 !important;
+    }
+    /* Label form dark */
+    .dark label {
+      color: #cbd5e1 !important;
+    }
+    /* Input placeholder dark */
+    .dark input::placeholder,
+    .dark textarea::placeholder {
+      color: #64748b !important;
+    }
+    /* Select option dark */
+    .dark select option {
+      background: #1e293b;
+      color: #e2e8f0;
+    }
+    /* Heading umum di dark */
+    .dark h3, .dark h4 {
+      color: #f1f5f9 !important;
+    }
+    /* Teks deskripsi tabs */
+    .dark p.text-slate-400 {
+      color: #94a3b8 !important;
+    }
+    /* Sidebar nav teks */
+    .dark #sidebar-nav button span {
+      color: inherit;
+    }
+    /* Footer dark */
+    .dark footer {
+      color: #64748b !important;
+    }
+    /* Scan result card dark */
+    .dark #scan-result-card span,
+    .dark #scan-result-card p,
+    .dark #scan-result-card h5 {
+      color: #e2e8f0 !important;
+    }
+    .dark #scan-result-card .text-slate-400 {
+      color: #94a3b8 !important;
+    }
+    /* Live clock dark */
+    .dark #live-clock {
+      color: #93c5fd !important;
+    }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -319,8 +375,13 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .dark .glass-card-3d {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
       box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.5);
+      border-color: rgba(71, 85, 105, 0.6) !important;
+    }
+    .dark .glass-card-3d span,
+    .dark .glass-card-3d p {
+      opacity: 1;
     }
     .glass-card-3d:hover {
       transform: translateY(-4px) scale(1.015);
@@ -439,8 +500,8 @@
             <i class="fa-solid fa-compass text-xl"></i>
           </div>
           <div>
-            <span class="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight block">e-Kuratorial</span>
-            <span class="text-xs text-slate-400 font-medium block">Taman Satwa SGBL</span>
+            <span class="font-extrabold text-lg text-slate-900 dark:text-slate-100 tracking-tight block">e-Kuratorial</span>
+            <span class="text-xs text-slate-400 dark:text-slate-400 font-medium block">Taman Satwa SGBL</span>
           </div>
         </div>
         <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-500 hover:text-slate-800 dark:hover:text-white">
@@ -503,7 +564,7 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-blue-600 border-2 border-blue-300 dark:border-blue-500 shadow-sm flex items-center justify-center text-white font-extrabold text-sm select-none">YA</div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-slate-800 dark:text-white truncate">Yonas Adestira</p>
+            <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Yonas Adestira</p>
             <p class="text-xs text-slate-400 truncate">Kurator</p>
           </div>
           <button onclick="openChangePinModal()" class="text-slate-400 hover:text-blue-500 transition-colors" title="Ganti PIN">
@@ -546,25 +607,25 @@
 
         <!-- 1. DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-6 fade-in">
-          <!-- Summary Cards Grid: 2 baris x 4 kolom (isi penuh) -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <!-- Summary Cards Grid: 2 kolom x 4 baris -->
+          <div class="grid grid-cols-2 gap-3">
             <!-- Total Populasi -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Populasi</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Total Populasi</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-blue-600">
                   <i class="fa-solid fa-users text-sm"></i>
                 </div>
               </div>
               <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-total-populasi" class="text-3xl font-extrabold text-blue-600 dark:text-blue-400">850</span>
-                <span class="text-[10px] bg-blue-50 dark:bg-blue-950/40 text-blue-600 px-2 py-0.5 rounded font-bold">Ekor</span>
+                <span class="text-[10px] bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded font-bold">Ekor</span>
               </div>
             </div>
             <!-- Kelahiran -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kelahiran Baru</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Kelahiran Baru</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-emerald-600">
                   <i class="fa-solid fa-egg text-sm"></i>
                 </div>
@@ -577,7 +638,7 @@
             <!-- Kematian -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kematian</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Kematian</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-600">
                   <i class="fa-solid fa-skull text-sm"></i>
                 </div>
@@ -590,7 +651,7 @@
             <!-- Satwa Titipan -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Titipan Negara</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Titipan Negara</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-amber-600">
                   <i class="fa-solid fa-handshake text-sm"></i>
                 </div>
@@ -603,7 +664,7 @@
             <!-- Satwa Dilindungi -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Dilindungi (UU)</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Dilindungi (UU)</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-purple-600">
                   <i class="fa-solid fa-shield-halved text-sm"></i>
                 </div>
@@ -616,20 +677,20 @@
             <!-- Satwa TIDAK Dilindungi -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Tidak Dilindungi</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Tidak Dilindungi</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-slate-600">
                   <i class="fa-solid fa-ban text-sm"></i>
                 </div>
               </div>
               <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-tidak-dilindungi" class="text-3xl font-extrabold text-slate-500 dark:text-slate-400">510</span>
-                <span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 px-2 py-0.5 rounded font-bold">Bebas</span>
+                <span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-2 py-0.5 rounded font-bold">Bebas</span>
               </div>
             </div>
             <!-- Satwa Eksotis -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Satwa Eksotis</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Satwa Eksotis</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-teal-600">
                   <i class="fa-solid fa-dragon text-sm"></i>
                 </div>
@@ -642,7 +703,7 @@
             <!-- Total Mutasi (slot ke-8 agar baris 2 penuh) -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Mutasi</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">Total Mutasi</span>
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-violet-600">
                   <i class="fa-solid fa-shuffle text-sm"></i>
                 </div>
@@ -657,13 +718,13 @@
           <!-- Charts Section -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm lg:col-span-2">
-              <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fa-solid fa-chart-line mr-2 text-blue-500"></i>Tren Dinamika Populasi Bulanan</h3>
+              <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-sm"><i class="fa-solid fa-chart-line mr-2 text-blue-500"></i>Tren Dinamika Populasi Bulanan</h3>
               <div class="h-64">
                 <canvas id="populasiChart"></canvas>
               </div>
             </div>
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
-              <h3 class="font-bold text-slate-800 dark:text-white mb-4"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i>Proporsi Perlindungan</h3>
+              <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-sm"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i>Proporsi Perlindungan</h3>
               <div class="h-64 flex items-center justify-center">
                 <canvas id="proporsiChart"></canvas>
               </div>
@@ -731,7 +792,7 @@
         <section id="tab-kelahiran" class="space-y-6 hidden fade-in">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg">Histori Kelahiran Satwa</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kelahiran Satwa</h3>
               <p class="text-xs text-slate-400">Pencatatan perkembangan biak & penetasan di Lembaga Konservasi.</p>
             </div>
             <button onclick="openModal('add-kelahiran-modal')" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
@@ -767,7 +828,7 @@
         <section id="tab-kematian" class="space-y-6 hidden fade-in">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg">Histori Kematian Satwa</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kematian Satwa</h3>
               <p class="text-xs text-slate-400">Pencatatan data nekropsi, penyebab sakit, dan nomor berita acara penitipan.</p>
             </div>
             <button onclick="openModal('add-kematian-modal')" class="w-full md:w-auto bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
@@ -801,7 +862,7 @@
         <section id="tab-titipan" class="space-y-6 hidden fade-in">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg">Satwa Titipan BKSDA & Instansi Lain</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Satwa Titipan BKSDA & Instansi Lain</h3>
               <p class="text-xs text-slate-400">Pencatatan titipan resmi satwa sitaan, konflik, ataupun penyelamatan.</p>
             </div>
             <button onclick="openModal('add-titipan-modal')" class="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
@@ -836,7 +897,7 @@
         <section id="tab-mutasi" class="space-y-6 hidden fade-in">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg">Riwayat Mutasi & Pemindahan Satwa</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Riwayat Mutasi & Pemindahan Satwa</h3>
               <p class="text-xs text-slate-400">Log perpindahan kandang, rescue, barter, pelepasliaran atau pertukaran Lembaga Konservasi.</p>
             </div>
             <button onclick="openModal('add-mutasi-modal')" class="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
@@ -1613,7 +1674,7 @@
             </div>
             <div>
               <p class="font-bold text-slate-800 dark:text-white leading-tight">${satwa.nama}</p>
-              <p class="text-xs text-slate-400 italic">${satwa.latin}</p>
+              <p class="text-xs text-slate-400 dark:text-slate-400 italic">${satwa.latin}</p>
             </div>
           </td>
           <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${satwa.kelas || 'Mamalia'}</span></td>
@@ -1646,13 +1707,13 @@
         row.innerHTML = `
           <td class="p-4">
             <p class="font-bold leading-tight">${kl.nama}</p>
-            <p class="text-xs text-slate-400 italic">${kl.latin}</p>
+            <p class="text-xs italic" style="color:#94a3b8">${kl.latin}</p>
           </td>
           <td class="p-4 text-xs font-semibold">${kl.tanggal}</td>
           <td class="p-4 font-bold text-blue-600">${kl.jumlah} ekor</td>
           <td class="p-4 font-mono text-xs">${kl.tag}</td>
           <td class="p-4 text-xs font-bold text-slate-500">${kl.kelamin}</td>
-          <td class="p-4 text-xs text-slate-400">${kl.ket}</td>
+          <td class="p-4 text-xs text-slate-400 dark:text-slate-400">${kl.ket}</td>
           <td class="p-4 text-center">
             <button onclick="editKelahiran(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
             <button onclick="deleteKelahiran(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
@@ -1670,7 +1731,7 @@
         row.innerHTML = `
           <td class="p-4">
             <p class="font-bold leading-tight">${km.nama}</p>
-            <p class="text-xs text-slate-400 italic">${km.latin}</p>
+            <p class="text-xs italic" style="color:#94a3b8">${km.latin}</p>
           </td>
           <td class="p-4 text-xs font-semibold">${km.tanggal}</td>
           <td class="p-4 font-bold text-rose-500">${km.jumlah} ekor</td>
@@ -1694,7 +1755,7 @@
           <td class="p-4 font-mono text-xs font-bold text-amber-600">${tp.bap}</td>
           <td class="p-4">
             <p class="font-bold leading-tight">${tp.nama}</p>
-            <p class="text-xs text-slate-400 italic">${tp.latin}</p>
+            <p class="text-xs italic" style="color:#94a3b8">${tp.latin}</p>
           </td>
           <td class="p-4 text-xs font-semibold">${tp.tanggal}</td>
           <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${tp.jumlah} ekor</td>
@@ -1718,7 +1779,7 @@
           <td class="p-4 font-mono text-xs font-bold text-violet-600">${mt.id}</td>
           <td class="p-4 font-bold">${mt.nama}</td>
           <td class="p-4 text-xs"><span class="px-2 py-0.5 rounded bg-violet-50 dark:bg-violet-950/30 text-violet-600 font-bold">${mt.jenis}</span></td>
-          <td class="p-4 text-xs text-slate-400">${mt.asal}</td>
+          <td class="p-4 text-xs text-slate-400 dark:text-slate-400">${mt.asal}</td>
           <td class="p-4 text-xs text-slate-800 dark:text-slate-100 font-semibold">${mt.tujuan}</td>
           <td class="p-4 text-xs">${mt.tanggal}</td>
           <td class="p-4 text-xs font-bold text-slate-500">${mt.petugas}</td>
