@@ -1117,11 +1117,37 @@
     function handleLogout() {
       const ml = document.getElementById("main-layout");
       const ls = document.getElementById("login-screen");
+
+      // Sembunyikan main app
       ml.classList.remove("app-visible");
       ml.setAttribute("style", "display:none!important");
+
+      // Tampilkan login screen persis seperti awal
       ls.classList.remove("app-hidden");
       ls.removeAttribute("style");
-      document.getElementById("login-password").value = "";
+
+      // Reset semua field & state login ke kondisi awal
+      const usernameEl = document.getElementById("login-username");
+      const passwordEl = document.getElementById("login-password");
+      const errorEl    = document.getElementById("login-error");
+      const toggleIcon = document.getElementById("password-toggle-icon");
+
+      if (usernameEl) {
+        usernameEl.value = "";
+        usernameEl.style.borderColor = "#e2e8f0";
+      }
+      if (passwordEl) {
+        passwordEl.value = "";
+        passwordEl.type  = "password";
+        passwordEl.style.borderColor = "#e2e8f0";
+      }
+      if (errorEl)    { errorEl.style.display = "none"; errorEl.textContent = ""; }
+      if (toggleIcon) { toggleIcon.className  = "fa-solid fa-eye-slash"; }
+
+      // Scroll ke atas & fokus ke username
+      window.scrollTo(0, 0);
+      setTimeout(() => { if (usernameEl) usernameEl.focus(); }, 100);
+
       try { showToast("Berhasil logout dari sistem.", "success"); } catch(e) {}
     }
 
@@ -2333,33 +2359,61 @@
         studbook: "Studbook"
       };
       const filename = (typeLabels[type] || "Laporan") + "_SGBL.doc";
-
-      const rawDate = document.getElementById("report-date").value;
-      const d = new Date(rawDate);
       const isLandscape = ["studbook","mutasi_bulanan","mutasi_triwulan"].includes(type);
 
-      const pageStyle = isLandscape
-        ? `@page { size: 297mm 210mm; margin: 15mm; } body { width: 267mm; }`
-        : `@page { size: 210mm 297mm; margin: 15mm; } body { width: 180mm; }`;
+      // Konversi SVG logo ke data URL agar tampil di Word
+      const cloned = printArea.cloneNode(true);
+      cloned.querySelectorAll("svg").forEach(svg => {
+        const serialized = new XMLSerializer().serializeToString(svg);
+        const b64 = btoa(unescape(encodeURIComponent(serialized)));
+        const img = document.createElement("img");
+        img.src = "data:image/svg+xml;base64," + b64;
+        img.width = svg.getAttribute("width") || 82;
+        img.height = svg.getAttribute("height") || 82;
+        img.style.cssText = svg.getAttribute("style") || "flex-shrink:0;";
+        svg.parentNode.replaceChild(img, svg);
+      });
 
-      const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      const pageStyle = isLandscape
+        ? `@page { size: 297mm 210mm landscape; margin: 15mm 15mm 15mm 15mm; }`
+        : `@page { size: 210mm 297mm portrait;  margin: 10mm 20mm 15mm 25mm; }`;
+
+      const docHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
         xmlns:w="urn:schemas-microsoft-com:office:word"
         xmlns="http://www.w3.org/TR/REC-html40">
         <head>
           <meta charset="utf-8">
           <title>${filename}</title>
-          <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+          <!--[if gte mso 9]><xml>
+            <w:WordDocument>
+              <w:View>Print</w:View><w:Zoom>100</w:Zoom>
+              <w:DoNotOptimizeForBrowser/>
+            </w:WordDocument>
+          </xml><![endif]-->
           <style>
             ${pageStyle}
-            body { font-family: Arial, sans-serif; font-size: 11pt; color: #000; }
+            body {
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+              color: #000;
+              line-height: 1.5;
+            }
             table { border-collapse: collapse; width: 100%; }
-            th, td { border: 1px solid #888; padding: 4pt 6pt; }
+            th, td {
+              border: 1px solid #000;
+              padding: 4pt 6pt;
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+            }
+            p, div, span, li {
+              font-family: 'Times New Roman', Times, serif;
+            }
           </style>
         </head>
-        <body>${printArea.innerHTML}</body>
+        <body>${cloned.innerHTML}</body>
       </html>`;
 
-      const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+      const blob = new Blob(['﻿', docHtml], { type: 'application/msword;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
