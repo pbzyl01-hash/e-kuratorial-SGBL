@@ -1731,7 +1731,7 @@
         styleElement.innerHTML = '@page { size: A4 landscape; margin: 15mm; }';
         reportArea.className = "paper-sim mx-auto text-sm leading-relaxed overflow-x-auto no-scrollbar w-full max-w-[297mm] min-h-[210mm] shadow-lg bg-white text-black transition-all";
       } else {
-        styleElement.innerHTML = '@page { size: A4 portrait; margin: 15mm; }';
+        styleElement.innerHTML = '@page { size: A4 portrait; margin-top: 10mm; margin-bottom: 15mm; margin-right: 20mm; margin-left: 25mm; }';
         reportArea.className = "paper-sim mx-auto text-sm leading-relaxed overflow-x-auto no-scrollbar w-full max-w-[210mm] min-h-[297mm] shadow-lg bg-white text-black transition-all";
       }
 
@@ -1742,10 +1742,10 @@
         var titleSz = compact ? "17px"  : "22px";
         var subSz   = compact ? "10px"  : "11.5px";
         var addrSz  = compact ? "9px"   : "10px";
-        var logoSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 100" width="' + logoSz + '" height="' + logoSz + '" style="flex-shrink:0;">'
-          + '<ellipse cx="80" cy="50" rx="74" ry="46" fill="#000"/>'
-          + '<ellipse cx="80" cy="50" rx="68" ry="40" fill="#000" stroke="#555" stroke-width="1"/>'
-          + '<text x="80" y="64" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="38" fill="#e00000" letter-spacing="2">SGBL</text>'
+        var logoSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 130" width="' + logoSz + '" height="' + logoSz + '" style="flex-shrink:0;">'
+          + '<ellipse cx="100" cy="65" rx="94" ry="60" fill="#fff" stroke="#000" stroke-width="6"/>'
+          + '<ellipse cx="100" cy="65" rx="84" ry="52" fill="#fff" stroke="#000" stroke-width="2"/>'
+          + '<text x="100" y="86" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="52" fill="#e00000" letter-spacing="3">SGBL</text>'
           + '</svg>';
         return '<div style="margin-bottom:0;padding-bottom:0;">'
           + '<div style="display:flex;align-items:center;gap:18px;padding-bottom:8px;">'
@@ -1780,7 +1780,7 @@
         });
 
         reportArea.innerHTML = `
-          <div style="padding:28px 36px;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;">
+          <div style="padding:10mm 20mm 15mm 25mm;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;box-sizing:border-box;">
             ${kopSurat()}
             <div style="text-align:right;margin-top:20px;margin-bottom:18px;font-size:12pt;">
               Tabang, ${formattedDateStr}
@@ -1841,57 +1841,68 @@
         let rowsHtml = '';
         localDB.kematian.forEach((km, idx) => {
           rowsHtml += `<tr>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${km.latin}</span></td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.jumlah} ekor</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.tanggal}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;color:#c0392b;font-weight:600;">${km.sebab}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;font-family:monospace;">${km.bap || '-'}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${idx+1}</td>
+            <td style="border:1px solid #000;padding:5px 7px;vertical-align:middle;">${km.nama}</td>
+            <td style="border:1px solid #000;padding:5px 7px;font-style:italic;vertical-align:middle;">${km.latin}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.jumlah} ekor</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.tanggal}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.sebab}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.bap || '-'}</td>
           </tr>`;
         });
 
         reportArea.innerHTML = `
-          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+          <div style="padding:10mm 20mm 15mm 25mm;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;box-sizing:border-box;">
             ${kopSurat()}
-            <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:11px;">
-              <div>
-                <div>Nomor &nbsp;&nbsp;&nbsp;: ${nomorSurat || '............/SGBL/LK/...../2026'}</div>
-                <div>Lampiran : -</div>
-                <div>Perihal &nbsp;&nbsp;: <strong>Laporan Kematian Satwa Liar</strong></div>
-              </div>
-              <div style="text-align:right;">
-                <div>Balikpapan, ${formattedDateStr}</div>
-                <div style="margin-top:6px;"><strong>Kepada Yth.</strong></div>
-                <div>Kepala Balai Konservasi Sumber Daya Alam</div>
-                <div>Kalimantan Timur</div>
-                <div style="font-style:italic;">Di Samarinda</div>
-              </div>
+            <div style="text-align:right;margin-top:20px;margin-bottom:18px;font-size:12pt;">
+              Tabang, ${formattedDateStr}
             </div>
-            <div style="margin-bottom:8px;">Dengan hormat,</div>
-            <div style="margin-bottom:12px;text-align:justify;line-height:1.6;">Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari untuk kemudian dapat dilakukan pemeriksaan pasca-kematian (nekropsi) dengan data sebagai berikut:</div>
-            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+            <table style="border:none;font-size:12pt;margin-bottom:18px;border-collapse:collapse;">
+              <tr>
+                <td style="padding:2px 0;width:100px;border:none;vertical-align:top;">Nomor</td>
+                <td style="padding:2px 6px;border:none;vertical-align:top;">:</td>
+                <td style="padding:2px 0;border:none;font-weight:bold;text-decoration:underline;">${nomorSurat || '.........../SGBL/ZOO/...../2026'}</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;border:none;vertical-align:top;">Lampiran</td>
+                <td style="padding:2px 6px;border:none;vertical-align:top;">:</td>
+                <td style="padding:2px 0;border:none;">-</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 0;border:none;text-decoration:underline;vertical-align:top;">Perihal</td>
+                <td style="padding:2px 6px;border:none;vertical-align:top;">:</td>
+                <td style="padding:2px 0;border:none;">Laporan Kematian Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;">Kepada Yth.</div>
+            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</div>
+            <div style="margin-bottom:2px;">di -</div>
+            <div style="padding-left:64px;margin-bottom:22px;">Samarinda</div>
+            <div style="margin-bottom:14px;">Dengan Hormat,</div>
+            <div style="margin-bottom:20px;text-align:justify;line-height:1.8;">Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara,&nbsp;&nbsp; Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan pasca-kematian (nekropsi) dengan data sebagai berikut.</div>
+            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
               <thead>
-                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
-                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:10%">Jumlah</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:14%">Tgl. Kematian</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:18%">Sebab Kematian</th>
-                  <th style="border:1px solid #ccc;padding:6px;">No. BAP</th>
+                <tr style="font-weight:bold;text-align:center;">
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No</th>
+                  <th colspan="2" style="border:1px solid #000;padding:6px 8px;">Nama Jenis</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Jumlah<br>(ekor)</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Tanggal<br>Kematian</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Sebab<br>Kematian</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No. BAP</th>
+                </tr>
+                <tr style="font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #000;padding:5px 8px;">Indonesia</th>
+                  <th style="border:1px solid #000;padding:5px 8px;">Latin</th>
                 </tr>
               </thead>
-              <tbody>${rowsHtml || '<tr><td colspan="6" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data kematian</td></tr>'}</tbody>
+              <tbody>${rowsHtml || '<tr><td colspan="7" style="padding:14px;text-align:center;color:#888;font-style:italic;border:1px solid #000;">Belum ada data kematian</td></tr>'}</tbody>
             </table>
-            <div style="margin-bottom:20px;text-align:justify;line-height:1.6;">Demikian laporan kematian ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</div>
-            <div style="display:flex;justify-content:flex-end;">
-              <div style="text-align:center;width:200px;">
-                <div>Hormat kami,</div>
-                <div style="font-weight:700;margin-top:4px;">${kuratorTitle}</div>
-                <div style="height:60px;"></div>
-                <div style="font-weight:700;text-decoration:underline;">${kuratorSignee}</div>
-                <div style="font-size:10px;color:#555;">PT. Satwa Gunung Bayan Lestari</div>
-              </div>
-            </div>
+            <div style="margin-bottom:22px;line-height:1.8;">Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.</div>
+            <div style="margin-bottom:3px;">Hormat Kami,</div>
+            <div style="margin-bottom:70px;">PT. Satwa Gunung Bayan Lestari,</div>
+            <div style="font-weight:bold;text-decoration:underline;margin-bottom:2px;">${kuratorSignee}</div>
+            <div style="margin-bottom:30px;">${kuratorTitle}</div>
+            <div style="font-size:11pt;border-top:1px solid #999;padding-top:8px;color:#333;">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
           </div>`;
 
       // -------------------------------------------------------
@@ -1979,7 +1990,7 @@
         let rowsHtml = '';
         localDB.kelahiran.forEach((kl, idx) => {
           rowsHtml += `<tr>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${idx+1}</td>
             <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${kl.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${kl.latin}</span></td>
             <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.jumlah} ekor</td>
             <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${kl.tag||'-'}</td>
@@ -1989,14 +2000,14 @@
           </tr>`;
         });
         reportArea.innerHTML = `
-          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+          <div style="padding:10mm 20mm 15mm 25mm;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;box-sizing:border-box;">
             ${kopSurat()}
             <div style="text-align:center;margin-bottom:14px;">
               <div style="font-size:13px;font-weight:900;text-transform:uppercase;text-decoration:underline;">REKAP LAPORAN KELAHIRAN SATWA</div>
               <div style="font-size:11px;font-weight:700;margin-top:3px;">TRIWULAN ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]}) TAHUN ${d.getFullYear()}</div>
               <div style="font-size:10px;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari – Lembaga Konservasi</div>
             </div>
-            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
               <thead>
                 <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
                   <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
@@ -2031,31 +2042,35 @@
         let rowsHtml = '';
         localDB.kematian.forEach((km, idx) => {
           rowsHtml += `<tr>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${idx+1}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;font-weight:600;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${km.latin}</span></td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.jumlah} ekor</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;">${km.tanggal}</td>
-            <td style="border:1px solid #ccc;padding:5px 6px;text-align:center;color:#c0392b;font-weight:600;">${km.sebab}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${idx+1}</td>
+            <td style="border:1px solid #000;padding:5px 7px;font-weight:600;vertical-align:middle;">${km.nama}<br><span style="font-style:italic;font-weight:400;font-size:10px;">${km.latin}</span></td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.jumlah} ekor</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.tanggal}</td>
+            <td style="border:1px solid #000;padding:5px 7px;text-align:center;vertical-align:middle;">${km.sebab}</td>
             <td style="border:1px solid #ccc;padding:5px 6px;font-size:10px;font-family:monospace;">${km.bap||'-'}</td>
           </tr>`;
         });
         reportArea.innerHTML = `
-          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+          <div style="padding:10mm 20mm 15mm 25mm;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;box-sizing:border-box;">
             ${kopSurat()}
             <div style="text-align:center;margin-bottom:14px;">
               <div style="font-size:13px;font-weight:900;text-transform:uppercase;text-decoration:underline;">REKAP LAPORAN KEMATIAN SATWA</div>
               <div style="font-size:11px;font-weight:700;margin-top:3px;">TRIWULAN ${['I','II','III','IV'][triwulan-1]} (${tw[0]} – ${tw[2]}) TAHUN ${d.getFullYear()}</div>
               <div style="font-size:10px;color:#555;margin-top:2px;">PT. Satwa Gunung Bayan Lestari – Lembaga Konservasi</div>
             </div>
-            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
               <thead>
-                <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
-                  <th style="border:1px solid #ccc;padding:6px;width:4%">No</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:32%">Jenis Satwa (Indonesia/Latin)</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:10%">Jumlah</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:14%">Tgl. Kematian</th>
-                  <th style="border:1px solid #ccc;padding:6px;width:18%">Sebab Kematian</th>
-                  <th style="border:1px solid #ccc;padding:6px;">No. BAP</th>
+                <tr style="font-weight:bold;text-align:center;">
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No</th>
+                  <th colspan="2" style="border:1px solid #000;padding:6px 8px;">Nama Jenis</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Jumlah<br>(ekor)</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Tanggal<br>Kematian</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">Sebab<br>Kematian</th>
+                  <th rowspan="2" style="border:1px solid #000;padding:6px 8px;vertical-align:middle;">No. BAP</th>
+                </tr>
+                <tr style="font-weight:bold;text-align:center;">
+                  <th style="border:1px solid #000;padding:5px 8px;">Indonesia</th>
+                  <th style="border:1px solid #000;padding:5px 8px;">Latin</th>
                 </tr>
               </thead>
               <tbody>${rowsHtml||'<tr><td colspan="6" style="padding:10px;text-align:center;color:#888;font-style:italic;">Belum ada data</td></tr>'}</tbody>
@@ -2172,7 +2187,7 @@
         });
 
         reportArea.innerHTML = `
-          <div style="padding:24px 28px;font-family:Arial,sans-serif;font-size:11px;color:#111;background:#fff;">
+          <div style="padding:10mm 20mm 15mm 25mm;font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;line-height:1.5;box-sizing:border-box;">
             ${kopSurat()}
             <div style="text-align:center;margin-bottom:12px;">
               <div style="font-size:13px;font-weight:900;text-transform:uppercase;">BUKU CATATAN HARIAN (LOGBOOK) PENANGKARAN JENIS ${categoryName}</div>
@@ -2191,7 +2206,7 @@
                 <div>BULAN/TAHUN: ${bulanTahun}</div>
               </div>
             </div>
-            <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:14px;">
+            <table style="width:100%;border-collapse:collapse;font-size:11pt;margin-bottom:20px;">
               <thead>
                 <tr style="background:#e8edf5;font-weight:bold;text-align:center;">
                   <th style="border:1px solid #aaa;padding:6px;width:5%">No.</th>
