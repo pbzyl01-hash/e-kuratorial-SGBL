@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   <link rel="icon" type="image/png" href="favicon.png">
-<head>
+<head>  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -168,9 +168,9 @@
         </div>
         <!-- JUDUL ANIMASI MENYALA & BERDENYUT -->
         <div class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-          <span class="neon-pulse-title text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-purple-400 to-blue-600">e-Kuratorial Satwa</span>
+          <span class="neon-pulse-title text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-purple-400 to-blue-600">e-Kuratorial</span>
         </div>
-        <div class="text-sm text-slate-500 dark:text-slate-400 mt-1.5 font-semibold">Satwa Gunung Bayan Lestari</div>
+        <div class="text-sm text-slate-500 dark:text-slate-400 mt-1.5 font-semibold">Taman Satwa Gunung Bayan Lestari</div>
       </div>
 
       <!-- PIN Input dengan "Mata Elang" toggle -->
@@ -232,7 +232,7 @@
 
       <!-- Tautan Navigasi -->
       <nav id="sidebar-nav" class="flex-1 p-4 space-y-1.5 overflow-y-auto no-scrollbar">
-        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-50 text-brand-700 dark:bg-brand-900/25 dark:text-brand-400">
+        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-500 text-white dark:bg-brand-900/40 dark:text-brand-400">
           <i class="fa-solid fa-chart-pie w-5 text-center text-blue-500"></i>
           <span>Dashboard</span>
         </button>
@@ -536,7 +536,7 @@
                 <thead>
                   <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
                     <th class="p-4">Nama Jenis Satwa</th>
-                    <th class="p-4">Tanggal Lair</th>
+                    <th class="p-4">Tanggal Lahir</th>
                     <th class="p-4">Jumlah (Ekor)</th>
                     <th class="p-4">Tag / No. ID</th>
                     <th class="p-4">Jenis Kelamin</th>
@@ -724,10 +724,13 @@
                 </div>
 
                 <button onclick="generateSelectedReport()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white border-none rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
-                  <i class="fa-solid fa-arrows-rotate animate-spin" style="animation-duration: 6s;"></i> Perbarui Preview
+                  <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i> Perbarui Preview
+                </button>
+                <button onclick="downloadViaGoogleDocTemplate()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white border-none rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md">
+                  <i class="fa-solid fa-file-invoice"></i> Ekspor ke Google Doc Template
                 </button>
                 <button onclick="downloadReportDocx()" class="w-full py-2.5 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/40 border border-brand-200 dark:border-brand-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
-                  <i class="fa-solid fa-file-word"></i> Unduh Word (.docx)
+                  <i class="fa-solid fa-file-word"></i> Unduh File Lokal Word (.doc)
                 </button>
               </div>
 
@@ -1094,7 +1097,7 @@
       generateSelectedReport();
       updateDashboardStats();
       
-      // Ambil otomatis dari Google Sheets jika lingkungan Apps Script siap
+      // Ambil otomatis dari Google Sheets secara asinkronus
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         loadFromSpreadsheet();
       }
@@ -1941,7 +1944,7 @@
             <div style="margin-bottom:30px;">${kuratorTitle}</div>
           </div>`;
       } else {
-        // Fallback placeholder sederhana jika tipe laporan lain dipilih
+        // Fallback placeholder
         reportArea.innerHTML = `
           <div style="font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:#fff;padding:20px;">
             ${kopSurat()}
@@ -1955,11 +1958,11 @@
     // Google Sheets loader via Apps Script
     async function loadFromSpreadsheet() {
       if (typeof google === 'undefined' || !google.script) {
-        showToast("Lingkungan mandiri, menggunakan penyimpanan lokal.", "success");
+        showToast("Lingkungan lokal aktif.", "success");
         return;
       }
       try {
-        showToast("⏳ Sinkronisasi data dengan Spreadsheet...", "success");
+        showToast("⏳ Membaca database spreadsheet...", "success");
         google.script.run
           .withSuccessHandler(function(data) {
             if (data && data.master && data.master.length > 0) {
@@ -1984,6 +1987,68 @@
       } catch (err) {
         showToast("Gagal memanggil Apps Script: " + err.message, "error");
       }
+    }
+
+    // MENGIRIM DATA DAN MEMBUAT GOOGLE DOC BERDASARKAN TEMPLATE PENGGUNA
+    function downloadViaGoogleDocTemplate() {
+      if (typeof google === 'undefined' || !google.script) {
+        showToast("Fitur Google Doc Template hanya berjalan di Google Apps Script.", "error");
+        return;
+      }
+      
+      const type = document.getElementById("report-type").value;
+      const rawDate = document.getElementById("report-date").value;
+      const nomorSurat = document.getElementById("report-nomor-surat")?.value || "";
+      const triwulan = document.getElementById("report-triwulan")?.value || "1";
+
+      showToast("⏳ Sedang memproses dokumen Google Doc...", "success");
+      
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.status === "success") {
+            showToast("✅ Berhasil membuat Laporan Google Doc!", "success");
+            window.open(res.url, "_blank");
+          } else {
+            showToast("Gagal membuat laporan: " + res.message, "error");
+          }
+        })
+        .withFailureHandler(function(err) {
+          showToast("Koneksi gagal: " + err, "error");
+        })
+        .generateOfficialReportDoc(type, rawDate, nomorSurat, triwulan, localDB);
+    }
+
+    // GANTI PIN LOGIKA - Diperbaiki untuk menghentikan reload dan menyinkronkan data secara persisten
+    function handleChangePin(e) {
+      e.preventDefault(); // Mencegah reload form default
+      const oldPin = document.getElementById("cp-old").value.trim();
+      const newPin = document.getElementById("cp-new").value.trim();
+      const confirmPin = document.getElementById("cp-confirm").value.trim();
+      const savedPin = localStorage.getItem('sgbl_pin') || "1234";
+      const errEl = document.getElementById("cp-error");
+
+      if (oldPin !== savedPin) {
+        errEl.textContent = "PIN lama tidak sesuai!";
+        errEl.classList.remove("hidden");
+        return;
+      }
+      if (newPin !== confirmPin) {
+        errEl.textContent = "Konfirmasi PIN tidak cocok!";
+        errEl.classList.remove("hidden");
+        return;
+      }
+      if (newPin.length < 4) {
+        errEl.textContent = "PIN baru minimal 4 karakter!";
+        errEl.classList.remove("hidden");
+        return;
+      }
+      
+      // Update persisten
+      localStorage.setItem('sgbl_pin', newPin);
+      errEl.classList.add("hidden");
+      closeChangePinModal();
+      showToast("✅ PIN Sandi Berhasil Diperbarui!", "success");
+      document.getElementById("change-pin-form").reset();
     }
 
     function editKelahiran(idx) {
@@ -2082,27 +2147,20 @@
     }
 
     function downloadReportDocx() {
-      // Implementasi download Word seperti pada file asli Anda tetap dipertahankan utuh
-      showToast("Mengekspor laporan ke dokumen Word...", "success");
-      setTimeout(() => {
-        showToast("✅ Berhasil mengunduh dokumen Word!", "success");
-      }, 1500);
+      showToast("Mengekspor laporan ke dokumen Word lokal...", "success");
+      // Fallback ekspor HTML manual ke doc Word lokal
+      const headerHTML = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><title>Ekspor Laporan</title></head><body>";
+      const footerHTML = "</body></html>";
+      const sourceHTML = headerHTML + document.getElementById("print-area").innerHTML + footerHTML;
+      
+      const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+      const fileDownload = document.createElement("a");
+      document.body.appendChild(fileDownload);
+      fileDownload.href = source;
+      fileDownload.download = 'Laporan_eKuratorial_SGBL.doc';
+      fileDownload.click();
+      document.body.removeChild(fileDownload);
     }
   </script>
-<script type="text/javascript">
-    // Menonaktifkan Klik Kanan
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-
-    // Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || 
-            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
-            (e.ctrlKey && e.key === 'u')) {
-            e.preventDefault();
-        }
-    });
-</script>
-  </body>
+</body>
 </html>
