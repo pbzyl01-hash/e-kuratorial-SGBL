@@ -185,7 +185,7 @@
   </div>
 
   <!-- MAIN LAYOUT (Hidden initially) -->
-  <div id="main-layout" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+  <div id="main-layout" style="display:none;" class="flex-1 flex flex-col md:flex-row min-h-screen">
     
     <!-- SIDEBAR -->
     <aside class="w-full md:w-64 bg-white dark:bg-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 flex flex-col shadow-sm z-20">
@@ -1079,9 +1079,12 @@
 
       if (pin === savedPin) {
         errEl.style.display = "none";
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("main-layout").style.display = "flex";
-        document.getElementById("main-layout").classList.remove("hidden");
+        // Sembunyikan login, tampilkan main
+        const loginEl = document.getElementById("login-screen");
+        const mainEl  = document.getElementById("main-layout");
+        loginEl.style.cssText = "display:none!important;";
+        mainEl.style.cssText  = "display:flex!important;flex:1;flex-direction:column;min-height:100vh;";
+        mainEl.classList.remove("hidden");
         try { showToast("Selamat bekerja, Kurator!", "success"); } catch(e) {}
         try { updateDashboardStats(); } catch(e) {}
         try { setTimeout(renderCharts, 200); } catch(e) {}
@@ -1099,9 +1102,11 @@
     }
 
     function handleLogout() {
-      document.getElementById("main-layout").classList.add("hidden");
-      document.getElementById("login-screen").classList.remove("hidden");
-      showToast("Berhasil logout dari sistem.", "success");
+      document.getElementById("main-layout").style.cssText = "display:none!important;";
+      const loginEl = document.getElementById("login-screen");
+      loginEl.style.cssText = "display:flex!important;align-items:center;justify-content:center;min-height:100vh;padding:16px;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#1e3a8a 70%,#0f172a 100%);";
+      document.getElementById("login-password").value = "";
+      try { showToast("Berhasil logout dari sistem.", "success"); } catch(e) {}
     }
 
     // === THEME MANAGER ===
