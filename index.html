@@ -546,8 +546,8 @@
 
         <!-- 1. DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-6 fade-in">
-          <!-- Summary Cards Grid with 3D Glossy Badge Effects -->
-          <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
+          <!-- Summary Cards Grid: 2 baris x 4 kolom (isi penuh) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <!-- Total Populasi -->
             <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
               <div class="flex items-center justify-between">
@@ -637,6 +637,19 @@
               <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-eksotis" class="text-3xl font-extrabold text-teal-500">0</span>
                 <span class="text-[10px] bg-teal-50 dark:bg-teal-950/40 text-teal-500 px-2 py-0.5 rounded font-bold">Eksotis</span>
+              </div>
+            </div>
+            <!-- Total Mutasi (slot ke-8 agar baris 2 penuh) -->
+            <div class="glass-card-3d p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Mutasi</span>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-violet-600">
+                  <i class="fa-solid fa-shuffle text-sm"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-4">
+                <span id="stat-mutasi" class="text-3xl font-extrabold text-violet-500">0</span>
+                <span class="text-[10px] bg-violet-50 dark:bg-violet-950/40 text-violet-500 px-2 py-0.5 rounded font-bold">Mutasi</span>
               </div>
             </div>
           </div>
@@ -1573,12 +1586,15 @@
       const totalTidakDilindungi = localDB.master.filter(s => s.status === 'Tidak Dilindungi').reduce((acc, curr) => acc + curr.jumlah, 0);
       const totalEksotis = localDB.master.filter(s => s.status === 'Eksotis').reduce((acc, curr) => acc + curr.jumlah, 0);
 
+      const totalMutasi = localDB.mutasi ? localDB.mutasi.length : 0;
       document.getElementById("stat-total-populasi").innerText = totalPop;
       document.getElementById("stat-kelahiran").innerText = totalLahir;
       document.getElementById("stat-kematian").innerText = totalMati;
       document.getElementById("stat-titipan").innerText = totalTitip;
       document.getElementById("stat-dilindungi").innerText = totalDilindungi;
       document.getElementById("stat-tidak-dilindungi").innerText = totalTidakDilindungi;
+      const elMutasi = document.getElementById("stat-mutasi");
+      if (elMutasi) elMutasi.innerText = totalMutasi;
       document.getElementById("stat-eksotis").innerText = totalEksotis;
     }
 
