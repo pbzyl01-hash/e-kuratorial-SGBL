@@ -27,6 +27,13 @@
       }
     }
   </script>
+  <style>
+    /* === CRITICAL: Login / App toggle === */
+    #login-screen  { display: flex !important; }
+    #main-layout   { display: none !important; }
+    #login-screen.app-hidden  { display: none !important; }
+    #main-layout.app-visible  { display: flex !important; }
+  </style>
   <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1079,12 +1086,8 @@
 
       if (pin === savedPin) {
         errEl.style.display = "none";
-        // Sembunyikan login, tampilkan main
-        const loginEl = document.getElementById("login-screen");
-        const mainEl  = document.getElementById("main-layout");
-        loginEl.style.cssText = "display:none!important;";
-        mainEl.style.cssText  = "display:flex!important;flex:1;flex-direction:column;min-height:100vh;";
-        mainEl.classList.remove("hidden");
+        document.getElementById("login-screen").classList.add("app-hidden");
+        document.getElementById("main-layout").classList.add("app-visible");
         try { showToast("Selamat bekerja, Kurator!", "success"); } catch(e) {}
         try { updateDashboardStats(); } catch(e) {}
         try { setTimeout(renderCharts, 200); } catch(e) {}
@@ -1102,9 +1105,8 @@
     }
 
     function handleLogout() {
-      document.getElementById("main-layout").style.cssText = "display:none!important;";
-      const loginEl = document.getElementById("login-screen");
-      loginEl.style.cssText = "display:flex!important;align-items:center;justify-content:center;min-height:100vh;padding:16px;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#1e3a8a 70%,#0f172a 100%);";
+      document.getElementById("main-layout").classList.remove("app-visible");
+      document.getElementById("login-screen").classList.remove("app-hidden");
       document.getElementById("login-password").value = "";
       try { showToast("Berhasil logout dari sistem.", "success"); } catch(e) {}
     }
