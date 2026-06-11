@@ -1122,9 +1122,16 @@
       ml.classList.remove("app-visible");
       ml.setAttribute("style", "display:none!important");
 
-      // Tampilkan login screen persis seperti awal
+      // Tampilkan login screen persis seperti awal — restore SEMUA inline style asli
       ls.classList.remove("app-hidden");
-      ls.removeAttribute("style");
+      ls.setAttribute("style",
+        "display:flex !important;" +
+        "align-items:center;" +
+        "justify-content:center;" +
+        "min-height:100vh;" +
+        "padding:16px;" +
+        "background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#1e3a8a 70%,#0f172a 100%);"
+      );
 
       // Reset semua field & state login ke kondisi awal
       const usernameEl = document.getElementById("login-username");
@@ -2404,9 +2411,21 @@
               padding: 4pt 6pt;
               font-family: 'Times New Roman', Times, serif;
               font-size: 12pt;
+              mso-para-margin: 0;
+              mso-para-margin-top: 0;
+              mso-para-margin-bottom: 0;
             }
             p, div, span, li {
               font-family: 'Times New Roman', Times, serif;
+              margin: 0;
+              padding: 0;
+              mso-para-margin: 0;
+              mso-para-margin-top: 0;
+              mso-para-margin-bottom: 0;
+            }
+            /* Word paragraph spacing = 0 after */
+            @page Section1 {
+              mso-para-margin: 0;
             }
           </style>
         </head>
