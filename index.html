@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link class="icon" type="image/png" href="favicon.png">
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -280,17 +280,14 @@
         </a>
       </nav>
 
-      <div class="p-4 border-t border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/40">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-blue-600 border-2 border-blue-300 dark:border-blue-500 shadow-sm flex items-center justify-center text-white font-extrabold text-sm select-none">YA</div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Yonas Adestira</p>
-            <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold truncate">Kurator Utama</p>
-          </div>
-          <button onclick="openChangePinModal()" class="text-slate-400 hover:text-blue-500 transition-colors" title="Ganti PIN">
-            <i class="fa-solid fa-key text-sm"></i>
-          </button>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between gap-2">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Yonas Adestira</p>
+          <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold truncate">Kurator Utama</p>
         </div>
+        <button onclick="openChangePinModal()" class="text-slate-400 hover:text-blue-500 transition-colors" title="Ganti PIN">
+          <i class="fa-solid fa-key text-sm"></i>
+        </button>
       </div>
     </aside>
 
@@ -531,7 +528,7 @@
                 <thead>
                   <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
                     <th class="p-4">Nama Jenis Satwa</th>
-                    <th class="p-4">Tanggal Lair</th>
+                    <th class="p-4">Tanggal Lahir</th>
                     <th class="p-4">Jumlah (Ekor)</th>
                     <th class="p-4">Tag / No. ID</th>
                     <th class="p-4">Jenis Kelamin</th>
@@ -633,7 +630,7 @@
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-sm">
                 <thead>
-                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
+                  <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/80">
                     <th class="p-4">ID Mutasi</th>
                     <th class="p-4">Jenis Satwa</th>
                     <th class="p-4">Jenis Mutasi</th>
@@ -1035,8 +1032,31 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbykJM36-T1ICBsKI9ma7ttXECx0bbwS-DTmY9IJkU9l76VwvITHFmzdmJbPQz5XPCsdrQ/exec";
 
+    // Deklarasi global instance grafik agar tidak memicu ReferenceError pada renderCharts()
+    let populationChartInstance = null;
+    let proporsiChartInstance = null;
+
+    // --- SECURE STORAGE WRAPPER ENGINE (SANGAT KRUSIAL UNTUK LINGKUNGAN SANDBOX IFRAME VERCEL) ---
+    const SafeStorage = {
+      getItem(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          return this.fallback[key] || null;
+        }
+      },
+      setItem(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch (e) {
+          this.fallback[key] = value;
+        }
+      },
+      fallback: {}
+    };
+
     let localDB = {
-      master: JSON.parse(localStorage.getItem('sgbl_master')) || [
+      master: JSON.parse(SafeStorage.getItem('sgbl_master')) || [
         { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", jumlah: 20, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Kondisi Sehat" },
         { id: "REG-002", nama: "Betet Ekor Panjang", latin: "Psittacula longicauda", kelas: "Aves", jumlah: 3, status: "Dilindungi", kandang: "Kandang Kawat 4", asal: "Rescue BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat" },
         { id: "REG-003", nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 8, status: "Dilindungi", kandang: "Kandang Besar Kasuari", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sangat Aktif" },
@@ -1046,64 +1066,27 @@
         { id: "REG-007", nama: "Beruang Madu", latin: "Helarctos malayanus", kelas: "Mamalia", jumlah: 16, status: "Dilindungi", kandang: "Kandang Hutan Beruang", asal: "Penyelamatan", generasi: "F0", kelamin: "Betina", keterangan: "Aktif" },
         { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", jumlah: 8, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", generasi: "F0", kelamin: "Jantan", keterangan: "Sehat klinis" }
       ],
-      kelahiran: JSON.parse(localStorage.getItem('sgbl_kelahiran')) || [
+      kelahiran: JSON.parse(SafeStorage.getItem('sgbl_kelahiran')) || [
         { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "Noband", tanggal: "2026-03-02", kelamin: "Unknown", ket: "Anak sehat klinis" },
         { nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 2, tag: "Noband", tanggal: "2026-03-06", kelamin: "Unknown", ket: "Lahir kembar sehat" }
       ],
-      kematian: JSON.parse(localStorage.getItem('sgbl_kematian')) || [
+      kematian: JSON.parse(SafeStorage.getItem('sgbl_kematian')) || [
         { nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", jumlah: 1, tanggal: "2026-11-21", sebab: "Sakit", bap: "BA.30/K.18-SKW.3/KSA.1/01/2018" }
       ],
-      titipan: JSON.parse(localStorage.getItem('sgbl_titipan')) || [
+      titipan: JSON.parse(SafeStorage.getItem('sgbl_titipan')) || [
         { bap: "BA.30/K.18-SKW.3/KSA.1/01/2018", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", tanggal: "2018-01-15", jumlah: 20, asal: "BKSDA Kaltim", status: "Titipan" }
       ],
-      mutasi: JSON.parse(localStorage.getItem('sgbl_mutasi')) || [
+      mutasi: JSON.parse(SafeStorage.getItem('sgbl_mutasi')) || [
         { id: "MUT-001", nama: "Beruang Madu", jenis: "Perpindahan Kandang", asal: "Kandang Karantina", tujuan: "Kandang Hutan Beruang", tanggal: "2026-03-01", petugas: "Yonas Adestira Ichti" }
       ]
     };
 
-    let populationChartInstance = null;
-    let proporsiChartInstance = null;
-
-    function updateClock() {
-      const now = new Date();
-      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-      
-      const dayName = days[now.getDay()];
-      const dateStr = now.getDate().toString().padStart(2, '0');
-      const monthName = months[now.getMonth()];
-      const yearStr = now.getFullYear();
-      
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
-      
-      const clockElement = document.getElementById("live-clock");
-      if (clockElement) {
-        clockElement.innerHTML = `${dayName}, ${dateStr} ${monthName} ${yearStr} &bull; ${hours}:${minutes}:${seconds}`;
-      }
-    }
-    setInterval(updateClock, 1000);
-
-    window.onload = function() {
-      const savedTheme = localStorage.getItem('ekurator_theme') || 'dark';
-      applyTheme(savedTheme === 'dark');
-      updateClock();
-      renderAllTables();
-      populateSelectDropdowns();
-      generateSelectedReport();
-      updateDashboardStats();
-      
-      // Ambil otomatis dari Google Sheets secara asinkronus
-      loadFromSpreadsheet();
-    };
-
     function saveToLocalStorage() {
-      localStorage.setItem('sgbl_master', JSON.stringify(localDB.master));
-      localStorage.setItem('sgbl_kelahiran', JSON.stringify(localDB.kelahiran));
-      localStorage.setItem('sgbl_kematian', JSON.stringify(localDB.kematian));
-      localStorage.setItem('sgbl_titipan', JSON.stringify(localDB.titipan));
-      localStorage.setItem('sgbl_mutasi', JSON.stringify(localDB.mutasi));
+      SafeStorage.setItem('sgbl_master', JSON.stringify(localDB.master));
+      SafeStorage.setItem('sgbl_kelahiran', JSON.stringify(localDB.kelahiran));
+      SafeStorage.setItem('sgbl_kematian', JSON.stringify(localDB.kematian));
+      SafeStorage.setItem('sgbl_titipan', JSON.stringify(localDB.titipan));
+      SafeStorage.setItem('sgbl_mutasi', JSON.stringify(localDB.mutasi));
     }
 
     // Google Apps Script Async synchronization with REST API fallback for Vercel/Local
@@ -1156,7 +1139,7 @@
 
     function doLogin() {
       const pin = document.getElementById("login-password").value.trim();
-      const savedPin = localStorage.getItem('sgbl_pin') || "1234";
+      const savedPin = SafeStorage.getItem('sgbl_pin') || "1234";
       const errEl = document.getElementById("login-error");
       if (!pin) {
         errEl.textContent = "Masukkan PIN terlebih dahulu.";
@@ -1305,6 +1288,40 @@
       }, 3500);
     }
 
+    // --- KELAS DINAMIS: DISESUAIKAN DENGAN RIWAYAT SATWA NYATA ---
+    function getDinamisBulananData() {
+      const kelahiranBulanan = Array(12).fill(0);
+      const kematianBulanan = Array(12).fill(0);
+
+      // Map kelahiran berdasarkan field 'tanggal'
+      localDB.kelahiran.forEach(k => {
+        if (k.tanggal) {
+          const parts = k.tanggal.split('-');
+          if (parts.length === 3) {
+            const m = parseInt(parts[1], 10) - 1; // Konversi ke index bulan (0-11)
+            if (m >= 0 && m < 12) {
+              kelahiranBulanan[m] += (parseInt(k.jumlah) || 0);
+            }
+          }
+        }
+      });
+
+      // Map kematian berdasarkan field 'tanggal'
+      localDB.kematian.forEach(k => {
+        if (k.tanggal) {
+          const parts = k.tanggal.split('-');
+          if (parts.length === 3) {
+            const m = parseInt(parts[1], 10) - 1;
+            if (m >= 0 && m < 12) {
+              kematianBulanan[m] += (parseInt(k.jumlah) || 0);
+            }
+          }
+        }
+      });
+
+      return { kelahiran: kelahiranBulanan, kematian: kematianBulanan };
+    }
+
     // PREMIUM DESIGN CHARTS
     function renderCharts() {
       const isDark = document.documentElement.classList.contains('dark');
@@ -1318,14 +1335,17 @@
         populationChartInstance.destroy();
       }
 
+      // Gunakan kalkulasi dinamika real dari data riwayat input
+      const dataDinamis = getDinamisBulananData();
+
       populationChartInstance = new Chart(popCtx2d, {
         type: 'line',
         data: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
           datasets: [
             {
-              label: 'Kelahiran 2026',
-              data: [1, 2, 8, 3, 2, 4, 1, 3, 2, 5, 1, 2],
+              label: 'Kelahiran Terdaftar',
+              data: dataDinamis.kelahiran,
               borderColor: '#3b82f6',
               backgroundColor: 'rgba(59, 130, 246, 0.1)',
               borderWidth: 3,
@@ -1333,8 +1353,8 @@
               fill: true
             },
             {
-              label: 'Kematian 2026',
-              data: [0, 1, 0, 1, 0, 2, 0, 1, 1, 0, 2, 0],
+              label: 'Kematian Terdaftar',
+              data: dataDinamis.kematian,
               borderColor: '#f43f5e',
               backgroundColor: 'rgba(244, 63, 94, 0.1)',
               borderWidth: 3,
@@ -1651,7 +1671,7 @@
 
       if (editIdx !== undefined && editIdx !== "") {
         delete modal.dataset.editIdx;
-        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-baby-carriage mr-2"></i>Catat Kelahiran Baru';
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid :fa-baby-carriage mr-2"></i>Catat Kelahiran Baru';
         localDB.kelahiran[parseInt(editIdx)] = { nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket };
         saveAndSync(); renderAllTables(); updateDashboardStats(); closeAllModals();
         showToast("Data kelahiran berhasil diperbarui!", "success");
@@ -2061,13 +2081,32 @@
       }
     }
 
-    // GANTI PIN LOGIKA - Diperbaiki untuk menghentikan reload dan menyinkronkan data secara persisten
+    // --- FUNGSI AKSES MODAL PIN (MENYELESAIKAN REFERENCEERROR) ---
+    function openChangePinModal() {
+      const form = document.getElementById("change-pin-form");
+      if (form) form.reset();
+      const errEl = document.getElementById("cp-error");
+      if (errEl) errEl.classList.add("hidden");
+      const backdrop = document.getElementById("modal-backdrop");
+      if (backdrop) backdrop.classList.remove("hidden");
+      const modal = document.getElementById("change-pin-modal");
+      if (modal) modal.classList.remove("hidden");
+    }
+
+    function closeChangePinModal() {
+      const backdrop = document.getElementById("modal-backdrop");
+      if (backdrop) backdrop.classList.add("hidden");
+      const modal = document.getElementById("change-pin-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    // GANTI PIN LOGIKA - Sempurna menghentikan reload dan menyinkronkan data secara persisten
     function handleChangePin(e) {
       if (e) e.preventDefault(); // Mencegah reload form default
       const oldPin = document.getElementById("cp-old").value.trim();
       const newPin = document.getElementById("cp-new").value.trim();
       const confirmPin = document.getElementById("cp-confirm").value.trim();
-      const savedPin = localStorage.getItem('sgbl_pin') || "1234";
+      const savedPin = SafeStorage.getItem('sgbl_pin') || "1234";
       const errEl = document.getElementById("cp-error");
 
       if (oldPin !== savedPin) {
@@ -2086,8 +2125,8 @@
         return;
       }
       
-      // Update persisten
-      localStorage.setItem('sgbl_pin', newPin);
+      // Update persisten melalui engine SafeStorage
+      SafeStorage.setItem('sgbl_pin', newPin);
       errEl.classList.add("hidden");
       closeChangePinModal();
       showToast("✅ PIN Sandi Berhasil Diperbarui!", "success");
@@ -2106,13 +2145,49 @@
       openModal('add-kelahiran-modal');
     }
 
+    // Perbaikan fungsi hapus kelahiran agar grafik ikut diperbarui
     function deleteKelahiran(idx) {
       if (!confirm("Hapus data kelahiran ini?")) return;
       localDB.kelahiran.splice(idx, 1);
       saveAndSync();
       renderAllTables();
       updateDashboardStats();
+      renderCharts();
       showToast("Data kelahiran dihapus.", "success");
+    }
+
+    // Perbaikan fungsi edit kelahiran agar grafik ikut diperbarui saat disimpan
+    function handleSaveKelahiran(e) {
+      e.preventDefault();
+      const satwaNama = document.getElementById("kl-satwa").value;
+      const tanggal = document.getElementById("kl-tanggal").value;
+      const jumlah = parseInt(document.getElementById("kl-jumlah").value);
+      const tag = document.getElementById("kl-tag").value;
+      const ket = document.getElementById("kl-keterangan").value;
+
+      const modal = document.getElementById("add-kelahiran-modal");
+      const editIdx = modal.dataset.editIdx;
+      const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      const latin = satwaObj ? satwaObj.latin : satwaNama;
+      const kelas = satwaObj ? satwaObj.kelas : "";
+
+      if (editIdx !== undefined && editIdx !== "") {
+        delete modal.dataset.editIdx;
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-baby-carriage mr-2"></i>Catat Kelahiran Baru';
+        localDB.kelahiran[parseInt(editIdx)] = { nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket };
+        saveAndSync(); renderAllTables(); updateDashboardStats(); renderCharts(); closeAllModals();
+        showToast("Data kelahiran berhasil diperbarui!", "success");
+        document.getElementById("add-kelahiran-form").reset();
+        return;
+      }
+
+      if (satwaObj) {
+        satwaObj.jumlah += jumlah;
+        localDB.kelahiran.unshift({ nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket });
+        saveAndSync(); renderAllTables(); updateDashboardStats(); renderCharts(); closeAllModals();
+        showToast("Laporan kelahiran baru telah disimpan!", "success");
+        document.getElementById("add-kelahiran-form").reset();
+      }
     }
 
     function editKematian(idx) {
@@ -2127,13 +2202,52 @@
       openModal('add-kematian-modal');
     }
 
+    // Perbaikan fungsi hapus kematian agar grafik ikut diperbarui
     function deleteKematian(idx) {
       if (!confirm("Hapus data kematian ini?")) return;
       localDB.kematian.splice(idx, 1);
       saveAndSync();
       renderAllTables();
       updateDashboardStats();
+      renderCharts();
       showToast("Data kematian dihapus.", "success");
+    }
+
+    // Perbaikan fungsi edit kematian agar grafik ikut diperbarui saat disimpan
+    function handleSaveKematian(e) {
+      e.preventDefault();
+      const satwaNama = document.getElementById("km-satwa").value;
+      const tanggal = document.getElementById("km-tanggal").value;
+      const jumlah = parseInt(document.getElementById("km-jumlah").value);
+      const sebab = document.getElementById("km-sebab").value;
+      const bap = document.getElementById("km-bap").value;
+
+      const modal = document.getElementById("add-kematian-modal");
+      const editIdx = modal.dataset.editIdx;
+      const satwaObj = localDB.master.find(s => s.nama === satwaNama);
+      const latin = satwaObj ? satwaObj.latin : satwaNama;
+
+      if (editIdx !== undefined && editIdx !== "") {
+        delete modal.dataset.editIdx;
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-skull-crossbones mr-2"></i>Catat Kematian Satwa';
+        localDB.kematian[parseInt(editIdx)] = { nama: satwaNama, latin, jumlah, tanggal, sebab, bap };
+        saveAndSync(); renderAllTables(); updateDashboardStats(); renderCharts(); closeAllModals();
+        showToast("Data kematian berhasil diperbarui!", "success");
+        document.getElementById("add-kematian-form").reset();
+        return;
+      }
+
+      if (satwaObj) {
+        if (satwaObj.jumlah < jumlah) {
+          showToast("Jumlah kematian tidak boleh melebihi populasi saat ini!", "error");
+          return;
+        }
+        satwaObj.jumlah -= jumlah;
+        localDB.kematian.unshift({ nama: satwaNama, latin, jumlah, tanggal, sebab, bap });
+        saveAndSync(); renderAllTables(); updateDashboardStats(); renderCharts(); closeAllModals();
+        showToast("Kematian satwa berhasil dicatat.", "success");
+        document.getElementById("add-kematian-form").reset();
+      }
     }
 
     function editTitipan(idx) {
@@ -2186,6 +2300,7 @@
       renderAllTables();
       populateSelectDropdowns();
       updateDashboardStats();
+      renderCharts();
       showToast("Satwa berhasil dihapus.", "success");
     }
 
