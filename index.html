@@ -187,7 +187,6 @@
       </div>
 
       <div id="login-error" class="hidden bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 p-3.5 rounded-2xl text-xs font-semibold mb-5 text-center">
-        PIN salah. PIN standar: 1234.
       </div>
 
       <button type="button" onclick="doLogin()"
@@ -292,34 +291,8 @@
         
         <div class="flex items-center gap-4">
           <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300">
-            
-    // --- FITUR LIVE CLOCK HARI DAN TANGGAL ---
-    function updateClock() {
-    const clockEl = document.getElementById("live-clock");
-    if (!clockEl) return;
-
-    const sekarang = new Date();
-    const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const daftarBulan = [
-    "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
-    const hari = daftarHari[sekarang.getDay()];
-    const tanggal = sekarang.getDate().toString().padStart(2, '0');
-    const bulan = daftarBulan[sekarang.getMonth()];
-    const tahun = sekarang.getFullYear();
-    const jam = sekarang.getHours().toString().padStart(2, '0');
-    const menit = sekarang.getMinutes().toString().padStart(2, '0');
-    const detik = secretaries = sekarang.getSeconds().toString().padStart(2, '0');
-    clockEl.textContent = `${hari}, ${tanggal} ${bulan} ${tahun} ${jam}:${menit}:${detik}`;
-    }
-
-    // Jalankan clock setiap detik setelah dokumen dimuat
-    document.addEventListener("DOMContentLoaded", () {
-    updateClock();
-    setInterval(updateClock, 1000);
-    });
-
+            <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
+            <span id="live-clock">Senin, 08 Juni 2026 00:00:00</span>
           </div>
           <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all" title="Ubah Tema">
             <i id="theme-icon" class="fa-solid fa-sun text-yellow-500 text-lg"></i>
@@ -1170,7 +1143,7 @@
       ]
     };
 
-     saveToLocalStorage() {
+    function saveToLocalStorage() {
       SafeStorage.setItem('sgbl_master', JSON.stringify(localDB.master));
       SafeStorage.setItem('sgbl_kelahiran', JSON.stringify(localDB.kelahiran));
       SafeStorage.setItem('sgbl_kematian', JSON.stringify(localDB.kematian));
@@ -2534,5 +2507,20 @@
       document.body.removeChild(fileDownload);
     }
   </script>
-</body>
+<script type="text/javascript">
+    // Menonaktifkan Klik Kanan
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
+            (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+        }
+    });
+</script>
+  </body>
 </html>
