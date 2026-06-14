@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
-  <link class="icon" type="image/png" href="favicon3.png">
-<head> 
+  <link class="icon" type="image/png" href="favicon.png">
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -165,9 +165,9 @@
           <i class="fa-solid fa-compass text-4xl text-brand-600 dark:text-brand-500"></i>
         </div>
         <div class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-          <span class="neon-pulse-title text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-purple-400 to-blue-600">e-Kuratorial Satwa</span>
+          <span class="neon-pulse-title text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-purple-400 to-blue-600">e-Kuratorial</span>
         </div>
-        <div class="text-sm text-slate-500 dark:text-slate-400 mt-1.5 font-semibold">Satwa Gunung Bayan Lestari</div>
+        <div class="text-sm text-slate-500 dark:text-slate-400 mt-1.5 font-semibold">Taman Satwa Gunung Bayan Lestari</div>
       </div>
 
       <div class="mb-6">
@@ -1118,14 +1118,14 @@
     // --- RE-ARCHITECTURE DATA MODEL: INDUK & ANAKAN SEPERTI FORMAT RESMI BKSDA ---
     let localDB = {
       master: JSON.parse(SafeStorage.getItem('sgbl_master')) || [
-        { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", induk_awal: 18, anakan_awal: 2, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan Negara (BKSDA)", generasi: "F0", kelamin: "Unknown", keterangan: "Kondisi Sehat" },
-        { id: "REG-002", nama: "Betet Ekor Panjang", latin: "Psittacula longicauda", kelas: "Aves", induk_awal: 3, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Kawat 4", asal: "Rescue BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat" },
-        { id: "REG-003", nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", induk_awal: 6, anakan_awal: 2, status: "Dilindungi", kandang: "Kandang Besar Kasuari", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sangat Aktif" },
-        { id: "REG-004", nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", induk_awal: 10, anakan_awal: 2, status: "Tidak Dilindungi", kandang: "Kandang Lemur", asal: "Import", generasi: "F0", kelamin: "Unknown", keterangan: "Lincah" },
-        { id: "REG-005", nama: "Sigung", latin: "Mephitis mephitis", kelas: "Mamalia", induk_awal: 12, anakan_awal: 3, status: "Tidak Dilindungi", kandang: "Kandang Kubah Sigung", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sehat" },
-        { id: "REG-006", nama: "Tamandua", latin: "Tamandua tetradactyla", kelas: "Mamalia", induk_awal: 4, anakan_awal: 0, status: "Tidak Dilindungi", kandang: "Kandang Khusus", asal: "Import", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat klinis" },
-        { id: "REG-007", nama: "Beruang Madu", latin: "Helarctos malayanus", kelas: "Mamalia", induk_awal: 15, anakan_awal: 1, status: "Dilindungi", kandang: "Kandang Hutan Beruang", asal: "Penyelamatan", generasi: "F0", kelamin: "Betina", keterangan: "Aktif" },
-        { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", induk_awal: 8, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", generasi: "F0", kelamin: "Jantan", keterangan: "Sehat klinis" }
+        { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", "jumlah induk": 18, "jumlah anakan": 2, induk_awal: 18, anakan_awal: 2, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan Negara (BKSDA)", generasi: "F0", kelamin: "Unknown", keterangan: "Kondisi Sehat" },
+        { id: "REG-002", nama: "Betet Ekor Panjang", latin: "Psittacula longicauda", kelas: "Aves", "jumlah induk": 3, "jumlah anakan": 0, induk_awal: 3, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Kawat 4", asal: "Rescue BKSDA", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat" },
+        { id: "REG-003", nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", "jumlah induk": 6, "jumlah anakan": 2, induk_awal: 6, anakan_awal: 2, status: "Dilindungi", kandang: "Kandang Besar Kasuari", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sangat Aktif" },
+        { id: "REG-004", nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", "jumlah induk": 10, "jumlah anakan": 2, induk_awal: 10, anakan_awal: 2, status: "Tidak Dilindungi", kandang: "Kandang Lemur", asal: "Import", generasi: "F0", kelamin: "Unknown", keterangan: "Lincah" },
+        { id: "REG-005", nama: "Sigung", latin: "Mephitis mephitis", kelas: "Mamalia", "jumlah induk": 12, "jumlah anakan": 3, induk_awal: 12, anakan_awal: 3, status: "Tidak Dilindungi", kandang: "Kandang Kubah Sigung", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "Unknown", keterangan: "Sehat" },
+        { id: "REG-006", nama: "Tamandua", latin: "Tamandua tetradactyla", kelas: "Mamalia", "jumlah induk": 4, "jumlah anakan": 0, induk_awal: 4, anakan_awal: 0, status: "Tidak Dilindungi", kandang: "Kandang Khusus", asal: "Import", generasi: "F0", kelamin: "Unknown", keterangan: "Sehat klinis" },
+        { id: "REG-007", nama: "Beruang Madu", latin: "Helarctos malayanus", kelas: "Mamalia", "jumlah induk": 15, "jumlah anakan": 1, induk_awal: 15, anakan_awal: 1, status: "Dilindungi", kandang: "Kandang Hutan Beruang", asal: "Penyelamatan", generasi: "F0", kelamin: "Betina", keterangan: "Aktif" },
+        { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", "jumlah induk": 8, "jumlah anakan": 0, induk_awal: 8, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", generasi: "F0", kelamin: "Jantan", keterangan: "Sehat klinis" }
       ],
       kelahiran: JSON.parse(SafeStorage.getItem('sgbl_kelahiran')) || [
         { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "Noband", tanggal: "2026-03-02", kelamin: "Unknown", ket: "Anak lahir sehat di LK" },
@@ -1349,6 +1349,9 @@
 
     // --- HITUNG MUTASI PENAMBAHAN/PENGURANGAN SECARA REAL-TIME ---
     function getRecalculatedSatwa(satwa) {
+      const induk_awal = parseInt(satwa["jumlah induk"] !== undefined ? satwa["jumlah induk"] : satwa.induk_awal) || 0;
+      const anakan_awal = parseInt(satwa["jumlah anakan"] !== undefined ? satwa["jumlah anakan"] : satwa.anakan_awal) || 0;
+
       // 1. Hitung Penambahan
       const penambahanKelahiran = localDB.kelahiran
         .filter(k => k.nama === satwa.nama)
@@ -1396,8 +1399,8 @@
       const totalKurangAnakan = penguranganKematianAnakan + penguranganMutasiAnakan;
 
       // 3. Stok Akhir
-      const induk_akhir = Math.max(0, satwa.induk_awal + totalTambahInduk - totalKurangInduk);
-      const anakan_akhir = Math.max(0, satwa.anakan_awal + totalTambahAnakan - totalKurangAnakan);
+      const induk_akhir = Math.max(0, induk_awal + totalTambahInduk - totalKurangInduk);
+      const anakan_akhir = Math.max(0, anakan_awal + totalTambahAnakan - totalKurangAnakan);
 
       // Tarik BA dokumen mutasi/transaksi terakhir
       const lastKematian = localDB.kematian.filter(k => k.nama === satwa.nama)[0];
@@ -1407,8 +1410,10 @@
 
       return {
         ...satwa,
-        induk_awal: satwa.induk_awal,
-        anakan_awal: satwa.anakan_awal,
+        "jumlah induk": induk_akhir,
+        "jumlah anakan": anakan_akhir,
+        induk_awal: induk_awal,
+        anakan_awal: anakan_awal,
         tambah_induk: totalTambahInduk,
         tambah_anakan: totalTambahAnakan,
         kurang_induk: totalKurangInduk,
@@ -1928,14 +1933,17 @@
     function editSatwa(id) {
       const satwa = localDB.master.find(s => s.id === id);
       if (satwa) {
+        const s_induk = satwa["jumlah induk"] !== undefined ? satwa["jumlah induk"] : (satwa.induk_awal || 0);
+        const s_anakan = satwa["jumlah anakan"] !== undefined ? satwa["jumlah anakan"] : (satwa.anakan_awal || 0);
+
         document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Data Satwa: ${satwa.id}`;
         document.getElementById("ms-id-hidden").value = satwa.id;
         document.getElementById("ms-nama").value = satwa.nama;
         document.getElementById("ms-latin").value = satwa.latin;
         document.getElementById("ms-kelas").value = satwa.kelas || "Mamalia";
         document.getElementById("ms-status").value = satwa.status;
-        document.getElementById("ms-induk-awal").value = satwa.induk_awal || 0;
-        document.getElementById("ms-anakan-awal").value = satwa.anakan_awal || 0;
+        document.getElementById("ms-induk-awal").value = s_induk;
+        document.getElementById("ms-anakan-awal").value = s_anakan;
         document.getElementById("ms-kandang").value = satwa.kandang;
         document.getElementById("ms-asal").value = satwa.asal;
         document.getElementById("ms-keterangan").value = satwa.keterangan || "";
@@ -1944,7 +1952,7 @@
         adjustGenderInputFields();
 
         // Fill dynamic fields
-        const total = (satwa.induk_awal || 0) + (satwa.anakan_awal || 0);
+        const total = parseInt(s_induk) + parseInt(s_anakan);
         if (total === 1) {
           const select = document.getElementById("ms-gender");
           if (select) {
@@ -1998,7 +2006,9 @@
         if (satwaIdx !== -1) {
           localDB.master[satwaIdx] = { 
             id: hiddenId, nama, latin, kelas, status, kandang, asal, 
-            generasi: "F0", kelamin, keterangan, induk_awal, anakan_awal 
+            generasi: "F0", kelamin, keterangan, 
+            "jumlah induk": induk_awal, "jumlah anakan": anakan_awal,
+            induk_awal: induk_awal, anakan_awal: anakan_awal 
           };
           showToast(`Berhasil memperbarui data Satwa ${hiddenId}!`, "success");
         }
@@ -2006,7 +2016,9 @@
         const newId = `REG-00${localDB.master.length + 1}`;
         localDB.master.push({ 
           id: newId, nama, latin, kelas, status, kandang, asal, 
-          generasi: "F0", kelamin, keterangan, induk_awal, anakan_awal 
+          generasi: "F0", kelamin, keterangan, 
+          "jumlah induk": induk_awal, "jumlah anakan": anakan_awal,
+          induk_awal: induk_awal, anakan_awal: anakan_awal 
         });
         showToast("Berhasil meregistrasikan satwa baru!", "success");
       }
@@ -2318,7 +2330,7 @@
               </tr>
             </table>
             <div style="margin-bottom:12px;">Kepada Yth.</div>
-            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</div>
+            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Conservasi Sumber Daya Alam Kalimantan Timur</div>
             <div style="margin-bottom:2px;">di - Samarinda</div>
             <div style="margin-top:15px;margin-bottom:15px;text-align:justify;line-height:1.6;">Kami laporkan kejadian kematian satwa liar di lembaga konservasi PT. Satwa Gunung Bayan Lestari (Tabang) dengan data lengkap sebagai berikut:</div>
             <table style="width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:15px;">
@@ -2654,6 +2666,37 @@
       renderAllTables();
       updateDashboardStats();
       showToast("Data titipan dihapus.", "success");
+    }
+
+    // --- FITUR FILTER DATA MASTER SATWA ---
+    function filterMasterTable() {
+      const query = document.getElementById("master-search").value.toLowerCase();
+      const statusFilter = document.getElementById("master-filter-status").value;
+      const kelasFilter = document.getElementById("master-filter-kelas").value;
+      const rows = document.querySelectorAll("#master-table-body tr");
+
+      rows.forEach(row => {
+        const textElement = row.querySelector("td:first-child");
+        if (!textElement) return;
+        const nameText = textElement.textContent.toLowerCase();
+        
+        // Dapatkan data status & kelas dari kolom tabel
+        const kelasCell = row.querySelector("td:nth-child(2)");
+        const statusCell = row.querySelector("td:nth-child(7)");
+        
+        const kelasVal = kelasCell ? kelasCell.textContent.trim() : "";
+        const statusVal = statusCell ? statusCell.textContent.trim() : "";
+
+        const matchesQuery = nameText.includes(query);
+        const matchesStatus = !statusFilter || statusVal.includes(statusFilter);
+        const matchesKelas = !kelasFilter || kelasVal.includes(kelasFilter);
+
+        if (matchesQuery && matchesStatus && matchesKelas) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
     }
 
     function editMutasi(idx) {
