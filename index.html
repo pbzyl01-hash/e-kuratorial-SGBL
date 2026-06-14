@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   <link class="icon" type="image/png" href="favicon.png">
-  
+<head>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -147,7 +147,7 @@
   </style>
 
   <!-- Google Fonts & FontAwesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -500,7 +500,7 @@
               <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kelahiran Satwa</h3>
               <p class="text-xs text-slate-400">Pencatatan perkembangan biak & penetasan di Lembaga Konservasi.</p>
             </div>
-            <button onclick="openModal('add-kelahiran-modal')" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+            <button onclick="openAddKelahiranModal()" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
               <i class="fa-solid fa-baby-carriage"></i>
               <span>Catat Kelahiran Baru</span>
             </button>
@@ -863,9 +863,15 @@
         </div>
         <div>
           <label class="block text-xs font-bold mb-1.5">Jumlah Lahir (Ekor) - Masuk ke Anakan</label>
-          <input type="number" id="kl-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+          <input type="number" id="kl-jumlah" oninput="adjustBirthGenderInputFields()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
+
+      <!-- TEMPAT INPUT JENIS KELAMIN DINAMIS KELAHIRAN -->
+      <div id="birth-gender-container" class="bg-slate-50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300">
+        <!-- Will be dynamically updated by JS -->
+      </div>
+
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-xs font-bold mb-1.5">Nomor Band / Tag ID</label>
@@ -1625,7 +1631,7 @@
         masterBody.appendChild(row);
       });
 
-      // 2. Kelahiran Satwa
+      // 2. Kelahiran Satwa (Jenis Kelamin dinamis ditampilkan)
       const lahirBody = document.getElementById("kelahiran-table-body");
       lahirBody.innerHTML = '';
       localDB.kelahiran.forEach((kl, idx) => {
@@ -1639,7 +1645,11 @@
           <td class="p-4 text-xs font-semibold">${kl.tanggal}</td>
           <td class="p-4 font-bold text-blue-600">${kl.jumlah} ekor</td>
           <td class="p-4 font-mono text-xs">${kl.tag}</td>
-          <td class="p-4 text-xs font-bold text-slate-500">${kl.kelamin}</td>
+          <td class="p-4 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <span class="px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-100/50">
+              ${kl.kelamin || 'Unknown'}
+            </span>
+          </td>
           <td class="p-4 text-xs text-slate-400 dark:text-slate-400">${kl.ket}</td>
           <td class="p-4 text-center">
             <button onclick="editKelahiran(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
@@ -1930,6 +1940,125 @@
       return false;
     }
 
+    // --- PENANGANAN JENIS KELAMIN DINAMIS DALAM MODAL KELAHIRAN ---
+    function openAddKelahiranModal() {
+      document.getElementById("add-kelahiran-form").reset();
+      const modal = document.getElementById("add-kelahiran-modal");
+      delete modal.dataset.editIdx;
+      modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa';
+      
+      setTimeout(() => {
+        adjustBirthGenderInputFields();
+      }, 50);
+
+      openModal('add-kelahiran-modal');
+    }
+
+    function adjustBirthGenderInputFields() {
+      const container = document.getElementById("birth-gender-container");
+      if (!container) return;
+
+      const jumlah = parseInt(document.getElementById("kl-jumlah").value) || 0;
+
+      if (jumlah === 0) {
+        container.innerHTML = `
+          <div class="text-center py-2 text-xs text-slate-400 dark:text-slate-500 font-semibold">
+            <i class="fa-solid fa-circle-info mr-1 text-blue-500"></i> Tentukan jumlah lahir terlebih dahulu untuk mengisi jenis kelamin.
+          </div>
+        `;
+      } else if (jumlah === 1) {
+        container.innerHTML = `
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
+              <i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i> Jenis Kelamin Anak:
+            </span>
+            <select id="kl-gender" class="w-full md:w-48 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              <option value="Jantan">Jantan</option>
+              <option value="Betina">Betina</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i> Distribusi Jenis Kelamin Anak
+              </span>
+              <span id="birth-gender-validation-badge" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
+                Belum Sesuai (0/${jumlah})
+              </span>
+            </div>
+            <div class="grid grid-cols-3 gap-2.5">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">♂ Jantan</label>
+                <input type="number" id="kl-gender-jantan" oninput="validateBirthGenderCounts()" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">♀ Betina</label>
+                <input type="number" id="kl-gender-betina" oninput="validateBirthGenderCounts()" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">? Unknown</label>
+                <input type="number" id="kl-gender-unknown" oninput="validateBirthGenderCounts()" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              </div>
+            </div>
+            <p id="birth-gender-helper-text" class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">
+              Alokasi saat ini: <span id="birth-gender-allocated-sum" class="font-extrabold text-slate-700 dark:text-slate-300">0</span> dari <span id="birth-gender-target-sum" class="font-extrabold text-blue-600 dark:text-blue-400">${jumlah}</span> ekor.
+            </p>
+          </div>
+        `;
+        validateBirthGenderCounts();
+      }
+    }
+
+    function validateBirthGenderCounts() {
+      const jumlah = parseInt(document.getElementById("kl-jumlah").value) || 0;
+      if (jumlah <= 1) return true;
+
+      const jantan = parseInt(document.getElementById("kl-gender-jantan").value) || 0;
+      const betina = parseInt(document.getElementById("kl-gender-betina").value) || 0;
+      const unknown = parseInt(document.getElementById("kl-gender-unknown").value) || 0;
+      const sum = jantan + betina + unknown;
+
+      const sumEl = document.getElementById("birth-gender-allocated-sum");
+      if (sumEl) sumEl.innerText = sum;
+
+      const badge = document.getElementById("birth-gender-validation-badge");
+      if (badge) {
+        if (sum === jumlah) {
+          badge.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800";
+          badge.innerText = "Sesuai ✓";
+          return true;
+        } else {
+          badge.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800";
+          badge.innerText = `Belum Sesuai (${sum}/${jumlah})`;
+          return false;
+        }
+      }
+      return false;
+    }
+
+    function getBirthGenderValue() {
+      const jumlah = parseInt(document.getElementById("kl-jumlah").value) || 0;
+      if (jumlah === 0) return "Unknown";
+      if (jumlah === 1) {
+        return document.getElementById("kl-gender") ? document.getElementById("kl-gender").value : "Unknown";
+      } else {
+        const jantan = parseInt(document.getElementById("kl-gender-jantan").value) || 0;
+        const betina = parseInt(document.getElementById("kl-gender-betina").value) || 0;
+        const unknown = parseInt(document.getElementById("kl-gender-unknown").value) || 0;
+        
+        let parts = [];
+        if (jantan > 0) parts.push(`${jantan} ♂`);
+        if (betina > 0) parts.push(`${betina} ♀`);
+        if (unknown > 0) parts.push(`${unknown} ?`);
+        
+        return parts.length > 0 ? parts.join(', ') : "Unknown";
+      }
+    }
+
     function editSatwa(id) {
       const satwa = localDB.master.find(s => s.id === id);
       if (satwa) {
@@ -2038,6 +2167,18 @@
       const tag = document.getElementById("kl-tag").value;
       const ket = document.getElementById("kl-keterangan").value;
 
+      // Ambil nilai jenis kelamin terdistribusi / tunggal
+      const kelamin = getBirthGenderValue();
+
+      // Validasi kecocokan alokasi jenis kelamin jika jumlah > 1
+      if (jumlah > 1) {
+        const isValid = validateBirthGenderCounts();
+        if (!isValid) {
+          showToast("Alokasi jenis kelamin anak tidak cocok dengan total jumlah lahir!", "error");
+          return;
+        }
+      }
+
       const modal = document.getElementById("add-kelahiran-modal");
       const editIdx = modal.dataset.editIdx;
       const satwaObj = localDB.master.find(s => s.nama === satwaNama);
@@ -2046,8 +2187,8 @@
 
       if (editIdx !== undefined && editIdx !== "") {
         delete modal.dataset.editIdx;
-        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-baby-carriage mr-2"></i>Catat Kelahiran Baru';
-        localDB.kelahiran[parseInt(editIdx)] = { nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket };
+        modal.querySelector("h3").innerHTML = '<i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa';
+        localDB.kelahiran[parseInt(editIdx)] = { nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin, ket };
         saveAndSync(); renderAllTables(); updateDashboardStats(); renderCharts(); closeAllModals();
         showToast("Data kelahiran berhasil diperbarui!", "success");
         document.getElementById("add-kelahiran-form").reset();
@@ -2055,7 +2196,7 @@
       }
 
       if (satwaObj) {
-        localDB.kelahiran.unshift({ nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin: "Unknown", ket });
+        localDB.kelahiran.unshift({ nama: satwaNama, latin, kelas, jumlah, tag, tanggal, kelamin, ket });
         saveAndSync(); renderAllTables(); updateDashboardStats(); renderCharts(); closeAllModals();
         showToast("Laporan kelahiran baru telah disimpan (Ditambahkan ke Anakan)!", "success");
         document.getElementById("add-kelahiran-form").reset();
@@ -2587,6 +2728,30 @@
       document.getElementById("kl-tag").value = kl.tag;
       document.getElementById("kl-tanggal").value = kl.tanggal;
       document.getElementById("kl-keterangan").value = kl.ket || "";
+      
+      // Render ulang kolom jenis kelamin dinamis sesuai data jumlah
+      adjustBirthGenderInputFields();
+
+      // Isi nilai kolom jenis kelamin dinamis sesuai data lama
+      const jumlah = parseInt(kl.jumlah) || 0;
+      if (jumlah === 1) {
+        const select = document.getElementById("kl-gender");
+        if (select) {
+          if (kl.kelamin.includes("♂")) select.value = "Jantan";
+          else if (kl.kelamin.includes("♀")) select.value = "Betina";
+          else if (kl.kelamin.includes("?")) select.value = "Unknown";
+          else select.value = kl.kelamin || "Unknown";
+        }
+      } else if (jumlah > 1) {
+        const breakdown = parseGenderValue(kl.kelamin, jumlah);
+        if (document.getElementById("kl-gender-jantan")) {
+          document.getElementById("kl-gender-jantan").value = breakdown.jantan;
+          document.getElementById("kl-gender-betina").value = breakdown.betina;
+          document.getElementById("kl-gender-unknown").value = breakdown.unknown;
+          validateBirthGenderCounts();
+        }
+      }
+
       document.getElementById("add-kelahiran-modal").dataset.editIdx = idx;
       openModal('add-kelahiran-modal');
     }
