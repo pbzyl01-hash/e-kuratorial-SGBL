@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   <link class="icon" type="image/png" href="favicon.png">
-<head>  
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -263,7 +263,7 @@
               <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
               <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
               <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
-              <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+              <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27 h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
             </svg>
           </span>
           <span>Google Drive</span>
@@ -290,9 +290,10 @@
         <h2 id="header-title" class="text-lg font-bold text-slate-800 dark:text-white">Dashboard Populasi</h2>
         
         <div class="flex items-center gap-4">
+          <!-- ELEMEN HARI DAN TANGGAL REAL-TIME (LIVE CLOCK) -->
           <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300">
             <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
-            <span id="live-clock">Senin, 08 Juni 2026 00:00:00</span>
+            <span id="live-clock">Mendeteksi waktu...</span>
           </div>
           <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all" title="Ubah Tema">
             <i id="theme-icon" class="fa-solid fa-sun text-yellow-500 text-lg"></i>
@@ -613,7 +614,7 @@
             </div>
           </div>
 
-          <!-- Buku Rekap Mutasi format tabel image_78f838.png -->
+          <!-- Buku Rekap Mutasi format tabel resmi -->
           <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-center border-collapse text-xs">
@@ -644,7 +645,7 @@
                   </tr>
                 </thead>
                 <tbody id="mutasi-rekap-body" class="divide-y divide-slate-200/60 dark:divide-slate-700/50">
-                  <!-- Dynamic calculated rows based on image layout -->
+                  <!-- Dynamic calculated rows based on database layout -->
                 </tbody>
               </table>
             </div>
@@ -1143,6 +1144,31 @@
       ]
     };
 
+    // --- LIVE CLOCK REAL-TIME ENGINE (HARI DAN TANGGAL BAHASA INDONESIA) ---
+    function startLiveClock() {
+      const liveClockEl = document.getElementById("live-clock");
+      if (!liveClockEl) return;
+
+      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      const months = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+
+      setInterval(() => {
+        const now = new Date();
+        const dayName = days[now.getDay()];
+        const dateNum = String(now.getDate()).padStart(2, '0');
+        const monthName = months[now.getMonth()];
+        const year = now.getFullYear();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        liveClockEl.innerText = `${dayName}, ${dateNum} ${monthName} ${year} ${hours}:${minutes}:${seconds}`;
+      }, 1000);
+    }
+
     function saveToLocalStorage() {
       SafeStorage.setItem('sgbl_master', JSON.stringify(localDB.master));
       SafeStorage.setItem('sgbl_kelahiran', JSON.stringify(localDB.kelahiran));
@@ -1238,15 +1264,7 @@
       window.scrollTo(0,0);
       showToast("Berhasil keluar dari sesi.", "success");
     }
-    function initClock() {
-      setInterval(() => {
-        const now = new Date();
-        const days = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-        const months = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
-        const pad = (n) => String(n).padStart(2, '0');
-        document.getElementById("live-clock").innerText = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-      }, 1000);
-    }
+
     function applyTheme(dark) {
       const html = document.documentElement;
       const icon = document.getElementById("theme-icon");
@@ -1490,7 +1508,7 @@
       });
 
       const propCtx = document.getElementById('proporsiChart');
-      if (!propCtx) return;
+      if (!popCtx) return;
       const propCtx2d = propCtx.getContext('2d');
       if (proporsiChartInstance) {
         proporsiChartInstance.destroy();
@@ -1677,7 +1695,7 @@
         titipBody.appendChild(row);
       });
 
-      // 5. Mutasi Satwa Log Riwayat & Rekapitulasi Baru
+      // 5. Mutasi Satwa Log Riwayat
       const mutasiBody = document.getElementById("mutasi-table-body");
       mutasiBody.innerHTML = '';
       localDB.mutasi.forEach((mt, idx) => {
@@ -1701,7 +1719,7 @@
         mutasiBody.appendChild(row);
       });
 
-      // Render Rekapitulasi Baru ke Tab Mutasi (Sesuai image_78f838.png)
+      // Render Rekapitulasi Baru ke Tab Mutasi
       renderMutasiRekapitulasiTable();
     }
 
@@ -1958,7 +1976,7 @@
       document.getElementById("add-mutasi-form").reset();
     }
 
-    // ============ REWRITE EXPORT & REPORT SYSTEM (DIUBAH KE TABEL REKAPITULASI DUA BARIS) ============
+    // ============ EXPORT & REPORT SYSTEM (DIUBAH KE TABEL REKAPITULASI DUA BARIS) ============
     function setReportType(type) {
       document.getElementById('report-type').value = type;
       const colorMap = {
@@ -2124,7 +2142,7 @@
               </tr>
             </table>
             <div style="margin-bottom:12px;">Kepada Yth.</div>
-            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Conservasi Sumber Daya Alam Kalimantan Timur</div>
+            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</div>
             <div style="margin-bottom:2px;">di - Samarinda</div>
             <div style="margin-top:15px;margin-bottom:15px;text-align:justify;line-height:1.6;">Kami laporkan kejadian kematian satwa liar di lembaga konservasi PT. Satwa Gunung Bayan Lestari (Tabang) dengan data lengkap sebagai berikut:</div>
             <table style="width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:15px;">
@@ -2431,7 +2449,6 @@
       openModal('add-titipan-modal');
     }
 
-    // MEMBUAT / MENAMBAHKAN KEMBALI FUNGSI SHOWTOAST YANG TERHAPUS
     function showToast(message, type = "success") {
       const container = document.getElementById("toast-container");
       if (!container) return;
@@ -2514,14 +2531,27 @@
       fileDownload.click();
       document.body.removeChild(fileDownload);
     }
+
+    // --- INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // Aktifkan Live Clock secara real-time
+      startLiveClock();
+      
+      // Load Dropdowns
+      populateSelectDropdowns();
+      
+      // Load data awal
+      updateDashboardStats();
+      renderAllTables();
+    });
   </script>
-<script type="text/javascript">
-    // Menonaktifkan Klik Kanan
+  <script type="text/javascript">
+    // Keamanan Tambahan: Menonaktifkan Klik Kanan
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
 
-    // Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
+    // Keamanan Tambahan: Menonaktifkan Shortcut Keyboard Inspeksi Elemen
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
@@ -2529,6 +2559,6 @@
             e.preventDefault();
         }
     });
-</script>
-  </body>
+  </script>
+</body>
 </html>
