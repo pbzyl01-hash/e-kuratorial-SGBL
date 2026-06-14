@@ -292,8 +292,35 @@
         
         <div class="flex items-center gap-4">
           <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300">
-            <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
-            <span id="live-clock">Senin, 08 Juni 2026 00:00:00</span>
+            // --- FITUR LIVE CLOCK HARI DAN TANGGAL ---
+function updateClock() {
+  const clockEl = document.getElementById("live-clock");
+  if (!clockEl) return;
+
+  const sekarang = new Date();
+  const daftarHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const daftarBulan = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+
+  const hari = daftarHari[sekarang.getDay()];
+  const tanggal = sekarang.getDate().toString().padStart(2, '0');
+  const bulan = daftarBulan[sekarang.getMonth()];
+  const tahun = sekarang.getFullYear();
+  
+  const jam = sekarang.getHours().toString().padStart(2, '0');
+  const menit = sekarang.getMinutes().toString().padStart(2, '0');
+  const detik = secretaries = sekarang.getSeconds().toString().padStart(2, '0');
+
+  clockEl.textContent = `${hari}, ${tanggal} ${bulan} ${tahun} ${jam}:${menit}:${detik}`;
+}
+
+// Jalankan clock setiap detik setelah dokumen dimuat
+document.addEventListener("DOMContentLoaded", function() {
+  updateClock();
+  setInterval(updateClock, 1000);
+});
           </div>
           <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all" title="Ubah Tema">
             <i id="theme-icon" class="fa-solid fa-sun text-yellow-500 text-lg"></i>
