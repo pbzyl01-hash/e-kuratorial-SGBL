@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   <link class="icon" type="image/png" href="favicon3.png">
-<head>  
+<head> 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -806,24 +806,22 @@
           </select>
         </div>
       </div>
-      <div class="grid grid-cols-3 gap-3">
+      
+      <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-xs font-bold mb-1.5">Jumlah Induk Awal</label>
-          <input type="number" id="ms-induk-awal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+          <input type="number" id="ms-induk-awal" oninput="adjustGenderInputFields()" min="0" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
           <label class="block text-xs font-bold mb-1.5">Jumlah Anakan Awal</label>
-          <input type="number" id="ms-anakan-awal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
-        </div>
-        <div>
-          <label class="block text-xs font-bold mb-1.5">Jenis Kelamin</label>
-          <select id="ms-gender" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
-            <option value="Jantan">Jantan</option>
-            <option value="Betina">Betina</option>
-            <option value="Unknown">Unknown</option>
-          </select>
+          <input type="number" id="ms-anakan-awal" oninput="adjustGenderInputFields()" min="0" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
+
+      <div id="gender-input-container" class="bg-slate-50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300">
+        <!-- Will be dynamically updated by JS -->
+      </div>
+
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-xs font-bold mb-1.5">Kandang</label>
@@ -1780,7 +1778,151 @@
       document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-circle-plus mr-2"></i>Registrasi Satwa Baru`;
       document.getElementById("add-satwa-form").reset();
       document.getElementById("ms-id-hidden").value = "";
+      
+      setTimeout(() => {
+        adjustGenderInputFields();
+      }, 50);
+      
       openModal("add-satwa-modal");
+    }
+
+    // --- PARSING & MANAGING GENDER SPLIT/BREAKDOWNS ---
+    function parseGenderValue(genderStr, totalCount = 0) {
+      let jantan = 0, betina = 0, unknown = 0;
+      if (!genderStr) return { jantan, betina, unknown };
+
+      if (genderStr.includes('♂') || genderStr.includes('♀') || genderStr.includes('?')) {
+        const parts = genderStr.split(',');
+        parts.forEach(p => {
+          const clean = p.trim();
+          if (clean.includes('♂')) {
+            jantan = parseInt(clean) || 0;
+          } else if (clean.includes('♀')) {
+            betina = parseInt(clean) || 0;
+          } else if (clean.includes('?')) {
+            unknown = parseInt(clean) || 0;
+          }
+        });
+      } else {
+        // Fallback backward compatibility for legacy inputs
+        if (genderStr === "Jantan") jantan = totalCount;
+        else if (genderStr === "Betina") betina = totalCount;
+        else unknown = totalCount;
+      }
+      return { jantan, betina, unknown };
+    }
+
+    function getGenderValue() {
+      const induk_awal = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anakan_awal = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const total = induk_awal + anakan_awal;
+
+      if (total === 0) return "Unknown";
+      if (total === 1) {
+        return document.getElementById("ms-gender") ? document.getElementById("ms-gender").value : "Unknown";
+      } else {
+        const jantan = parseInt(document.getElementById("ms-gender-jantan").value) || 0;
+        const betina = parseInt(document.getElementById("ms-gender-betina").value) || 0;
+        const unknown = parseInt(document.getElementById("ms-gender-unknown").value) || 0;
+        
+        let parts = [];
+        if (jantan > 0) parts.push(`${jantan} ♂`);
+        if (betina > 0) parts.push(`${betina} ♀`);
+        if (unknown > 0) parts.push(`${unknown} ?`);
+        
+        return parts.length > 0 ? parts.join(', ') : "Unknown";
+      }
+    }
+
+    function adjustGenderInputFields() {
+      const container = document.getElementById("gender-input-container");
+      if (!container) return;
+
+      const induk_awal = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anakan_awal = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const total = induk_awal + anakan_awal;
+
+      if (total === 0) {
+        container.innerHTML = `
+          <div class="text-center py-2 text-xs text-slate-400 dark:text-slate-500 font-semibold">
+            <i class="fa-solid fa-circle-info mr-1 text-blue-500"></i> Tentukan jumlah induk atau anakan awal terlebih dahulu untuk mengisi jenis kelamin.
+          </div>
+        `;
+      } else if (total === 1) {
+        container.innerHTML = `
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <span class="text-xs font-bold text-slate-600 dark:text-slate-300">
+              <i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i> Jenis Kelamin Satwa Tunggal:
+            </span>
+            <select id="ms-gender" class="w-full md:w-48 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              <option value="Jantan">Jantan</option>
+              <option value="Betina">Betina</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i> Distribusi Rincian Jenis Kelamin
+              </span>
+              <span id="gender-validation-badge" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
+                Belum Sesuai (0/${total})
+              </span>
+            </div>
+            <div class="grid grid-cols-3 gap-2.5">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">♂ Jantan</label>
+                <input type="number" id="ms-gender-jantan" oninput="validateGenderCounts()" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">♀ Betina</label>
+                <input type="number" id="ms-gender-betina" oninput="validateGenderCounts()" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">? Unknown</label>
+                <input type="number" id="ms-gender-unknown" oninput="validateGenderCounts()" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold focus:outline-none text-slate-850 dark:text-slate-100">
+              </div>
+            </div>
+            <p id="gender-helper-text" class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">
+              Alokasi saat ini: <span id="gender-allocated-sum" class="font-extrabold text-slate-700 dark:text-slate-300">0</span> dari <span id="gender-target-sum" class="font-extrabold text-blue-600 dark:text-blue-400">${total}</span> ekor.
+            </p>
+          </div>
+        `;
+        validateGenderCounts();
+      }
+    }
+
+    function validateGenderCounts() {
+      const induk_awal = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anakan_awal = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const total = induk_awal + anakan_awal;
+
+      if (total <= 1) return true;
+
+      const jantan = parseInt(document.getElementById("ms-gender-jantan").value) || 0;
+      const betina = parseInt(document.getElementById("ms-gender-betina").value) || 0;
+      const unknown = parseInt(document.getElementById("ms-gender-unknown").value) || 0;
+      const sum = jantan + betina + unknown;
+
+      const sumEl = document.getElementById("gender-allocated-sum");
+      if (sumEl) sumEl.innerText = sum;
+
+      const badge = document.getElementById("gender-validation-badge");
+      if (badge) {
+        if (sum === total) {
+          badge.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800";
+          badge.innerText = "Sesuai ✓";
+          return true;
+        } else {
+          badge.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800";
+          badge.innerText = `Belum Sesuai (${sum}/${total})`;
+          return false;
+        }
+      }
+      return false;
     }
 
     function editSatwa(id) {
@@ -1794,10 +1936,32 @@
         document.getElementById("ms-status").value = satwa.status;
         document.getElementById("ms-induk-awal").value = satwa.induk_awal || 0;
         document.getElementById("ms-anakan-awal").value = satwa.anakan_awal || 0;
-        document.getElementById("ms-gender").value = satwa.kelamin || "Unknown";
         document.getElementById("ms-kandang").value = satwa.kandang;
         document.getElementById("ms-asal").value = satwa.asal;
         document.getElementById("ms-keterangan").value = satwa.keterangan || "";
+        
+        // Dynamic re-rendering first
+        adjustGenderInputFields();
+
+        // Fill dynamic fields
+        const total = (satwa.induk_awal || 0) + (satwa.anakan_awal || 0);
+        if (total === 1) {
+          const select = document.getElementById("ms-gender");
+          if (select) {
+            if (satwa.kelamin.includes("♂")) select.value = "Jantan";
+            else if (satwa.kelamin.includes("♀")) select.value = "Betina";
+            else if (satwa.kelamin.includes("?")) select.value = "Unknown";
+            else select.value = satwa.kelamin || "Unknown";
+          }
+        } else if (total > 1) {
+          const breakdown = parseGenderValue(satwa.kelamin, total);
+          if (document.getElementById("ms-gender-jantan")) {
+            document.getElementById("ms-gender-jantan").value = breakdown.jantan;
+            document.getElementById("ms-gender-betina").value = breakdown.betina;
+            document.getElementById("ms-gender-unknown").value = breakdown.unknown;
+            validateGenderCounts();
+          }
+        }
         
         openModal("add-satwa-modal");
       }
@@ -1805,14 +1969,26 @@
 
     function handleSaveSatwa(e) {
       e.preventDefault();
+      
+      const induk_awal = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anakan_awal = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const total = induk_awal + anakan_awal;
+
+      // Validation check for multiple inputs
+      if (total > 1) {
+        const isValid = validateGenderCounts();
+        if (!isValid) {
+          showToast("Alokasi jenis kelamin tidak cocok dengan total induk & anakan!", "error");
+          return;
+        }
+      }
+
       const hiddenId = document.getElementById("ms-id-hidden").value;
       const nama = document.getElementById("ms-nama").value;
       const latin = document.getElementById("ms-latin").value;
       const kelas = document.getElementById("ms-kelas").value;
       const status = document.getElementById("ms-status").value;
-      const induk_awal = parseInt(document.getElementById("ms-induk-awal").value) || 0;
-      const anakan_awal = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
-      const kelamin = document.getElementById("ms-gender").value;
+      const kelamin = getGenderValue(); // Gather calculated dynamic gender value
       const kandang = document.getElementById("ms-kandang").value;
       const asal = document.getElementById("ms-asal").value;
       const keterangan = document.getElementById("ms-keterangan").value;
