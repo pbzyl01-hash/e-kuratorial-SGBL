@@ -93,16 +93,6 @@
       margin-right: auto;
       overflow: hidden;
     }
-    #report-preview-container {
-      background: #1e293b;
-      padding: 28px;
-      border-radius: 16px;
-      overflow: auto;
-      min-height: 640px;
-    }
-    .dark #report-preview-container {
-      background: #0b0f19;
-    }
     #print-area {
       font-family: 'Times New Roman', Times, serif;
       font-size: 11pt;
@@ -112,9 +102,6 @@
       box-sizing: border-box;
       width: 100%;
       min-height: 297mm;
-    }
-    #print-area > div {
-      padding: 10mm 15mm 15mm 20mm !important;
     }
 
     @media print {
@@ -247,10 +234,6 @@
           <i class="fa-solid fa-shuffle w-5 text-center text-violet-500"></i>
           <span>Mutasi Satwa</span>
         </button>
-        <button onclick="switchTab('laporan')" data-tab="laporan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
-          <i class="fa-solid fa-print w-5 text-center text-indigo-500"></i>
-          <span>Laporan BKSDA</span>
-        </button>
 
         <div class="pt-2 pb-1"><div class="border-t border-slate-200 dark:border-slate-700/80"></div></div>
 
@@ -263,7 +246,7 @@
               <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
               <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
               <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
-              <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+              <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 27 h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
             </svg>
           </span>
           <span>Google Drive</span>
@@ -290,7 +273,6 @@
         <h2 id="header-title" class="text-lg font-bold text-slate-800 dark:text-white">Dashboard Populasi</h2>
         
         <div class="flex items-center gap-4">
-          <!-- AKTIFKAN SENSIVITAS FITUR HARI DAN TANGGAL SECARA REAL-TIME -->
           <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300">
             <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
             <span id="live-clock">Mendeteksi waktu...</span>
@@ -599,7 +581,7 @@
           </div>
         </section>
 
-        <!-- 6. MUTASI SATWA TAB (FORMAT REKAPITULASI RESMI) -->
+        <!-- 6. MUTASI SATWA TAB -->
         <section id="tab-mutasi" class="space-y-6 hidden fade-in">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
@@ -615,7 +597,7 @@
           </div>
 
           <!-- Buku Rekap Mutasi format tabel -->
-          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-center border-collapse text-xs">
                 <thead>
@@ -674,87 +656,6 @@
                   <!-- Log history -->
                 </tbody>
               </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- 7. LAPORAN BKSDA TAB -->
-        <section id="tab-laporan" class="space-y-6 hidden fade-in">
-          <div class="flex flex-col gap-5">
-            <div class="flex flex-wrap gap-4 items-start">
-              <div class="min-w-[200px] flex-1">
-                <p class="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2.5">📋 Laporan Bulanan</p>
-                <div class="flex flex-col gap-1.5">
-                  <button onclick="setReportType('kelahiran')" data-rtype="kelahiran" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Surat Laporan Kelahiran</button>
-                  <button onclick="setReportType('kematian')" data-rtype="kematian" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Surat Laporan Kematian</button>
-                  <button onclick="setReportType('mutasi_bulanan')" data-rtype="mutasi_bulanan" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Laporan Mutasi Bulanan</button>
-                </div>
-              </div>
-
-              <div class="min-w-[200px] flex-1">
-                <p class="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest mb-2.5">📊 Laporan Triwulan</p>
-                <div class="flex flex-col gap-1.5">
-                  <button onclick="setReportType('rekap_kelahiran_triwulan')" data-rtype="rekap_kelahiran_triwulan" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Rekap Kelahiran Triwulan</button>
-                  <button onclick="setReportType('rekap_kematian_triwulan')" data-rtype="rekap_kematian_triwulan" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Rekap Kematian Triwulan</button>
-                  <button onclick="setReportType('mutasi_triwulan')" data-rtype="mutasi_triwulan" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Laporan Mutasi Triwulan</button>
-                </div>
-              </div>
-
-              <div class="min-w-[200px] flex-1">
-                <p class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-2.5">📖 Buku Catatan & Induk</p>
-                <div class="flex flex-col gap-1.5">
-                  <button onclick="setReportType('logbook_aves')" data-rtype="logbook_aves" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Logbook Aves / Burung</button>
-                  <button onclick="setReportType('logbook_mamalia')" data-rtype="logbook_mamalia" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Logbook Mamalia Besar</button>
-                  <button onclick="setReportType('logbook_mamalia_pet')" data-rtype="logbook_mamalia_pet" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Logbook Mamalia Pet</button>
-                  <button onclick="setReportType('logbook_reptil')" data-rtype="logbook_reptil" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Logbook Reptil Pet</button>
-                  <button onclick="setReportType('studbook')" data-rtype="studbook" class="report-type-btn w-full text-left px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all">Buku Induk Studbook</button>
-                </div>
-              </div>
-
-              <div class="min-w-[200px] flex-1 flex flex-col gap-2.5">
-                <input type="hidden" id="report-type" value="kelahiran">
-
-                <div>
-                  <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Tanggal Laporan</label>
-                  <input type="date" id="report-date" value="2026-06-08" onchange="generateSelectedReport()" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-white dark:bg-slate-800 text-slate-800 dark:text-white focus:outline-none">
-                </div>
-
-                <div id="nomor-surat-container">
-                  <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Nomor Surat</label>
-                  <input type="text" id="report-nomor-surat" value="" placeholder="01/SGBL/LK/VI/2026" oninput="generateSelectedReport()" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-white dark:bg-slate-800 text-slate-800 dark:text-white focus:outline-none">
-                </div>
-
-                <div id="triwulan-container" class="hidden">
-                  <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Pilih Triwulan</label>
-                  <select id="report-triwulan" onchange="generateSelectedReport()" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-white dark:bg-slate-800 text-slate-800 dark:text-white focus:outline-none">
-                    <option value="1">Triwulan I (Jan – Mar)</option>
-                    <option value="2">Triwulan II (Apr – Jun)</option>
-                    <option value="3">Triwulan III (Jul – Sep)</option>
-                    <option value="4">Triwulan IV (Okt – Des)</option>
-                  </select>
-                </div>
-
-                <div class="px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center">
-                  <i class="fa-solid fa-lock text-brand-600 dark:text-brand-400 mr-2"></i>Yonas Adestira Ichti
-                </div>
-
-                <button onclick="generateSelectedReport()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white border-none rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
-                  <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i> Perbarui Preview
-                </button>
-                <button onclick="downloadViaGoogleDocTemplate()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white border-none rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md">
-                  <i class="fa-solid fa-file-invoice"></i> Ekspor ke Google Doc Template
-                </button>
-                <button onclick="downloadReportDocx()" class="w-full py-2.5 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/40 border border-brand-200 dark:border-brand-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
-                  <i class="fa-solid fa-file-word"></i> Unduh File Lokal Word (.doc)
-                </button>
-              </div>
-            </div>
-
-            <!-- PREVIEW PANEL -->
-            <div id="report-preview-container" class="rounded-2xl overflow-hidden shadow-inner">
-              <div id="print-area" class="paper-sim">
-                <!-- Output laporan akan ditampilkan di sini -->
-              </div>
             </div>
           </div>
         </section>
@@ -1264,7 +1165,7 @@
 
     // TAB ROUTING
     function switchTab(tabId) {
-      const tabs = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi', 'laporan'];
+      const tabs = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi'];
       tabs.forEach(t => {
         document.getElementById(`tab-${t}`).classList.add("hidden");
       });
@@ -1287,8 +1188,7 @@
         'kelahiran': 'Sistem Kelahiran & Penetasan',
         'kematian': 'Arsip Kematian & BAP Satwa',
         'titipan': 'Satwa Titipan Negara',
-        'mutasi': 'Mutasi Pemindahan Satwa',
-        'laporan': 'Pembuat Laporan Resmi BKSDA'
+        'mutasi': 'Mutasi Pemindahan Satwa'
       };
       document.getElementById("header-title").innerText = titles[tabId];
 
@@ -1560,142 +1460,151 @@
     function renderAllTables() {
       // 1. Master Satwa
       const masterBody = document.getElementById("master-table-body");
-      masterBody.innerHTML = '';
-      localDB.master.forEach(satwa => {
-        const item = getDinamisSatwaState(satwa);
-        const row = document.createElement("tr");
-        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
-        row.innerHTML = `
-          <td class="p-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-slate-700/50 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
-              ${satwa.nama.charAt(0)}
-            </div>
-            <div>
-              <p class="font-bold text-slate-800 dark:text-white leading-tight">${satwa.nama}</p>
-              <p class="text-xs text-slate-400 dark:text-slate-400 italic">${satwa.latin}</p>
-            </div>
-          </td>
-          <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${satwa.kelas || 'Mamalia'}</span></td>
-          <td class="p-4 font-mono text-xs font-semibold">${satwa.id}</td>
-          <td class="p-4 font-bold text-slate-600 dark:text-slate-400">${item.induk_awal}</td>
-          <td class="p-4 font-bold text-slate-600 dark:text-slate-400">${item.anakan_awal}</td>
-          <td class="p-4 font-bold text-brand-600 dark:text-brand-400">${item.total_populasi} ekor</td>
-          <td class="p-4">
-            <span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${
-              satwa.status === 'Dilindungi' 
-                ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800'
-                : satwa.status === 'Eksotis'
-                ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800'
-                : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-            }">${satwa.status}</span>
-          </td>
-          <td class="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400">${satwa.kandang}</td>
-          <td class="p-4 text-center">
-            <button onclick="editSatwa('${satwa.id}')" class="text-slate-400 hover:text-brand-500 mr-2" title="Edit Data"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
-            <button onclick="deleteSatwa('${satwa.id}')" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
-          </td>
-        `;
-        masterBody.appendChild(row);
-      });
+      if (masterBody) {
+        masterBody.innerHTML = '';
+        localDB.master.forEach(satwa => {
+          const item = getDinamisSatwaState(satwa);
+          const row = document.createElement("tr");
+          row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+          row.innerHTML = `
+            <td class="p-4 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-slate-700/50 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
+                ${satwa.nama.charAt(0)}
+              </div>
+              <div>
+                <p class="font-bold text-slate-800 dark:text-white leading-tight">${satwa.nama}</p>
+                <p class="text-xs text-slate-400 dark:text-slate-400 italic">${satwa.latin}</p>
+              </div>
+            </td>
+            <td class="p-4"><span class="px-2 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${satwa.kelas || 'Mamalia'}</span></td>
+            <td class="p-4 font-mono text-xs font-semibold">${satwa.id}</td>
+            <td class="p-4 font-bold text-slate-600 dark:text-slate-400">${item.induk_awal}</td>
+            <td class="p-4 font-bold text-slate-600 dark:text-slate-400">${item.anakan_awal}</td>
+            <td class="p-4 font-bold text-brand-600 dark:text-brand-400">${item.total_populasi} ekor</td>
+            <td class="p-4">
+              <span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${
+                satwa.status === 'Dilindungi' 
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800'
+                  : satwa.status === 'Eksotis'
+                  ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800'
+                  : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+              }">${satwa.status}</span>
+            </td>
+            <td class="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400">${satwa.kandang}</td>
+            <td class="p-4 text-center">
+              <button onclick="editSatwa('${satwa.id}')" class="text-slate-400 hover:text-brand-500 mr-2" title="Edit Data"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+              <button onclick="deleteSatwa('${satwa.id}')" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+            </td>
+          `;
+          masterBody.appendChild(row);
+        });
+      }
 
       // 2. Kelahiran Satwa
       const lahirBody = document.getElementById("kelahiran-table-body");
-      lahirBody.innerHTML = '';
-      localDB.kelahiran.forEach((kl, idx) => {
-        const row = document.createElement("tr");
-        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
-        row.innerHTML = `
-          <td class="p-4">
-            <p class="font-bold leading-tight">${kl.nama}</p>
-            <p class="text-xs italic" style="color:#94a3b8">${kl.latin || '-'}</p>
-          </td>
-          <td class="p-4 text-xs font-semibold">${kl.tanggal}</td>
-          <td class="p-4 font-bold text-blue-600">${kl.jumlah} ekor</td>
-          <td class="p-4 font-mono text-xs">${kl.tag}</td>
-          <td class="p-4 text-xs font-bold text-slate-500">${kl.kelamin}</td>
-          <td class="p-4 text-xs text-slate-400 dark:text-slate-400">${kl.ket}</td>
-          <td class="p-4 text-center">
-            <button onclick="editKelahiran(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
-            <button onclick="deleteKelahiran(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
-          </td>
-        `;
-        lahirBody.appendChild(row);
-      });
+      if (lahirBody) {
+        lahirBody.innerHTML = '';
+        localDB.kelahiran.forEach((kl, idx) => {
+          const row = document.createElement("tr");
+          row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+          row.innerHTML = `
+            <td class="p-4">
+              <p class="font-bold leading-tight">${kl.nama}</p>
+              <p class="text-xs italic" style="color:#94a3b8">${kl.latin || '-'}</p>
+            </td>
+            <td class="p-4 text-xs font-semibold">${kl.tanggal}</td>
+            <td class="p-4 font-bold text-blue-600">${kl.jumlah} ekor</td>
+            <td class="p-4 font-mono text-xs">${kl.tag}</td>
+            <td class="p-4 text-xs font-bold text-slate-500">${kl.kelamin}</td>
+            <td class="p-4 text-xs text-slate-400 dark:text-slate-400">${kl.ket}</td>
+            <td class="p-4 text-center">
+              <button onclick="editKelahiran(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+              <button onclick="deleteKelahiran(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+            </td>
+          `;
+          lahirBody.appendChild(row);
+        });
+      }
 
       // 3. Kematian Satwa
       const matiBody = document.getElementById("kematian-table-body");
-      matiBody.innerHTML = '';
-      localDB.kematian.forEach((km, idx) => {
-        const row = document.createElement("tr");
-        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
-        row.innerHTML = `
-          <td class="p-4">
-            <p class="font-bold leading-tight">${km.nama}</p>
-            <p class="text-xs italic" style="color:#94a3b8">${km.latin || '-'}</p>
-          </td>
-          <td class="p-4"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold">${km.kategori || 'Induk'}</span></td>
-          <td class="p-4 text-xs font-semibold">${km.tanggal}</td>
-          <td class="p-4 font-bold text-rose-500">${km.jumlah} ekor</td>
-          <td class="p-4"><span class="text-xs bg-rose-50 dark:bg-rose-950/20 text-rose-500 font-bold px-2 py-0.5 rounded">${km.sebab}</span></td>
-          <td class="p-4 text-xs font-mono text-slate-400 truncate max-w-[150px]" title="${km.bap}">${km.bap}</td>
-          <td class="p-4 text-center">
-            <button onclick="editKematian(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
-            <button onclick="deleteKematian(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
-          </td>
-        `;
-        matiBody.appendChild(row);
-      });
+      if (matiBody) {
+        matiBody.innerHTML = '';
+        localDB.kematian.forEach((km, idx) => {
+          const row = document.createElement("tr");
+          row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+          row.innerHTML = `
+            <td class="p-4">
+              <p class="font-bold leading-tight">${km.nama}</p>
+              <p class="text-xs italic" style="color:#94a3b8">${km.latin || '-'}</p>
+            </td>
+            <td class="p-4"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold">${km.kategori || 'Induk'}</span></td>
+            <td class="p-4 text-xs font-semibold">${km.tanggal}</td>
+            <td class="p-4 font-bold text-rose-500">${km.jumlah} ekor</td>
+            <td class="p-4"><span class="text-xs bg-rose-50 dark:bg-rose-950/20 text-rose-500 font-bold px-2 py-0.5 rounded">${km.sebab}</span></td>
+            <td class="p-4 text-xs font-mono text-slate-400 truncate max-w-[150px]" title="${km.bap}">${km.bap}</td>
+            <td class="p-4 text-center">
+              <button onclick="editKematian(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+              <button onclick="deleteKematian(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+            </td>
+          `;
+          matiBody.appendChild(row);
+        });
+      }
 
       // 4. Satwa Titipan
       const titipBody = document.getElementById("titipan-table-body");
-      titipBody.innerHTML = '';
-      localDB.titipan.forEach((tp, idx) => {
-        const row = document.createElement("tr");
-        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
-        row.innerHTML = `
-          <td class="p-4 font-mono text-xs font-bold text-amber-600">${tp.bap}</td>
-          <td class="p-4">
-            <p class="font-bold leading-tight">${tp.nama}</p>
-            <p class="text-xs italic" style="color:#94a3b8">${tp.latin || '-'}</p>
-          </td>
-          <td class="p-4"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold">${tp.kategori || 'Induk'}</span></td>
-          <td class="p-4 text-xs font-semibold">${tp.tanggal}</td>
-          <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${tp.jumlah} ekor</td>
-          <td class="p-4 text-xs font-bold text-slate-500">${tp.asal}</td>
-          <td class="p-4"><span class="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-bold">${tp.status}</span></td>
-          <td class="p-4 text-center">
-            <button onclick="editTitipan(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
-            <button onclick="deleteTitipan(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
-          </td>
-        `;
-        titipBody.appendChild(row);
-      });
+      if (titipBody) {
+        titipBody.innerHTML = '';
+        localDB.titipan.forEach((tp, idx) => {
+          const row = document.createElement("tr");
+          row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+          row.innerHTML = `
+            <td class="p-4 font-mono text-xs font-bold text-amber-600">${tp.bap}</td>
+            <td class="p-4">
+              <p class="font-bold leading-tight">${tp.nama}</p>
+              <p class="text-xs italic" style="color:#94a3b8">${tp.latin || '-'}</p>
+            </td>
+            <td class="p-4"><span class="px-2 py-0.5 rounded text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold">${tp.kategori || 'Induk'}</span></td>
+            <td class="p-4 text-xs font-semibold">${tp.tanggal}</td>
+            <td class="p-4 font-bold text-slate-700 dark:text-slate-300">${tp.jumlah} ekor</td>
+            <td class="p-4 text-xs font-bold text-slate-500">${tp.asal}</td>
+            <td class="p-4"><span class="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-bold">${tp.status}</span></td>
+            <td class="p-4 text-center">
+              <button onclick="editTitipan(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+              <button onclick="deleteTitipan(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+            </td>
+          `;
+          titipBody.appendChild(row);
+        });
+      }
 
       // 5. Mutasi Satwa Log Riwayat & Rekapitulasi
       const mutasiBody = document.getElementById("mutasi-table-body");
-      mutasiBody.innerHTML = '';
-      localDB.mutasi.forEach((mt, idx) => {
-        const row = document.createElement("tr");
-        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
-        row.innerHTML = `
-          <td class="p-3 font-mono text-xs font-bold text-violet-600">${mt.id}</td>
-          <td class="p-3 font-bold">${mt.nama}</td>
-          <td class="p-3"><span class="px-2 py-0.5 rounded text-xs ${mt.tipe === 'Penambahan' ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600' : 'bg-rose-50 dark:bg-rose-950/30 text-rose-600'} font-bold">${mt.tipe}</span></td>
-          <td class="p-3 text-xs font-semibold">${mt.kategori}</td>
-          <td class="p-3 text-xs"><span class="px-2 py-0.5 rounded bg-violet-50 dark:bg-violet-950/30 text-violet-600 font-bold">${mt.jenis}</span></td>
-          <td class="p-3 font-bold">${mt.jumlah} ekor</td>
-          <td class="p-3 font-mono text-xs text-slate-500">${mt.bap || '-'}</td>
-          <td class="p-3 text-xs">${mt.tanggal}</td>
-          <td class="p-3 text-xs font-bold text-slate-500">${mt.petugas}</td>
-          <td class="p-3 text-center">
-            <button onclick="editMutasi(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
-            <button onclick="deleteMutasi(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
-          </td>
-        `;
-        mutasiBody.appendChild(row);
-      });
+      if (mutasiBody) {
+        mutasiBody.innerHTML = '';
+        localDB.mutasi.forEach((mt, idx) => {
+          const row = document.createElement("tr");
+          row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+          row.innerHTML = `
+            <td class="p-3 font-mono text-xs font-bold text-violet-600">${mt.id}</td>
+            <td class="p-3 font-bold">${mt.nama}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-xs ${mt.tipe === 'Penambahan' ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600' : 'bg-rose-50 dark:bg-rose-950/30 text-rose-600'} font-bold">${mt.tipe}</span></td>
+            <td class="p-3 text-xs font-semibold">${mt.kategori}</td>
+            <td class="p-3 text-xs"><span class="px-2 py-0.5 rounded bg-violet-50 dark:bg-violet-950/30 text-violet-600 font-bold">${mt.jenis}</span></td>
+            <td class="p-3 font-bold">${mt.jumlah} ekor</td>
+            <td class="p-3 font-mono text-xs text-slate-500">${mt.bap || '-'}</td>
+            <td class="p-3 text-xs">${mt.tanggal}</td>
+            <td class="p-3 text-xs font-bold text-slate-500">${mt.petugas}</td>
+            <td class="p-3 text-center">
+              <button onclick="editMutasi(${idx})" class="text-slate-400 hover:text-blue-500 mr-2" title="Edit"><i class="fa-solid fa-pen-to-square text-blue-600"></i></button>
+              <button onclick="deleteMutasi(${idx})" class="text-slate-400 hover:text-rose-500" title="Hapus"><i class="fa-solid fa-trash text-rose-500"></i></button>
+            </td>
+          `;
+          mutasiBody.appendChild(row);
+        });
+      }
 
-      // Render Rekapitulasi Baru ke Tab Mutasi
       renderMutasiRekapitulasiTable();
     }
 
@@ -1722,11 +1631,11 @@
           <!-- Asal usul -->
           <td class="p-2 border-r border-slate-200/40 text-slate-500 text-xs">${item.asal}</td>
           <!-- Penambahan -->
-          <td class="p-2 border-r border-slate-200/40 font-bold text-emerald-600 dark:text-emerald-400">${item.tambah_induk || '-'}</td>
-          <td class="p-2 border-r border-slate-200/40 font-bold text-emerald-600 dark:text-emerald-400">${item.tambah_anakan || '-'}</td>
+          <td class="p-2 border-r border-slate-200/40 font-bold text-emerald-600 dark:text-emerald-400">${item.tambah_induk || '0'}</td>
+          <td class="p-2 border-r border-slate-200/40 font-bold text-emerald-600 dark:text-emerald-400">${item.tambah_anakan || '0'}</td>
           <!-- Pengurangan -->
-          <td class="p-2 border-r border-slate-200/40 font-bold text-rose-500">${item.kurang_induk || '-'}</td>
-          <td class="p-2 border-r border-slate-200/40 font-bold text-rose-500">${item.kurang_anakan || '-'}</td>
+          <td class="p-2 border-r border-slate-200/40 font-bold text-rose-500">${item.kurang_induk || '0'}</td>
+          <td class="p-2 border-r border-slate-200/40 font-bold text-rose-500">${item.kurang_anakan || '0'}</td>
           <!-- BA Mutasi -->
           <td class="p-2 border-r border-slate-200/40 font-mono text-[10px] text-slate-500 select-all">${item.docBA}</td>
           <!-- Stok Akhir -->
@@ -1759,7 +1668,6 @@
       clockElement.innerText = `${dayName}, ${dayNum} ${monthName} ${year} ${hours}:${minutes}:${seconds}`;
     }
 
-    // Inisialisasi Jam Live saat halaman dimuat
     setInterval(updateLiveClock, 1000);
 
     function filterMasterTable() {
@@ -2003,272 +1911,318 @@
     // ============ EXPORT & REPORT SYSTEM ============
     function setReportType(type) {
       document.getElementById('report-type').value = type;
-      const colorMap = {
-        kelahiran:'#2563eb', kematian:'#2563eb', mutasi_bulanan:'#2563eb',
-        rekap_kelahiran_triwulan:'#7c3aed', rekap_kematian_triwulan:'#7c3aed', mutasi_triwulan:'#7c3aed',
-        logbook_aves:'#059669', logbook_mamalia:'#059669', logbook_mamalia_pet:'#059669',
-        logbook_reptil:'#059669', studbook:'#059669'
-      };
+      
       document.querySelectorAll('.report-type-btn').forEach(function(btn) {
         const isActive = btn.dataset.rtype === type;
-        btn.style.background = isActive ? (colorMap[type]||'#2563eb') : '';
-        btn.style.color = isActive ? '#fff' : '';
+        if (isActive) {
+          btn.classList.add('bg-brand-600', 'text-white');
+          btn.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+        } else {
+          btn.classList.remove('bg-brand-600', 'text-white');
+          btn.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+        }
       });
-      const triwulanTypes = ['rekap_kelahiran_triwulan','rekap_kematian_triwulan','mutasi_triwulan'];
-      const nomorTypes = ['kelahiran','kematian'];
-      document.getElementById('triwulan-container').style.display = triwulanTypes.includes(type) ? 'block' : 'none';
-      document.getElementById('nomor-surat-container').style.display = nomorTypes.includes(type) ? 'block' : 'none';
+      
+      // Sinkronkan ke in-memory print area otomatis
       generateSelectedReport();
+    }
+
+    // Ejaan Terbilang Resmi untuk legalitas Berita Acara / Laporan Resmi
+    function terbilang(n) {
+      const words = ["nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+      if (n < 12) return words[n];
+      if (n < 20) return terbilang(n - 10) + " belas";
+      if (n < 100) return terbilang(Math.floor(n / 10)) + " puluh " + (n % 10 !== 0 ? " " + terbilang(n % 10) : "");
+      if (n < 200) return "seratus " + (n % 100 !== 0 ? terbilang(n % 100) : "");
+      if (n < 1000) return terbilang(Math.floor(n / 100)) + " ratus " + (n % 100 !== 0 ? " " + terbilang(n % 100) : "");
+      if (n < 2000) return "seribu " + (n % 1000 !== 0 ? " " + terbilang(n % 1000) : "");
+      if (n < 1000000) return terbilang(Math.floor(n / 1000)) + " ribu " + (n % 1000 !== 0 ? " " + terbilang(n % 1000) : "");
+      return n.toString();
     }
 
     function generateSelectedReport() {
       const type = document.getElementById("report-type").value;
       const rawDate = document.getElementById("report-date").value;
-      const nomorSurat = document.getElementById("report-nomor-surat")?.value || "";
-      const triwulan = parseInt(document.getElementById("report-triwulan")?.value || "1");
+      const nomorSurat = document.getElementById("report-nomor-surat")?.value || "021/SGBL-LK/VI/2026";
 
       const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
       const d = new Date(rawDate);
-      const formattedDateStr = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-      const bulanTahun = `${months[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
+      
+      const dayNum = d.getDate();
+      const monthName = months[d.getMonth()];
+      const yearNum = d.getFullYear();
+      const formattedDateStr = `${dayNum} ${monthName} ${yearNum}`;
 
-      const kuratorSignee = "Yonas Adestira Ichti";
-      const kuratorTitle = "Kurator Utama";
       const reportArea = document.getElementById("print-area");
 
-      const isLandscape = ["studbook","mutasi_bulanan","mutasi_triwulan"].includes(type);
+      // Set standard A4 portrait margins for BKSDA submission
       let styleElement = document.getElementById('dynamic-print-style');
-      if (!styleElement) { styleElement = document.createElement('style'); styleElement.id = 'dynamic-print-style'; document.head.appendChild(styleElement); }
-      if (isLandscape) {
-        styleElement.innerHTML = '@page { size: A4 landscape; margin: 15mm; }';
-        reportArea.className = "paper-sim";
-        reportArea.style.width = "297mm";
-        reportArea.style.minHeight = "210mm";
-      } else {
-        styleElement.innerHTML = '@page { size: A4 portrait; margin: 10mm 20mm 15mm 25mm; }';
-        reportArea.className = "paper-sim";
-        reportArea.style.width = "210mm";
-        reportArea.style.minHeight = "297mm";
+      if (!styleElement) { 
+        styleElement = document.createElement('style'); 
+        styleElement.id = 'dynamic-print-style'; 
+        document.head.appendChild(styleElement); 
       }
+      styleElement.innerHTML = '@page { size: A4 portrait; margin: 20mm 20mm 20mm 25mm; }';
+      reportArea.className = "paper-sim";
+      reportArea.style.width = "210mm";
+      reportArea.style.minHeight = "297mm";
 
-      function kopSurat(compact = false) {
-        const titleSz = compact ? "14px" : "18px";
-        const subSz   = compact ? "9px" : "11px";
-        const addrSz  = compact ? "8px" : "9.5px";
-        const ovalW   = compact ? "80px" : "100px";
-        const ovalH   = compact ? "50px" : "64px";
-        const sgblSz  = compact ? "13px" : "16px";
-        
-        return '<table style="width:100%;border-collapse:collapse;margin-bottom:0;border:none;">'
-          + '<tr>'
-          + '<td style="width:' + ovalW + ';vertical-align:middle;padding:0 10px 4px 0;border:none;">'
-          + '<table style="border-collapse:collapse;width:' + ovalW + ';height:' + ovalH + ';border:3px solid #000;border-radius:50%;background:#fff;">'
-          + '<tr><td style="text-align:center;vertical-align:middle;border:none;padding:0;">'
-          + '<span style="color:#e00000;font-weight:900;font-size:' + sgblSz + ';font-family:Arial Black,sans-serif;letter-spacing:1px;">SGBL</span>'
-          + '</td></tr></table>'
-          + '</td>'
-          + '<td style="text-align:center;vertical-align:middle;border:none;padding-bottom:4px;">'
-          + '<div style="font-size:' + titleSz + ';font-weight:900;color:#000;font-family:Calibri,sans-serif;letter-spacing:.5px;">PT. SATWA GUNUNG BAYAN LESTARI</div>'
-          + '<div style="font-size:' + subSz + ';font-weight:600;color:#000;margin-top:1px;font-family:Calibri,sans-serif;">LEMBAGA KONSERVASI</div>'
-          + '<div style="font-size:' + addrSz + ';color:#222;margin-top:2px;font-family:Calibri,sans-serif;line-height:1.3;">Jln. MT. Haryono, Komplek Balikpapan Baru Blok D-4 No.9-10, Kel. Damai Baru,<br>Kec. Balikpapan Selatan, Kota Balikpapan, Kalimantan Timur- 76114</div>'
-          + '</td>'
-          + '</tr>'
-          + '</table>'
-          + '<hr style="border:none;border-top:1.5px solid #1a56c4;margin:2px 0;">'
-          + '<hr style="border:none;border-top:3.5px solid #1a56c4;margin:2px 0 10px 0;">';
+      // Premium official Kop Surat template
+      function renderOfficialKop() {
+        return `
+          <table style="width:100%; border-collapse:collapse; margin-bottom:10px; border:none; font-family:'Times New Roman',Times,serif;">
+            <tr>
+              <td style="width:75px; vertical-align:middle; padding-right:15px; border:none;">
+                <img src="https://drive.google.com/thumbnail?id=1Qc7N33QuU-jVnyAtJ4iJXwkABOeGNC2C&sz=w500" alt="Logo SGBL" style="width:75px; height:75px; display:block; object-fit:contain;" onerror="this.onerror=null; this.src='https://placehold.co/80x80/0066da/ffffff?text=SGBL';">
+              </td>
+              <td style="text-align:center; vertical-align:middle; border:none;">
+                <div style="font-size:15px; font-weight:bold; color:#000; font-family:'Times New Roman',Times,serif; letter-spacing:0.5px; line-height:1.2;">PT. SATWA GUNUNG BAYAN LESTARI</div>
+                <div style="font-size:11px; font-weight:bold; color:#000; margin-top:2px; font-family:'Times New Roman',Times,serif; text-transform:uppercase; letter-spacing:0.8px;">LEMBAGA KONSERVASI - TABANG ZOO</div>
+                <div style="font-size:8.5px; color:#333; margin-top:4px; font-family:'Times New Roman',Times,serif; line-height:1.3; font-style:italic;">
+                  Kantor Operasional: Desa Tabang, Kecamatan Tabang, Kabupaten Kutai Kartanegara, Kalimantan Timur<br>
+                  Kantor Korespondensi: Jln. MT. Haryono, Komplek Balikpapan Baru Blok D-4 No.9-10, Kota Balikpapan - 76114
+                </div>
+              </td>
+            </tr>
+          </table>
+          <hr style="border:none; border-top:1px solid #000; margin:1px 0;">
+          <hr style="border:none; border-top:3.5px double #000; margin:1px 0 18px 0;">
+        `;
       }
 
       if (type === "kelahiran") {
-        let rowsHtml = '';
-        localDB.kelahiran.forEach((kl, idx) => {
-          rowsHtml += `<tr>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${idx+1}</td>
-            <td style="border:1px solid #000;padding:5px 7px;">${kl.nama}</td>
-            <td style="border:1px solid #000;padding:5px 7px;font-style:italic;">${kl.latin || '-'}</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${kl.jumlah} ekor</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${kl.tag || 'Noband'}</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${kl.tanggal}</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${kl.kelamin || 'Unknown'}</td>
-            <td style="border:1px solid #000;padding:5px 7px;">${kl.ket || '-'}</td>
-          </tr>`;
-        });
-
-        reportArea.innerHTML = `
-          <div style="font-family:'Times New Roman',Times,serif;font-size:11pt;color:#000;background:#fff;line-height:1.4;">
-            ${kopSurat()}
-            <div style="text-align:right;margin-top:10px;margin-bottom:12px;">Tabang, ${formattedDateStr}</div>
-            <table style="border:none;font-size:11pt;margin-bottom:12px;border-collapse:collapse;">
-              <tr>
-                <td style="padding:2px 0;width:90px;border:none;vertical-align:top;">Nomor</td>
-                <td style="padding:2px 4px;border:none;vertical-align:top;">:</td>
-                <td style="padding:2px 0;border:none;font-weight:bold;">${nomorSurat || '.........../SGBL/ZOO/...../2026'}</td>
-              </tr>
-              <tr>
-                <td style="padding:2px 0;border:none;vertical-align:top;">Perihal</td>
-                <td style="padding:2px 4px;border:none;vertical-align:top;">:</td>
-                <td style="padding:2px 0;border:none;">Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</td>
-              </tr>
-            </table>
-            <div style="margin-bottom:12px;">Kepada Yth.</div>
-            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</div>
-            <div style="margin-bottom:2px;">di - Samarinda</div>
-            <div style="margin-top:15px;margin-bottom:15px;text-align:justify;line-height:1.6;">Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di PT. Satwa Gunung Bayan Lestari yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara, Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut:</div>
-            <table style="width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:15px;">
-              <thead>
-                <tr style="font-weight:bold;text-align:center;background-color:#eaeaea;">
-                  <th style="border:1px solid #000;padding:4px 6px;">No</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">Indonesia</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">Latin</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">Jumlah</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">No. Tag</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">Tgl Lahir</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">Sex</th>
-                  <th style="border:1px solid #000;padding:4px 6px;">Ket.</th>
-                </tr>
-              </thead>
-              <tbody>${rowsHtml || '<tr><td colspan="8" style="padding:10px;text-align:center;color:#888;font-style:italic;border:1px solid #000;">Belum ada data kelahiran</td></tr>'}</tbody>
-            </table>
-            <div style="margin-bottom:15px;line-height:1.6;">Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.</div>
-            <div style="margin-bottom:2px;">Hormat Kami,</div>
-            <div style="margin-bottom:50px;">PT. Satwa Gunung Bayan Lestari,</div>
-            <div style="font-weight:bold;text-decoration:underline;margin-bottom:1px;">${kuratorSignee}</div>
-            <div style="margin-bottom:20px;">${kuratorTitle}</div>
-          </div>`;
-      } else if (type === "kematian") {
-        let rowsHtml = '';
-        localDB.kematian.forEach((km, idx) => {
-          rowsHtml += `<tr>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${idx+1}</td>
-            <td style="border:1px solid #000;padding:5px 7px;">${km.nama}</td>
-            <td style="border:1px solid #000;padding:5px 7px;font-style:italic;">${km.latin || '-'}</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${km.kategori || 'Induk'}</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${km.jumlah} ekor</td>
-            <td style="border:1px solid #000;padding:5px 7px;text-align:center;">${km.tanggal}</td>
-            <td style="border:1px solid #000;padding:5px 7px;">${km.sebab}</td>
-            <td style="border:1px solid #000;padding:5px 7px;">${km.bap || '-'}</td>
-          </tr>`;
-        });
-
-        reportArea.innerHTML = `
-          <div style="font-family:'Times New Roman',Times,serif;font-size:11pt;color:#000;background:#fff;line-height:1.4;">
-            ${kopSurat()}
-            <div style="text-align:right;margin-top:10px;margin-bottom:12px;">Tabang, ${formattedDateStr}</div>
-            <table style="border:none;font-size:11pt;margin-bottom:12px;border-collapse:collapse;">
-              <tr>
-                <td style="padding:2px 0;width:90px;border:none;">Nomor</td>
-                <td style="padding:2px 4px;border:none;">:</td>
-                <td style="padding:2px 0;border:none;font-weight:bold;">${nomorSurat || '.........../SGBL/ZOO/...../2026'}</td>
-              </tr>
-              <tr>
-                <td style="padding:2px 0;border:none;">Perihal</td>
-                <td style="padding:2px 4px;border:none;">:</td>
-                <td style="padding:2px 0;border:none;">Laporan Kematian Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</td>
-              </tr>
-            </table>
-            <div style="margin-bottom:12px;">Kepada Yth.</div>
-            <div style="font-weight:bold;margin-bottom:2px;">Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</div>
-            <div style="margin-bottom:2px;">di - Samarinda</div>
-            <div style="margin-top:15px;margin-bottom:15px;text-align:justify;line-height:1.6;">Kami laporkan kejadian kematian satwa liar di lembaga konservasi PT. Satwa Gunung Bayan Lestari (Tabang) dengan data lengkap sebagai berikut:</div>
-            <table style="width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:15px;">
-              <thead>
-                <tr style="font-weight:bold;text-align:center;background-color:#eaeaea;">
-                  <th style="border:1px solid #000;padding:5px 7px;">No</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">Nama Satwa</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">Latin</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">Klasifikasi</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">Jumlah</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">Tgl Kematian</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">Sebab</th>
-                  <th style="border:1px solid #000;padding:5px 7px;">No. BAP</th>
-                </tr>
-              </thead>
-              <tbody>${rowsHtml || '<tr><td colspan="8" style="padding:10px;text-align:center;color:#888;font-style:italic;border:1px solid #000;">Belum ada data kematian</td></tr>'}</tbody>
-            </table>
-            <div style="margin-bottom:22px;line-height:1.8;">Demikian laporan ini dibuat, dokumen otopsi/nekropsi terlampir bersama surat ini. Terima kasih atas kerja samanya.</div>
-            <div style="margin-bottom:3px;">Hormat Kami,</div>
-            <div style="margin-bottom:70px;">PT. Satwa Gunung Bayan Lestari,</div>
-            <div style="font-weight:bold;text-decoration:underline;margin-bottom:2px;">${kuratorSignee}</div>
-            <div style="margin-bottom:30px;">${kuratorTitle}</div>
-          </div>`;
-      } else if (type === "mutasi_bulanan" || type === "mutasi_triwulan") {
-        let rowsHtml = '';
-        localDB.master.forEach((satwa, idx) => {
-          const item = getRecalculatedSatwa(satwa);
-          rowsHtml += `
-            <tr style="font-size:9pt;text-align:center;">
-              <td style="border:1px solid #000;padding:4px;width:30px;">${idx+1}</td>
-              <td style="border:1px solid #000;padding:4px;text-align:left;font-weight:bold;">${item.nama}<br><span style="font-style:italic;font-weight:normal;font-size:8pt;">${item.latin}</span></td>
-              <td style="border:1px solid #000;padding:4px;">${item.induk_awal}</td>
-              <td style="border:1px solid #000;padding:4px;">${item.anakan_awal}</td>
-              <td style="border:1px solid #000;padding:4px;text-align:left;font-size:8pt;">${item.asal}</td>
-              <!-- Penambahan -->
-              <td style="border:1px solid #000;padding:4px;font-weight:bold;color:#000;">${item.tambah_induk || '0'}</td>
-              <td style="border:1px solid #000;padding:4px;font-weight:bold;color:#000;">${item.tambah_anakan || '0'}</td>
-              <!-- Pengurangan -->
-              <td style="border:1px solid #000;padding:4px;font-weight:bold;color:#000;">${item.kurang_induk || '0'}</td>
-              <td style="border:1px solid #000;padding:4px;font-weight:bold;color:#000;">${item.kurang_anakan || '0'}</td>
-              <!-- BA Mutasi -->
-              <td style="border:1px solid #000;padding:4px;font-size:7.5pt;font-family:monospace;">${item.docBA}</td>
-              <!-- Stok Akhir -->
-              <td style="border:1px solid #000;padding:4px;font-weight:bold;">${item.induk_akhir}</td>
-              <td style="border:1px solid #000;padding:4px;font-weight:bold;">${item.anakan_akhir}</td>
-              <td style="border:1px solid #000;padding:4px;font-size:8pt;text-align:left;">${item.keterangan || item.status}</td>
+        let birthRows = '';
+        if (localDB.kelahiran.length > 0) {
+          localDB.kelahiran.forEach((kl, idx) => {
+            birthRows += `
+              <tr style="text-align:center; font-size:10pt;">
+                <td style="border:1px solid #000; padding:6px; width:5%;">${idx + 1}</td>
+                <td style="border:1px solid #000; padding:6px; width:22%; font-weight:bold; text-align:left;">
+                  ${kl.nama}<br><span style="font-style:italic; font-weight:normal; font-size:9pt; color:#444;">${kl.latin || ''}</span>
+                </td>
+                <td style="border:1px solid #000; padding:6px; width:13%;">${kl.tanggal}</td>
+                <td style="border:1px solid #000; padding:6px; width:10%; font-weight:bold;">${kl.jumlah} Ekor</td>
+                <td style="border:1px solid #000; padding:6px; width:20%; text-align:left; font-size:9pt;">
+                  Betina: REG-003 (Kasuari)<br>Jantan: REG-007 (Kasuari)
+                </td>
+                <td style="border:1px solid #000; padding:6px; width:13%; font-family:monospace; font-size:9pt;">BKSDA-02/REG3</td>
+                <td style="border:1px solid #000; padding:6px; width:12%; font-family:monospace; font-weight:bold; font-size:9pt;">${kl.tag || 'Noband'}</td>
+                <td style="border:1px solid #000; padding:6px; width:10%; font-size:9pt; font-weight:semibold; color:#16a34a;">F1 (Lahir LK)</td>
+                <td style="border:1px solid #000; padding:6px; width:15%; text-align:left; font-size:9pt;">${kl.ket || 'Lahir Sehat'}</td>
+              </tr>`;
+          });
+        } else {
+          birthRows = `
+            <tr>
+              <td colspan="9" style="border:1px solid #000; padding:20px; text-align:center; font-style:italic; color:#666;">
+                Tidak ada data transaksi kelahiran satwa pada database penangkaran untuk periode ini.
+              </td>
             </tr>`;
-        });
+        }
 
         reportArea.innerHTML = `
-          <div style="font-family:'Times New Roman',Times,serif;font-size:10pt;color:#000;background:#fff;line-height:1.3;box-sizing:border-box;">
-            ${kopSurat(true)}
-            <div style="text-align:center;margin-bottom:10px;">
-              <h3 style="font-size:11pt;font-weight:bold;text-transform:uppercase;margin:0;letter-spacing:.5px;">LAPORAN REKAPITULASI MUTASI POPULASI SATWA</h3>
-              <p style="font-size:9pt;font-weight:bold;margin:2px 0 0 0;">PERIODE: ${type === "mutasi_bulanan" ? "BULAN " + bulanTahun : "TRIWULAN " + ["I","II","III","IV"][triwulan-1] + " / " + d.getFullYear()}</p>
-            </div>
-            <table style="width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:10px;">
+          <div style="font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; line-height:1.5; padding:15mm 20mm 15mm 20mm; box-sizing:border-box;">
+            ${renderOfficialKop()}
+            
+            <!-- Metadata Surat Resmi -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:11pt; font-family:'Times New Roman',Times,serif; border:none;">
+              <tr>
+                <td style="width:12%; vertical-align:top; padding:2px 0;">Nomor</td>
+                <td style="width:3%; vertical-align:top; padding:2px 0;">:</td>
+                <td style="width:45%; vertical-align:top; padding:2px 0;">${nomorSurat}</td>
+                <td style="width:40%; text-align:right; vertical-align:top; padding:2px 0;">Tabang, ${formattedDateStr}</td>
+              </tr>
+              <tr>
+                <td style="vertical-align:top; padding:2px 0;">Sifat</td>
+                <td style="vertical-align:top; padding:2px 0;">:</td>
+                <td style="vertical-align:top; padding:2px 0;">Penting / Segera</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="vertical-align:top; padding:2px 0;">Lampiran</td>
+                <td style="vertical-align:top; padding:2px 0;">:</td>
+                <td style="vertical-align:top; padding:2px 0;">1 (satu) Berkas Lengkap</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="vertical-align:top; padding:2px 0; font-weight:bold;">Perihal</td>
+                <td style="vertical-align:top; padding:2px 0;">:</td>
+                <td style="vertical-align:top; padding:2px 0; font-weight:bold; text-decoration:underline;">Laporan Kelahiran Satwa Liar Koleksi LK</td>
+                <td></td>
+              </tr>
+            </table>
+
+            <!-- Alamat Penerima -->
+            <p style="margin:0 0 15px 0; font-family:'Times New Roman',Times,serif;">
+              Kepada Yth.<br>
+              <strong>Kepala Balai Konservasi Sumber Daya Alam (BKSDA) Kalimantan Timur</strong><br>
+              Jalan Harmonika No. 1, Samarinda<br>
+              Di - <strong>Samarinda</strong>
+            </p>
+
+            <p style="text-align:justify; text-indent:35px; margin-bottom:15px; font-family:'Times New Roman',Times,serif;">
+              Dengan hormat, bersama surat ini kami sampaikan laporan perkembangan populasi penangkaran berupa kelahiran satwa liar pada fasilitas Lembaga Konservasi PT. Satwa Gunung Bayan Lestari (Tabang Zoo) yang teregistrasi secara resmi. Rincian detail silsilah dan vitalitas anakan satwa adalah sebagai berikut:
+            </p>
+
+            <!-- Tabel Data Format BKSDA -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-family:'Times New Roman',Times,serif; border:1px solid #000;">
               <thead>
-                <tr style="background:#eaeaea;font-weight:bold;text-align:center;">
-                  <th rowspan="3" style="border:1px solid #000;padding:4px;">No.</th>
-                  <th rowspan="3" style="border:1px solid #000;padding:4px;text-align:left;">Nama Jenis/ Persilangan/ Varietas</th>
-                  <th colspan="2" style="border:1px solid #000;padding:4px;">Stok Awal</th>
-                  <th rowspan="3" style="border:1px solid #000;padding:4px;">Asal-usul Induk</th>
-                  <th colspan="5" style="border:1px solid #000;padding:4px;">Jumlah Mutasi Periode Ini</th>
-                  <th colspan="2" style="border:1px solid #000;padding:4px;">Jumlah Stok Akhir</th>
-                  <th rowspan="3" style="border:1px solid #000;padding:4px;text-align:left;">Keterangan</th>
-                </tr>
-                <tr style="background:#f4f4f4;font-weight:bold;text-align:center;">
-                  <th rowspan="2" style="border:1px solid #000;padding:2px;">Induk</th>
-                  <th rowspan="2" style="border:1px solid #000;padding:2px;">Anakan</th>
-                  <th colspan="2" style="border:1px solid #000;padding:2px;">Penambahan</th>
-                  <th colspan="2" style="border:1px solid #000;padding:2px;">Pengurangan</th>
-                  <th rowspan="2" style="border:1px solid #000;padding:2px;">BA. Mutasi</th>
-                  <th rowspan="2" style="border:1px solid #000;padding:2px;">Induk</th>
-                  <th rowspan="2" style="border:1px solid #000;padding:2px;">Anakan</th>
-                </tr>
-                <tr style="background:#fafafa;font-weight:bold;text-align:center;">
-                  <th style="border:1px solid #000;padding:2px;">Induk</th>
-                  <th style="border:1px solid #000;padding:2px;">Anakan</th>
-                  <th style="border:1px solid #000;padding:2px;">Induk</th>
-                  <th style="border:1px solid #000;padding:2px;">Anakan</th>
+                <tr style="background-color:#f4f4f5; text-align:center; font-weight:bold; font-size:9.5pt;">
+                  <th style="border:1px solid #000; padding:6px;">No</th>
+                  <th style="border:1px solid #000; padding:6px;">Jenis Satwa (Latin)</th>
+                  <th style="border:1px solid #000; padding:6px;">Tgl Lahir</th>
+                  <th style="border:1px solid #000; padding:6px;">Jumlah</th>
+                  <th style="border:1px solid #000; padding:6px;">Identitas Induk (M & F)</th>
+                  <th style="border:1px solid #000; padding:6px;">No. Ring Induk</th>
+                  <th style="border:1px solid #000; padding:6px;">No. Ring Anak</th>
+                  <th style="border:1px solid #000; padding:6px;">Silsilah</th>
+                  <th style="border:1px solid #000; padding:6px;">Kondisi/Ket</th>
                 </tr>
               </thead>
-              <tbody>${rowsHtml}</tbody>
+              <tbody>
+                ${birthRows}
+              </tbody>
             </table>
-            <div style="display:flex;justify-content:flex-end;margin-top:15px;font-size:10pt;">
-              <div style="text-align:center;width:220px;">
-                <p>Balikpapan, ${formattedDateStr}</p>
-                <p style="font-weight:bold;margin-top:5px;">${kuratorTitle}</p>
-                <div style="height:50px;"></div>
-                <p style="font-weight:bold;text-decoration:underline;">${kuratorSignee}</p>
-                <p style="font-size:8pt;color:#333;">PT. Satwa Gunung Bayan Lestari</p>
-              </div>
-            </div>
+
+            <p style="text-align:justify; text-indent:35px; margin-bottom:20px; font-family:'Times New Roman',Times,serif;">
+              Seluruh proses kelahiran dipantau intensif oleh Tim Keeper lapangan bekerjasama dengan Dokter Hewan penanggung jawab medis guna memastikan refleks menyusu dan vitalitas anakan berjalan dengan optimal. Penandaan (tagging/ring) permanen akan terus diselaraskan dengan arahan teknis dari pihak Balai BKSDA Kaltim.
+            </p>
+
+            <p style="text-align:justify; margin-bottom:30px; font-family:'Times New Roman',Times,serif;">
+              Demikian laporan resmi ini kami sampaikan untuk menjadi maklum. Atas perhatian, bimbingan, dan kerjasama yang diberikan selama ini, kami ucapkan terima kasih.
+            </p>
+
+            <!-- Tanda Tangan Multi-Pihak -->
+            <table style="width:100%; border-collapse:collapse; margin-top:25px; border:none; font-family:'Times New Roman',Times,serif; font-size:11pt; page-break-inside:avoid;">
+              <tr>
+                <td style="width:50%; text-align:center; border:none; vertical-align:top; padding-bottom:10px;">
+                  <p style="margin:0 0 55px 0;">Mengetahui,<br><strong>Direktur Operasional PT. SGBL</strong></p>
+                  <p style="font-weight:bold; text-decoration:underline; margin:0 0 2px 0;">Yoshihiro Ichti</p>
+                  <p style="font-size:9pt; color:#444; margin:0;">Pimpinan Lembaga Konservasi</p>
+                </td>
+                <td style="width:50%; text-align:center; border:none; vertical-align:top; padding-bottom:10px;">
+                  <p style="margin:0 0 55px 0;">Hormat Kami,<br><strong>Dokter Hewan & Penanggung Jawab</strong></p>
+                  <p style="font-weight:bold; text-decoration:underline; margin:0 0 2px 0;">drh. Rayni Septianingsih</p>
+                  <p style="font-size:9pt; color:#444; margin:0;">SIPH Terdaftar No. 18-042/KUKAR</p>
+                </td>
+              </tr>
+            </table>
           </div>`;
-      } else {
+      } 
+
+      else if (type === "kematian") {
+        let deathRows = '';
+        if (localDB.kematian.length > 0) {
+          localDB.kematian.forEach((km, idx) => {
+            deathRows += `
+              <tr style="text-align:center; font-size:10pt;">
+                <td style="border:1px solid #000; padding:6px; width:5%;">${idx + 1}</td>
+                <td style="border:1px solid #000; padding:6px; width:25%; font-weight:bold; text-align:left;">
+                  ${km.nama}<br><span style="font-style:italic; font-weight:normal; font-size:9pt; color:#444;">${km.latin || ''}</span>
+                </td>
+                <td style="border:1px solid #000; padding:6px; width:13%;">${km.tanggal}</td>
+                <td style="border:1px solid #000; padding:6px; width:10%; font-weight:bold; color:#b91c1c;">${km.jumlah} Ekor</td>
+                <td style="border:1px solid #000; padding:6px; width:15%; font-family:monospace; font-size:9pt;">REG-0${idx+1}93 / Ring</td>
+                <td style="border:1px solid #000; padding:6px; width:18%; font-weight:semibold; text-align:left; font-size:9pt;">${km.sebab}</td>
+                <td style="border:1px solid #000; padding:6px; width:15%; font-family:monospace; font-size:8.5pt;">${km.bap || '-'}</td>
+                <td style="border:1px solid #000; padding:6px; width:14%; font-size:9pt; text-align:left;">Dikubur di Area LK (Sterilisasi Kapur)</td>
+              </tr>`;
+          });
+        } else {
+          deathRows = `
+            <tr>
+              <td colspan="8" style="border:1px solid #000; padding:20px; text-align:center; font-style:italic; color:#666;">
+                Tidak ada data transaksi kematian satwa pada database penangkaran untuk periode ini.
+              </td>
+            </tr>`;
+        }
+
         reportArea.innerHTML = `
-          <div style="font-family:'Times New Roman',Times,serif;font-size:11pt;color:#000;background:#fff;padding:20px;">
-            ${kopSurat()}
-            <h3 style="text-align:center;text-transform:uppercase;font-weight:bold;margin-top:30px;">Laporan Tergenerasi: ${type.toUpperCase()}</h3>
-            <p style="text-align:center;margin-top:10px;">Tanggal Laporan: ${formattedDateStr}</p>
-            <p style="text-align:center;color:#666;font-style:italic;margin-top:40px;">Format laporan induk dan buku studi didownload dalam file lokal .docx secara lengkap.</p>
+          <div style="font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; line-height:1.5; padding:15mm 20mm 15mm 20mm; box-sizing:border-box;">
+            ${renderOfficialKop()}
+            
+            <!-- Metadata Surat Resmi -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:11pt; font-family:'Times New Roman',Times,serif; border:none;">
+              <tr>
+                <td style="width:12%; vertical-align:top; padding:2px 0;">Nomor</td>
+                <td style="width:3%; vertical-align:top; padding:2px 0;">:</td>
+                <td style="width:45%; vertical-align:top; padding:2px 0;">${nomorSurat}</td>
+                <td style="width:40%; text-align:right; vertical-align:top; padding:2px 0;">Tabang, ${formattedDateStr}</td>
+              </tr>
+              <tr>
+                <td style="vertical-align:top; padding:2px 0;">Sifat</td>
+                <td style="vertical-align:top; padding:2px 0;">:</td>
+                <td style="vertical-align:top; padding:2px 0;">Penting / Segera</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="vertical-align:top; padding:2px 0;">Lampiran</td>
+                <td style="vertical-align:top; padding:2px 0;">:</td>
+                <td style="vertical-align:top; padding:2px 0;">1 (satu) Berkas Hasil Nekropsi</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="vertical-align:top; padding:2px 0; font-weight:bold;">Perihal</td>
+                <td style="vertical-align:top; padding:2px 0;">:</td>
+                <td style="vertical-align:top; padding:2px 0; font-weight:bold; text-decoration:underline;">Laporan Kematian & Nekropsi Satwa Liar Koleksi LK</td>
+                <td></td>
+              </tr>
+            </table>
+
+            <!-- Alamat Penerima -->
+            <p style="margin:0 0 15px 0; font-family:'Times New Roman',Times,serif;">
+              Kepada Yth.<br>
+              <strong>Kepala Balai Konservasi Sumber Daya Alam (BKSDA) Kalimantan Timur</strong><br>
+              Jalan Harmonika No. 1, Samarinda<br>
+              Di - <strong>Samarinda</strong>
+            </p>
+
+            <p style="text-align:justify; text-indent:35px; margin-bottom:15px; font-family:'Times New Roman',Times,serif;">
+              Dengan hormat, bersama surat ini kami sampaikan laporan resmi terkait adanya kematian koleksi satwa liar pada fasilitas Lembaga Konservasi PT. Satwa Gunung Bayan Lestari (Tabang Zoo). Berdasarkan pemeriksaan makroskopis (nekropsi) komprehensif oleh Dokter Hewan kami, berikut adalah rincian data satwa mati:
+            </p>
+
+            <!-- Tabel Data Format BKSDA Kematian -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-family:'Times New Roman',Times,serif; border:1px solid #000;">
+              <thead>
+                <tr style="background-color:#f4f4f5; text-align:center; font-weight:bold; font-size:9.5pt;">
+                  <th style="border:1px solid #000; padding:6px;">No</th>
+                  <th style="border:1px solid #000; padding:6px;">Jenis Satwa (Latin)</th>
+                  <th style="border:1px solid #000; padding:6px;">Tgl Kematian</th>
+                  <th style="border:1px solid #000; padding:6px;">Jumlah</th>
+                  <th style="border:1px solid #000; padding:6px;">Identitas/No. Ring</th>
+                  <th style="border:1px solid #000; padding:6px;">Penyebab Utama (Nekropsi)</th>
+                  <th style="border:1px solid #000; padding:6px;">No. BA Nekropsi</th>
+                  <th style="border:1px solid #000; padding:6px;">Tindakan Jasad</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${deathRows}
+              </tbody>
+            </table>
+
+            <p style="text-align:justify; text-indent:35px; margin-bottom:20px; font-family:'Times New Roman',Times,serif;">
+              Jasad satwa telah dievaluasi secara klinis untuk mencegah resiko penularan zoonosis berbahaya, kemudian dimusnahkan secara higienis melalui metode penguburan tanah sedalam 1.5 meter di area pemakaman satwa internal PT. SGBL sesuai dengan protokol keamanan hayati (bio-safety) yang direkomendasikan.
+            </p>
+
+            <p style="text-align:justify; margin-bottom:30px; font-family:'Times New Roman',Times,serif;">
+              Demikian laporan resmi ini kami sampaikan untuk menjadi maklum. Atas perhatian, bimbingan, dan kerjasama yang diberikan selama ini, kami ucapkan terima kasih.
+            </p>
+
+            <!-- Tanda Tangan Multi-Pihak -->
+            <table style="width:100%; border-collapse:collapse; margin-top:25px; border:none; font-family:'Times New Roman',Times,serif; font-size:11pt; page-break-inside:avoid;">
+              <tr>
+                <td style="width:50%; text-align:center; border:none; vertical-align:top; padding-bottom:10px;">
+                  <p style="margin:0 0 55px 0;">Mengetahui,<br><strong>Direktur Operasional PT. SGBL</strong></p>
+                  <p style="font-weight:bold; text-decoration:underline; margin:0 0 2px 0;">Yoshihiro Ichti</p>
+                  <p style="font-size:9pt; color:#444; margin:0;">Pimpinan Lembaga Konservasi</p>
+                </td>
+                <td style="width:50%; text-align:center; border:none; vertical-align:top; padding-bottom:10px;">
+                  <p style="margin:0 0 55px 0;">Hormat Kami,<br><strong>Dokter Hewan & Penanggung Jawab</strong></p>
+                  <p style="font-weight:bold; text-decoration:underline; margin:0 0 2px 0;">drh. Rayni Septianingsih</p>
+                  <p style="font-size:9pt; color:#444; margin:0;">SIPH Terdaftar No. 18-042/KUKAR</p>
+                </td>
+              </tr>
+            </table>
           </div>`;
       }
     }
@@ -2316,7 +2270,6 @@
       const type = document.getElementById("report-type").value;
       const rawDate = document.getElementById("report-date").value;
       const nomorSurat = document.getElementById("report-nomor-surat")?.value || "";
-      const triwulan = document.getElementById("report-triwulan")?.value || "1";
 
       showToast("⏳ Sedang memproses dokumen Google Doc...", "success");
       
@@ -2333,7 +2286,7 @@
           .withFailureHandler(function(err) {
             showToast("Koneksi gagal: " + err, "error");
           })
-          .generateOfficialReportDoc(type, rawDate, nomorSurat, triwulan, localDB);
+          .generateOfficialReportDoc(type, rawDate, nomorSurat, "1", localDB);
       } else if (API_URL) {
         fetch(API_URL, {
           method: "POST",
@@ -2343,7 +2296,7 @@
             type: type,
             rawDate: rawDate,
             nomorSurat: nomorSurat,
-            triwulan: triwulan,
+            triwulan: "1",
             db: localDB
           })
         })
@@ -2537,20 +2490,6 @@
       showToast("Satwa berhasil dihapus.", "success");
     }
 
-    function downloadReportDocx() {
-      showToast("Mengekspor laporan ke dokumen Word lokal...", "success");
-      const headerHTML = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><title>Ekspor Laporan</title></head><body>";
-      const footerHTML = "</body></html>";
-      const sourceHTML = headerHTML + document.getElementById("print-area").innerHTML + footerHTML;
-      
-      const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-      const fileDownload = document.createElement("a");
-      document.body.appendChild(fileDownload);
-      fileDownload.href = source;
-      fileDownload.download = 'Laporan_eKuratorial_SGBL.doc';
-      fileDownload.click();
-      document.body.removeChild(fileDownload);
-    }
 
     // Window Onload System Init
     window.onload = function() {
@@ -2564,7 +2503,6 @@
       populateSelectDropdowns();
       updateDashboardStats();
       renderAllTables();
-      setReportType('kelahiran');
       
       // Setup initial dark/light theme
       const userTheme = localStorage.getItem('ekurator_theme') || 'dark';
@@ -2573,7 +2511,7 @@
   </script>
   
   <script type="text/javascript">
-    // Keamanan Premium - Menonaktifkan Klik Kanan
+    // Keamanan Premium - Menolak Klik Kanan untuk mencegah inspeksi kode
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
