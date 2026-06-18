@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   
-  <link class="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1Rl8nYaQcGc120i81Txyl4l5wFZ-lB1oj&sz=w100">
+  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1Rl8nYaQcGc120i81Txyl4l5wFZ-lB1oj&sz=w100">
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -34,7 +34,7 @@
     }
   </script>
   
-  <!-- Google Fonts & FontAwesome -->
+  <!-- Google Fonts & FontAwesome 6.4.0 -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -42,9 +42,23 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* MEMASTIKAN FONT SEBELUMNYA (PLUS JAKARTA SANS) DIGUNAKAN DI SELURUH ELEMEN SECARA KHUSUS */
-    * {
-      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    /* Mengaktifkan Plus Jakarta Sans secara luas */
+    body, button, input, select, textarea, p, span, div, h1, h2, h3, h4, h5, h6, table, th, td {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* SOLUSI UTAMA: Mencegah FontAwesome tertimpa oleh aturan font global */
+    .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class^="fa-"], [class*=" fa-"] {
+      font-family: "Font Awesome 6 Free" !important;
+      font-style: normal;
+      font-weight: 900 !important;
+      display: inline-block;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .fa-brands {
+      font-family: "Font Awesome 6 Brands" !important;
     }
 
     /* === login/layout screen display toggling === */
@@ -563,7 +577,7 @@
           </div>
 
           <!-- Buku Rekap Mutasi format tabel -->
-          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden font-sans">
             <div class="overflow-x-auto">
               <table class="w-full text-center border-collapse text-xs">
                 <thead>
@@ -1593,12 +1607,12 @@
       const total = induk + anak;
 
       if (total === 0) {
-        container.innerHTML = `<span class="text-xs text-slate-400">Silakan isi jumlah induk atau anakan terlebih dahulu untuk melengkapi data kelamin.</span>`;
+        container.innerHTML = `<span class="text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>Silakan isi jumlah induk atau anakan terlebih dahulu untuk melengkapi data kelamin.</span>`;
         return;
       }
 
       container.innerHTML = `
-        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2">Rasio Kelamin Riil Satwa (Total: ${total} Ekor)</h4>
+        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2"><i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i>Rasio Kelamin Riil Satwa (Total: ${total} Ekor)</h4>
         <div class="grid grid-cols-3 gap-2">
           <div>
             <label class="text-[10px] font-bold text-blue-500">Jantan (♂)</label>
@@ -1632,7 +1646,7 @@
       }
 
       container.innerHTML = `
-        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2">Rasio Jenis Kelamin Anakan Baru</h4>
+        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2"><i class="fa-solid fa-venus-mars mr-1 text-emerald-500"></i>Rasio Jenis Kelamin Anakan Baru</h4>
         <div class="grid grid-cols-3 gap-2">
           <div>
             <label class="text-[10px] font-bold text-blue-500">Jantan (♂)</label>
