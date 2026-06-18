@@ -223,8 +223,8 @@
         <h2 id="header-title" class="text-lg font-bold text-slate-800 dark:text-white">Dashboard Populasi</h2>
         
         <div class="flex items-center gap-4">
-          <!-- LIVE CLOCK -->
-          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300 animate-pulse">
+          <!-- LIVE CLOCK (BERDENYUT DIHAPUS SEBAGAIMANA DIMINTA) -->
+          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300">
             <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
             <span id="live-clock">Mendeteksi waktu...</span>
           </div>
@@ -951,7 +951,8 @@
 
   <!-- JAVASCRIPT SYSTEM & ENGINE -->
   <script>
-    const API_URL = "";
+    // URL Web App Google Apps Script Anda (kosongkan jika dideploy sebagai kesatuan terintegrasi di GAS)
+    const API_URL = "https://script.google.com/macros/s/AKfycbwG6k_BvpriyMfEw2dj53BYnavo2FEGN29E-hpi9rs3ZxvTQgFbCsVkU_dGpacuRRUswA/exec";
 
     // Deklarasi global instance grafik agar tidak memicu ReferenceError pada renderCharts()
     let populationChartInstance = null;
