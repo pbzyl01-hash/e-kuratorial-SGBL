@@ -47,7 +47,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* SOLUSI UTAMA: Mencegah FontAwesome tertimpa oleh aturan font global */
+    /* Mencegah FontAwesome tertimpa oleh aturan font global */
     .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class^="fa-"], [class*=" fa-"] {
       font-family: "Font Awesome 6 Free" !important;
       font-style: normal;
@@ -156,7 +156,7 @@
       </div>
 
       <button type="button" onclick="doLogin()"
-        class="w-full py-4 bg-gradient-to-r from-brand-600 to-blue-500 hover:from-brand-700 hover:to-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 dark:shadow-brand-500/10 flex items-center justify-center gap-2.5 transition-all transform active:scale-95">
+        class="w-full py-4 bg-gradient-to-r from-brand-600 to-blue-500 hover:from-brand-700 hover:to-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 dark:shadow-brand-500/10 flex items-center justify-center gap-2.5 transition-all transform active:scale-95 duration-200">
         <span>Masuk Sistem</span>
         <i class="fa-solid fa-circle-chevron-right"></i>
       </button>
@@ -182,34 +182,34 @@
             <span class="text-[10px] text-slate-400 dark:text-slate-400 font-semibold uppercase tracking-wider block">Satwa Gunung Bayan Lestari</span>
           </div>
         </div>
-        <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-500 hover:text-slate-800 dark:hover:text-white">
+        <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-500 hover:text-slate-800 dark:hover:text-white p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
           <i class="fa-solid fa-bars text-xl"></i>
         </button>
       </div>
 
       <!-- Tautan Navigasi -->
       <nav id="sidebar-nav" class="flex-1 p-4 space-y-1.5 overflow-y-auto no-scrollbar">
-        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-500 text-white dark:bg-brand-900/40 dark:text-brand-400">
+        <button onclick="switchTab('dashboard')" data-tab="dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-500 text-white dark:bg-brand-900/40 dark:text-brand-400 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <i class="fa-solid fa-chart-pie w-5 text-center text-blue-500"></i>
           <span>Dashboard</span>
         </button>
-        <button onclick="switchTab('master')" data-tab="master" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+        <button onclick="switchTab('master')" data-tab="master" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <i class="fa-solid fa-paw w-5 text-center text-amber-500"></i>
           <span>Master Satwa</span>
         </button>
-        <button onclick="switchTab('kelahiran')" data-tab="kelahiran" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+        <button onclick="switchTab('kelahiran')" data-tab="kelahiran" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <i class="fa-solid fa-egg w-5 text-center text-emerald-500"></i>
           <span>Kelahiran Satwa</span>
         </button>
-        <button onclick="switchTab('kematian')" data-tab="kematian" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+        <button onclick="switchTab('kematian')" data-tab="kematian" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <i class="fa-solid fa-circle-xmark w-5 text-center text-rose-500"></i>
           <span>Kematian Satwa</span>
         </button>
-        <button onclick="switchTab('titipan')" data-tab="titipan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+        <button onclick="switchTab('titipan')" data-tab="titipan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <i class="fa-solid fa-handshake w-5 text-center text-cyan-500"></i>
           <span>Satwa Titipan</span>
         </button>
-        <button onclick="switchTab('mutasi')" data-tab="mutasi" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+        <button onclick="switchTab('mutasi')" data-tab="mutasi" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <i class="fa-solid fa-shuffle w-5 text-center text-violet-500"></i>
           <span>Mutasi Satwa</span>
         </button>
@@ -217,7 +217,7 @@
         <div class="pt-2 pb-1"><div class="border-t border-slate-200 dark:border-slate-700/80"></div></div>
 
         <a href="https://drive.google.com/drive/folders/1fpCSQca5nzDEIBMQI90bB1nISDh7aadu?usp=sharing" target="_blank" rel="noopener noreferrer"
-          class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 dark:hover:text-blue-400 group">
+          class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 dark:hover:text-blue-400 group transform hover:scale-[1.02] active:scale-[0.98] duration-200">
           <span class="w-5 flex items-center justify-center">
             <svg viewBox="0 0 87.3 78" class="w-[18px] h-[18px]" xmlns="http://www.w3.org/2000/svg">
               <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5h27.5z" fill="#0066da"/>
@@ -238,7 +238,7 @@
           <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Yonas Adestira</p>
           <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold truncate">Kurator Utama</p>
         </div>
-        <button onclick="openChangePinModal()" class="text-slate-400 hover:text-blue-500 transition-colors" title="Ganti PIN">
+        <button onclick="openChangePinModal()" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Ganti PIN">
           <i class="fa-solid fa-key text-sm"></i>
         </button>
       </div>
@@ -252,18 +252,18 @@
         <h2 id="header-title" class="text-lg font-bold text-slate-800 dark:text-white">Dashboard Populasi</h2>
         
         <div class="flex items-center gap-4">
-          <!-- LIVE CLOCK -->
+          <!-- LIVE CLOCK (Tanpa efek denyut kasar) -->
           <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 text-xs font-bold text-slate-600 dark:text-slate-300">
-            <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 4s;"></i>
+            <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 6s;"></i>
             <span id="live-clock">Mendeteksi waktu...</span>
           </div>
-          <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all" title="Ubah Tema">
+          <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all transform active:scale-90" title="Ubah Tema">
             <i id="theme-icon" class="fa-solid fa-sun text-yellow-500 text-lg"></i>
           </button>
           
           <div class="h-6 w-px bg-slate-200 dark:bg-slate-700/80"></div>
 
-          <button onclick="handleLogout()" class="px-3.5 py-1.5 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-sm font-semibold transition-all flex items-center gap-1.5">
+          <button onclick="handleLogout()" class="px-3.5 py-1.5 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-sm font-semibold transition-all flex items-center gap-1.5 transform active:scale-95">
             <i class="fa-solid fa-right-from-bracket"></i>
             <span class="hidden md:inline">Keluar</span>
           </button>
@@ -271,7 +271,7 @@
       </header>
 
       <!-- MAIN APP CONTAINER -->
-      <main class="flex-1 p-6 space-y-6">
+      <main class="flex-1 p-4 md:p-6 space-y-6">
 
         <!-- 1. DASHBOARD TAB -->
         <section id="tab-dashboard" class="space-y-6">
@@ -355,7 +355,7 @@
               </div>
               <div class="flex items-baseline justify-between mt-5">
                 <span id="stat-tidak-dilindungi" class="text-4xl font-black text-slate-600 dark:text-slate-300">0</span>
-                <span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 px-2.5 py-1 rounded-lg font-bold">Bebas</span>
+                <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2.5 py-1 rounded-lg font-bold">Bebas</span>
               </div>
             </div>
             <!-- Satwa Eksotis -->
@@ -389,13 +389,13 @@
           <!-- Charts Section -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm lg:col-span-2">
-              <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-sm"><i class="fa-solid fa-chart-line mr-2 text-blue-500"></i>Tren Dinamika Populasi Bulanan</h3>
+              <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-line text-blue-500"></i>Tren Dinamika Kelahiran dan Kematian Bulanan</h3>
               <div class="h-64">
                 <canvas id="populasiChart"></canvas>
               </div>
             </div>
             <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
-              <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-sm"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i>Proporsi Perlindungan</h3>
+              <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-500"></i>Proporsi Perlindungan</h3>
               <div class="h-64 flex items-center justify-center">
                 <canvas id="proporsiChart"></canvas>
               </div>
@@ -405,27 +405,28 @@
 
         <!-- 2. DATA MASTER SATWA TAB -->
         <section id="tab-master" class="space-y-6 hidden">
-          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-wrap gap-3 items-center">
-            <div class="relative flex-1 min-w-[180px]">
-              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-                <i class="fa-solid fa-magnifying-glass text-xs"></i>
-              </span>
-              <input type="text" id="master-search" oninput="filterMasterTable()" class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm" placeholder="Cari nama satwa / spesies...">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-wrap gap-3 items-center justify-between">
+            <div class="flex flex-wrap gap-2 items-center flex-1 min-w-[300px]">
+              <div class="relative flex-1 max-w-xs">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                  <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="master-search" oninput="filterMasterTable()" class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm" placeholder="Cari nama satwa / spesies...">
+              </div>
+              <select id="master-filter-status" onchange="filterMasterTable()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                <option value="">Semua Status</option>
+                <option value="Dilindungi">Dilindungi</option>
+                <option value="Tidak Dilindungi">Tidak Dilindungi</option>
+                <option value="Eksotis">Eksotis</option>
+              </select>
+              <select id="master-filter-kelas" onchange="filterMasterTable()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
+                <option value="">Semua Kelas</option>
+                <option value="Aves">Aves</option>
+                <option value="Mamalia">Mamalia</option>
+                <option value="Reptil">Reptil</option>
+              </select>
             </div>
-            <select id="master-filter-status" onchange="filterMasterTable()" class="flex-1 min-w-[140px] px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
-              <option value="">Semua Status</option>
-              <option value="Dilindungi">Dilindungi</option>
-              <option value="Tidak Dilindungi">Tidak Dilindungi</option>
-              <option value="Eksotis">Eksotis</option>
-            </select>
-            <select id="master-filter-kelas" onchange="filterMasterTable()" class="flex-1 min-w-[130px] px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none text-slate-700 dark:text-slate-300">
-              <option value="">Semua Kelas</option>
-              <option value="Aves">Aves</option>
-              <option value="Mamalia">Mamalia</option>
-              <option value="Reptil">Reptil</option>
-            </select>
-            <div class="flex-1 hidden sm:block"></div>
-            <button onclick="openAddSatwaModal()" class="flex-shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-5 py-2 rounded-xl font-bold shadow-md shadow-brand-600/20 text-sm flex items-center gap-2">
+            <button onclick="openAddSatwaModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-md shadow-brand-600/20 text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
               <i class="fa-solid fa-circle-plus"></i>
               <span>Tambah Satwa Baru</span>
             </button>
@@ -439,9 +440,9 @@
                     <th class="p-4">Satwa / Spesies</th>
                     <th class="p-4">Kelas</th>
                     <th class="p-4">No. Registrasi</th>
-                    <th class="p-4">Stok Awal Induk</th>
-                    <th class="p-4">Stok Awal Anakan</th>
-                    <th class="p-4">Total Populasi</th>
+                    <th class="p-4 text-center">Stok Awal Induk</th>
+                    <th class="p-4 text-center">Stok Awal Anakan</th>
+                    <th class="p-4 text-center">Total Populasi</th>
                     <th class="p-4">Status</th>
                     <th class="p-4">Kandang</th>
                     <th class="p-4 text-center">Tindakan</th>
@@ -459,10 +460,10 @@
         <section id="tab-kelahiran" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kelahiran Satwa</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-baby-carriage text-emerald-500"></i>Histori Kelahiran Satwa</h3>
               <p class="text-xs text-slate-400">Pencatatan perkembangan biak & penetasan di Lembaga Konservasi.</p>
             </div>
-            <button onclick="openAddKelahiranModal()" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+            <button onclick="openAddKelahiranModal()" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] duration-200 shadow-md">
               <i class="fa-solid fa-baby-carriage"></i>
               <span>Catat Kelahiran Baru</span>
             </button>
@@ -475,11 +476,11 @@
                   <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
                     <th class="p-4">Nama Jenis Satwa</th>
                     <th class="p-4">Tanggal Lahir</th>
-                    <th class="p-4">Jumlah (Ekor)</th>
+                    <th class="p-4 text-center">Jumlah (Ekor)</th>
                     <th class="p-4">Tag / No. ID</th>
                     <th class="p-4">Jenis Kelamin</th>
                     <th class="p-4">Keterangan</th>
-                    <th class="p-4 text-center">Aksi</th>
+                    <th class="p-4 text-center">Tindakan</th>
                   </tr>
                 </thead>
                 <tbody id="kelahiran-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
@@ -494,10 +495,10 @@
         <section id="tab-kematian" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kematian Satwa</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-skull-crossbones text-rose-500"></i>Histori Kematian Satwa</h3>
               <p class="text-xs text-slate-400">Pencatatan data nekropsi, penyebab sakit, dan kategori kematian.</p>
             </div>
-            <button onclick="openModal('add-kematian-modal')" class="w-full md:w-auto bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+            <button onclick="openModal('add-kematian-modal')" class="w-full md:w-auto bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] duration-200 shadow-md">
               <i class="fa-solid fa-skull-crossbones"></i>
               <span>Catat Kematian Baru</span>
             </button>
@@ -509,9 +510,9 @@
                 <thead>
                   <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
                     <th class="p-4">Jenis Satwa</th>
-                    <th class="p-4">Kategori Satwa</th>
+                    <th class="p-4">Klasifikasi</th>
                     <th class="p-4">Tanggal Kematian</th>
-                    <th class="p-4">Jumlah</th>
+                    <th class="p-4 text-center">Jumlah</th>
                     <th class="p-4">Penyebab</th>
                     <th class="p-4">Nomor BAP Kematian</th>
                     <th class="p-4 text-center">Tindakan</th>
@@ -529,10 +530,10 @@
         <section id="tab-titipan" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Satwa Titipan BKSDA & Instansi Lain</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-handshake text-cyan-500"></i>Satwa Titipan BKSDA & Instansi Lain</h3>
               <p class="text-xs text-slate-400">Pencatatan titipan resmi satwa sitaan, konflik, ataupun penyelamatan.</p>
             </div>
-            <button onclick="openModal('add-titipan-modal')" class="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+            <button onclick="openModal('add-titipan-modal')" class="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] duration-200 shadow-md">
               <i class="fa-solid fa-handshake-angle"></i>
               <span>Catat Satwa Titipan</span>
             </button>
@@ -547,10 +548,10 @@
                     <th class="p-4">Jenis Satwa</th>
                     <th class="p-4">Golongan</th>
                     <th class="p-4">Tanggal Masuk</th>
-                    <th class="p-4">Jumlah</th>
+                    <th class="p-4 text-center">Jumlah</th>
                     <th class="p-4">Asal Instansi</th>
                     <th class="p-4">Status</th>
-                    <th class="p-4 text-center">Aksi</th>
+                    <th class="p-4 text-center">Tindakan</th>
                   </tr>
                 </thead>
                 <tbody id="titipan-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
@@ -565,25 +566,23 @@
         <section id="tab-mutasi" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
-              <h3 class="font-bold text-lg text-slate-800 dark:text-white">Rekapitulasi Mutasi & Dinamika Satwa (BKSDA)</h3>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-shuffle text-violet-500"></i>Rekapitulasi Mutasi & Dinamika Satwa (BKSDA)</h3>
               <p class="text-xs text-slate-400">Menampilkan rekapitulasi penambahan (Kelahiran/Titipan) dan pengurangan (Kematian/Pelepasliaran/Barter) yang menjadi dasar laporan bulanan & triwulan.</p>
             </div>
-            <div class="flex gap-2 w-full md:w-auto">
-              <button onclick="openModal('add-mutasi-modal')" class="flex-1 md:flex-none bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
-                <i class="fa-solid fa-route"></i>
-                <span>Catat Transaksi Mutasi</span>
-              </button>
-            </div>
+            <button onclick="openModal('add-mutasi-modal')" class="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] duration-200 shadow-md">
+              <i class="fa-solid fa-route"></i>
+              <span>Catat Transaksi Mutasi</span>
+            </button>
           </div>
 
           <!-- Buku Rekap Mutasi format tabel -->
-          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden font-sans">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-center border-collapse text-xs">
                 <thead>
                   <tr class="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 font-bold border-b border-slate-300">
-                    <th rowspan="3" class="p-3 border-r border-slate-300/40">No.</th>
-                    <th rowspan="3" class="p-3 text-left border-r border-slate-300/40 min-w-[200px]">Nama Jenis/ Persilangan/ Varietas</th>
+                    <th rowspan="3" class="p-3 border-r border-slate-200/40">No.</th>
+                    <th rowspan="3" class="p-3 text-left border-r border-slate-200/40 min-w-[200px]">Nama Jenis/ Persilangan/ Varietas</th>
                     <th colspan="2" class="p-2 border-b border-r border-slate-300/40">Stok Awal</th>
                     <th rowspan="3" class="p-2 border-r border-slate-300/40">Asal-usul Induk</th>
                     <th colspan="5" class="p-2 border-b border-r border-slate-300/40">Jumlah Mutasi Bulan Ini</th>
@@ -615,7 +614,7 @@
 
           <!-- History Audit Log -->
           <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
-            <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-3"><i class="fa-solid fa-list-check mr-2 text-violet-500"></i>Log Riwayat Transaksi Mutasi Lapangan</h4>
+            <h4 class="font-bold text-sm text-slate-800 dark:text-white mb-3 flex items-center gap-2"><i class="fa-solid fa-list-check text-violet-500"></i>Log Riwayat Transaksi Mutasi Lapangan</h4>
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs border-collapse">
                 <thead>
@@ -625,11 +624,11 @@
                     <th class="p-3">Sifat Transaksi</th>
                     <th class="p-3">Klasifikasi</th>
                     <th class="p-3">Jenis Aktivitas</th>
-                    <th class="p-3">Jumlah</th>
+                    <th class="p-3 text-center">Jumlah</th>
                     <th class="p-3">No. BA / Dokumen</th>
                     <th class="p-3">Tanggal</th>
-                    <th class="p-3">Petugas Lapangan</th>
-                    <th class="p-3 text-center">Aksi</th>
+                    <th class="p-3">Petugas</th>
+                    <th class="p-3 text-center">Tindakan</th>
                   </tr>
                 </thead>
                 <tbody id="mutasi-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/30">
@@ -661,26 +660,26 @@
       <input type="hidden" id="ms-id-hidden">
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Nama Indonesia</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nama Indonesia</label>
           <input type="text" id="ms-nama" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Nama Latin (Spesies)</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nama Latin (Spesies)</label>
           <input type="text" id="ms-latin" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" required>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Kelas Satwa</label>
-          <select id="ms-kelas" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Kelas Satwa</label>
+          <select id="ms-kelas" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500">
             <option value="Aves">Aves</option>
             <option value="Mamalia">Mamalia</option>
             <option value="Reptil">Reptil</option>
           </select>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Status Perlindungan</label>
-          <select id="ms-status" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Status Perlindungan</label>
+          <select id="ms-status" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500">
             <option value="Dilindungi">Dilindungi Undang-Undang</option>
             <option value="Tidak Dilindungi">Tidak Dilindungi</option>
             <option value="Eksotis">Eksotis</option>
@@ -690,12 +689,12 @@
       
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Jumlah Induk Awal</label>
-          <input type="number" id="ms-induk-awal" oninput="adjustGenderInputFields()" min="0" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Jumlah Induk Awal</label>
+          <input type="number" id="ms-induk-awal" oninput="adjustGenderInputFields()" min="0" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Jumlah Anakan Awal</label>
-          <input type="number" id="ms-anakan-awal" oninput="adjustGenderInputFields()" min="0" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Jumlah Anakan Awal</label>
+          <input type="number" id="ms-anakan-awal" oninput="adjustGenderInputFields()" min="0" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-1 focus:ring-brand-500" required>
         </div>
       </div>
 
@@ -705,21 +704,21 @@
 
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Kandang</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Kandang</label>
           <input type="text" id="ms-kandang" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Asal-Usul / Perolehan</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Asal-Usul / Perolehan</label>
           <input type="text" id="ms-asal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div>
-        <label class="block text-xs font-bold mb-1.5">Keterangan / Kondisi Fisik</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Keterangan / Kondisi Fisik</label>
         <textarea id="ms-keterangan" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" rows="2"></textarea>
       </div>
       <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
         <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Data</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan Data</button>
       </div>
     </form>
   </div>
@@ -727,23 +726,24 @@
   <!-- 2. MODAL TAMBAH KELAHIRAN -->
   <div id="add-kelahiran-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
-      <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400"><i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa</h3>
+      <h3 id="modal-kelahiran-title" class="font-bold text-lg text-blue-600 dark:text-blue-400"><i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa</h3>
       <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="add-kelahiran-form" onsubmit="handleSaveKelahiran(event)" class="space-y-4">
+      <input type="hidden" id="kl-id-hidden">
       <div>
-        <label class="block text-xs font-bold mb-1.5">Pilih Spesies Induk</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Pilih Spesies Induk</label>
         <select id="kl-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
           <!-- Dynamic -->
         </select>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Tanggal Kelahiran / Masuk LK</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Tanggal Kelahiran / Masuk LK</label>
           <input type="date" id="kl-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Jumlah Lahir (Ekor) - Masuk ke Anakan</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Jumlah Lahir (Ekor)</label>
           <input type="number" id="kl-jumlah" oninput="adjustBirthGenderInputFields()" min="1" value="1" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
@@ -754,17 +754,17 @@
 
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Nomor Band / Tag ID</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nomor Band / Tag ID</label>
           <input type="text" id="kl-tag" value="Noband" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Keterangan Kondisi Anak</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Keterangan Kondisi Anak</label>
           <input type="text" id="kl-keterangan" value="Sehat secara klinis" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
         <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Kelahiran</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan Kelahiran</button>
       </div>
     </form>
   </div>
@@ -772,46 +772,47 @@
   <!-- 3. MODAL TAMBAH KEMATIAN -->
   <div id="add-kematian-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
-      <h3 class="font-bold text-lg text-rose-500"><i class="fa-solid fa-skull-crossbones mr-2"></i>Catat Kematian Satwa</h3>
+      <h3 id="modal-kematian-title" class="font-bold text-lg text-rose-500"><i class="fa-solid fa-skull-crossbones mr-2"></i>Catat Kematian Satwa</h3>
       <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="add-kematian-form" onsubmit="handleSaveKematian(event)" class="space-y-4">
+      <input type="hidden" id="km-id-hidden">
       <div>
-        <label class="block text-xs font-bold mb-1.5">Pilih Spesies</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Pilih Spesies</label>
         <select id="km-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
           <!-- Dynamic -->
         </select>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Klasifikasi Umur</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Klasifikasi Umur</label>
           <select id="km-kategori" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Induk">Induk (Dewasa)</option>
             <option value="Anakan">Anakan (Remaja/Bayi)</option>
           </select>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Jumlah Kematian (Ekor)</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Jumlah Kematian (Ekor)</label>
           <input type="number" id="km-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Tanggal Kematian</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Tanggal Kematian</label>
           <input type="date" id="km-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Penyebab / Keterangan Nekropsi</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Penyebab / Keterangan Nekropsi</label>
           <input type="text" id="km-sebab" value="Sakit" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div>
-        <label class="block text-xs font-bold mb-1.5">Nomor BAP Kematian BKSDA</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nomor BAP Kematian BKSDA</label>
         <input type="text" id="km-bap" value="-" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
       </div>
       <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
         <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold">Simpan Kematian</button>
+        <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan Kematian</button>
       </div>
     </form>
   </div>
@@ -819,46 +820,47 @@
   <!-- 4. MODAL TAMBAH TITIPAN -->
   <div id="add-titipan-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
-      <h3 class="font-bold text-lg text-amber-500"><i class="fa-solid fa-handshake-angle mr-2"></i>Catat Satwa Titipan BKSDA</h3>
+      <h3 id="modal-titipan-title" class="font-bold text-lg text-amber-500"><i class="fa-solid fa-handshake-angle mr-2"></i>Catat Satwa Titipan BKSDA</h3>
       <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="add-titipan-form" onsubmit="handleSaveTitipan(event)" class="space-y-4">
+      <input type="hidden" id="tp-id-hidden">
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Nomor Dokumen BAP</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nomor Dokumen BAP</label>
           <input type="text" id="tp-bap" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" placeholder="BA.30/K.18-SKW.3..." required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Instansi Pemilik</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Instansi Pemilik</label>
           <input type="text" id="tp-asal" value="BKSDA Kalimantan Timur" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div>
-        <label class="block text-xs font-bold mb-1.5">Pilih Spesies</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Pilih Spesies</label>
         <select id="tp-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
           <!-- Dynamic -->
         </select>
       </div>
       <div class="grid grid-cols-3 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Klasifikasi</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Klasifikasi</label>
           <select id="tp-kategori" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Induk">Induk (Dewasa)</option>
             <option value="Anakan">Anakan (Muda)</option>
           </select>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Jumlah (Ekor)</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Jumlah (Ekor)</label>
           <input type="number" id="tp-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Tanggal Penitipan</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Tanggal Penitipan</label>
           <input type="date" id="tp-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
         <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Data Titipan</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan Data Titipan</button>
       </div>
     </form>
   </div>
@@ -866,19 +868,20 @@
   <!-- 5. MODAL TAMBAH MUTASI -->
   <div id="add-mutasi-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
-      <h3 class="font-bold text-lg text-violet-500"><i class="fa-solid fa-route mr-2"></i>Catat Pemindahan & Mutasi</h3>
+      <h3 id="modal-mutasi-title" class="font-bold text-lg text-violet-500"><i class="fa-solid fa-route mr-2"></i>Catat Pemindahan & Mutasi</h3>
       <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="add-mutasi-form" onsubmit="handleSaveMutasi(event)" class="space-y-4">
+      <input type="hidden" id="mt-id-hidden">
       <div>
-        <label class="block text-xs font-bold mb-1.5">Pilih Satwa</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Pilih Satwa</label>
         <select id="mt-satwa" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
           <!-- Dynamic -->
         </select>
       </div>
       <div class="grid grid-cols-3 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Klasifikasi Mutasi</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Klasifikasi Mutasi</label>
           <select id="mt-jenis" onchange="handleMutationTypeChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Mutasi Penitipan">Mutasi Penitipan</option>
             <option value="Barter Masuk">Barter Masuk (LK)</option>
@@ -889,7 +892,7 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Sifat Transaksi</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Sifat Transaksi</label>
           <select id="mt-tipe" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Penambahan">Penambahan (+)</option>
             <option value="Pengurangan">Pengurangan (-)</option>
@@ -906,35 +909,35 @@
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Lokasi Asal / Dari</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Lokasi Asal / Dari</label>
           <input type="text" id="mt-asal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Lokasi Baru / Ke</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Lokasi Baru / Ke</label>
           <input type="text" id="mt-tujuan" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div class="grid grid-cols-3 gap-3">
         <div>
-          <label class="block text-xs font-bold mb-1.5">Jumlah Satwa (Ekor)</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Jumlah Satwa (Ekor)</label>
           <input type="number" id="mt-jumlah" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Tanggal Mutasi</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Tanggal Mutasi</label>
           <input type="date" id="mt-tanggal" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
         <div>
-          <label class="block text-xs font-bold mb-1.5">Nomor BA Mutasi / BAP</label>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nomor BA Mutasi / BAP</label>
           <input type="text" id="mt-bap" value="BA.Mutasi-" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
       </div>
       <div>
-        <label class="block text-xs font-bold mb-1.5">Petugas Lapangan / Kurator Penanggung Jawab</label>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Petugas Lapangan / Kurator Penanggung Jawab</label>
         <input type="text" id="mt-petugas" value="Yonas Adestira Ichti" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
       </div>
       <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
         <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold">Simpan Mutasi</button>
+        <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan Mutasi</button>
       </div>
     </form>
   </div>
@@ -970,7 +973,7 @@
       <div id="cp-error" class="hidden text-xs text-rose-500 font-semibold bg-rose-50 dark:bg-rose-950/20 px-3 py-2 rounded-lg"></div>
       <div class="pt-2 flex justify-end gap-2">
         <button type="button" onclick="closeChangePinModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
-        <button type="button" onclick="handleChangePin(event)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold">Simpan PIN Baru</button>
+        <button type="button" onclick="handleChangePin(event)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan PIN Baru</button>
       </div>
     </form>
   </div>
@@ -1066,7 +1069,7 @@
       const container = document.getElementById("toast-container");
       if (!container) return;
       const toast = document.createElement("div");
-      toast.className = `p-4 rounded-xl shadow-lg border text-xs font-bold transition-all duration-300 transform translate-y-2 pointer-events-auto flex items-center gap-2 ${
+      toast.className = `p-4 rounded-2xl shadow-xl border text-xs font-bold transition-all duration-300 transform translate-y-2 pointer-events-auto flex items-center gap-2 ${
         type === "success" 
           ? "bg-emerald-500/90 text-white border-emerald-400" 
           : "bg-rose-500/90 text-white border-rose-400"
@@ -1204,6 +1207,30 @@
       if (sidebar) {
         sidebar.classList.toggle('hidden');
       }
+    }
+
+    // --- FORM PARSER JENIS KELAMIN ANAK ---
+    function parseGenderValue(genderStr, totalCount = 0) {
+      let jantan = 0, betina = 0, unknown = 0;
+      if (!genderStr) return { jantan, betina, unknown };
+
+      if (genderStr.includes('♂') || genderStr.includes('♀') || genderStr.includes('Unknown') || genderStr.includes('Unk')) {
+        const parts = genderStr.split(' ');
+        for (let i = 0; i < parts.length; i++) {
+          const val = parseInt(parts[i]);
+          if (!isNaN(val)) {
+            const label = parts[i + 1] || "";
+            if (label.includes('♂')) jantan = val;
+            else if (label.includes('♀')) betina = val;
+            else if (label.includes('Unknown') || label.includes('Unk')) unknown = val;
+          }
+        }
+      } else {
+        if (genderStr.toLowerCase().includes("jantan")) jantan = totalCount;
+        else if (genderStr.toLowerCase().includes("betina")) betina = totalCount;
+        else unknown = totalCount;
+      }
+      return { jantan, betina, unknown };
     }
 
     function getRecalculatedSatwa(satwa) {
@@ -1381,8 +1408,8 @@
           <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">${recalc.kandang}</td>
           <td class="p-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
-              <button onclick="editSatwa('${recalc.id}')" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-colors"><i class="fa-solid fa-pen-to-square"></i></button>
-              <button onclick="deleteSatwa('${recalc.id}')" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+              <button onclick="editSatwa('${recalc.id}')" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all transform hover:scale-110" title="Ubah Data"><i class="fa-solid fa-pencil text-sm"></i></button>
+              <button onclick="deleteSatwa('${recalc.id}')" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-all transform hover:scale-110" title="Hapus"><i class="fa-solid fa-trash text-sm"></i></button>
             </div>
           </td>
         `;
@@ -1403,10 +1430,13 @@
           <td class="p-4 text-slate-600 dark:text-slate-300 font-semibold">${item.tanggal}</td>
           <td class="p-4 text-center font-extrabold text-emerald-500">${item.jumlah}</td>
           <td class="p-4"><span class="px-2 py-1 bg-slate-100 dark:bg-slate-950 text-xs rounded border border-slate-200 dark:border-slate-800">${item.tag}</span></td>
-          <td class="p-4 text-slate-500">${item.kelamin || '-'}</td>
+          <td class="p-4 text-slate-500 font-semibold">${item.kelamin || '-'}</td>
           <td class="p-4 text-slate-500 italic">${item.ket}</td>
           <td class="p-4 text-center">
-            <button onclick="deleteKelahiran(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="editKelahiran(${index})" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
+              <button onclick="deleteKelahiran(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </td>
         `;
         tbody.appendChild(row);
@@ -1429,7 +1459,10 @@
           <td class="p-4 text-slate-500 font-semibold">${item.sebab}</td>
           <td class="p-4 font-mono text-xs text-slate-400">${item.bap}</td>
           <td class="p-4 text-center">
-            <button onclick="deleteKematian(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="editKematian(${index})" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
+              <button onclick="deleteKematian(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </td>
         `;
         tbody.appendChild(row);
@@ -1453,7 +1486,10 @@
           <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">${item.asal}</td>
           <td class="p-4"><span class="px-2 py-1 text-xs font-bold rounded-lg bg-amber-500 text-white">${item.status}</span></td>
           <td class="p-4 text-center">
-            <button onclick="deleteTitipan(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="editTitipan(${index})" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
+              <button onclick="deleteTitipan(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </td>
         `;
         tbody.appendChild(row);
@@ -1483,7 +1519,10 @@
           <td class="p-3 text-slate-400">${item.tanggal}</td>
           <td class="p-3 text-slate-400">${item.petugas}</td>
           <td class="p-3 text-center">
-            <button onclick="deleteMutasi(${index})" class="p-1 text-rose-500 hover:bg-rose-50 rounded"><i class="fa-solid fa-trash"></i></button>
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="editMutasi(${index})" class="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
+              <button onclick="deleteMutasi(${index})" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </td>
         `;
         tbody.appendChild(row);
@@ -1566,7 +1605,7 @@
     function openAddSatwaModal() {
       document.getElementById("add-satwa-form").reset();
       document.getElementById("ms-id-hidden").value = "";
-      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-circle-plus mr-2"></i>Registrasi Satwa Baru`;
+      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-circle-plus mr-2 text-blue-500"></i>Registrasi Satwa Baru`;
       document.getElementById("gender-input-container").innerHTML = "";
       openModal("add-satwa-modal");
     }
@@ -1586,9 +1625,100 @@
       document.getElementById("ms-asal").value = item.asal;
       document.getElementById("ms-keterangan").value = item.keterangan || "";
 
-      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Registrasi Satwa`;
+      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-pencil mr-2 text-blue-500"></i>Edit Registrasi Satwa`;
       adjustGenderInputFields();
+
+      // Isi rasio kelamin dari string jika ada
+      const breakdown = parseGenderValue(item.kelamin, (parseInt(item.induk_awal) + parseInt(item.anakan_awal)));
+      setTimeout(() => {
+        const j = document.getElementById("ms-jantan");
+        const b = document.getElementById("ms-betina");
+        const u = document.getElementById("ms-unknown");
+        if (j) j.value = breakdown.jantan;
+        if (b) b.value = breakdown.betina;
+        if (u) u.value = breakdown.unknown;
+      }, 50);
+
       openModal("add-satwa-modal");
+    }
+
+    function editKelahiran(index) {
+      const item = localDB.kelahiran[index];
+      if (!item) return;
+
+      document.getElementById("kl-id-hidden").value = index;
+      document.getElementById("kl-satwa").value = item.nama;
+      document.getElementById("kl-tanggal").value = item.tanggal;
+      document.getElementById("kl-jumlah").value = item.jumlah;
+      document.getElementById("kl-tag").value = item.tag;
+      document.getElementById("kl-keterangan").value = item.ket;
+
+      document.getElementById("modal-kelahiran-title").innerHTML = `<i class="fa-solid fa-pencil mr-2 text-emerald-500"></i>Edit Catatan Kelahiran`;
+      adjustBirthGenderInputFields();
+
+      const breakdown = parseGenderValue(item.kelamin, item.jumlah);
+      setTimeout(() => {
+        const j = document.getElementById("kl-jantan");
+        const b = document.getElementById("kl-betina");
+        const u = document.getElementById("kl-unknown");
+        if (j) j.value = breakdown.jantan;
+        if (b) b.value = breakdown.betina;
+        if (u) u.value = breakdown.unknown;
+      }, 50);
+
+      openModal("add-kelahiran-modal");
+    }
+
+    function editKematian(index) {
+      const item = localDB.kematian[index];
+      if (!item) return;
+
+      document.getElementById("km-id-hidden").value = index;
+      document.getElementById("km-satwa").value = item.nama;
+      document.getElementById("km-kategori").value = item.kategori;
+      document.getElementById("km-jumlah").value = item.jumlah;
+      document.getElementById("km-tanggal").value = item.tanggal;
+      document.getElementById("km-sebab").value = item.sebab;
+      document.getElementById("km-bap").value = item.bap;
+
+      document.getElementById("modal-kematian-title").innerHTML = `<i class="fa-solid fa-pencil mr-2 text-rose-500"></i>Edit Catatan Kematian`;
+      openModal("add-kematian-modal");
+    }
+
+    function editTitipan(index) {
+      const item = localDB.titipan[index];
+      if (!item) return;
+
+      document.getElementById("tp-id-hidden").value = index;
+      document.getElementById("tp-bap").value = item.bap;
+      document.getElementById("tp-asal").value = item.asal;
+      document.getElementById("tp-satwa").value = item.nama;
+      document.getElementById("tp-kategori").value = item.kategori;
+      document.getElementById("tp-jumlah").value = item.jumlah;
+      document.getElementById("tp-tanggal").value = item.tanggal;
+
+      document.getElementById("modal-titipan-title").innerHTML = `<i class="fa-solid fa-pencil mr-2 text-amber-500"></i>Edit Catatan Titipan`;
+      openModal("add-titipan-modal");
+    }
+
+    function editMutasi(index) {
+      const item = localDB.mutasi[index];
+      if (!item) return;
+
+      document.getElementById("mt-id-hidden").value = index;
+      document.getElementById("mt-satwa").value = item.nama;
+      document.getElementById("mt-jenis").value = item.jenis;
+      document.getElementById("mt-tipe").value = item.tipe;
+      document.getElementById("mt-kategori").value = item.kategori;
+      document.getElementById("mt-asal").value = item.asal;
+      document.getElementById("mt-tujuan").value = item.tujuan;
+      document.getElementById("mt-jumlah").value = item.jumlah;
+      document.getElementById("mt-tanggal").value = item.tanggal;
+      document.getElementById("mt-bap").value = item.bap;
+      document.getElementById("mt-petugas").value = item.petugas;
+
+      document.getElementById("modal-mutasi-title").innerHTML = `<i class="fa-solid fa-pencil mr-2 text-violet-500"></i>Edit Transaksi Mutasi`;
+      openModal("add-mutasi-modal");
     }
 
     function closeAllModals() {
@@ -1632,6 +1762,8 @@
 
     function openAddKelahiranModal() {
       document.getElementById("add-kelahiran-form").reset();
+      document.getElementById("kl-id-hidden").value = "";
+      document.getElementById("modal-kelahiran-title").innerHTML = `<i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa`;
       adjustBirthGenderInputFields();
       openModal("add-kelahiran-modal");
     }
@@ -1711,7 +1843,7 @@
         const idx = localDB.master.findIndex(x => x.id === idHidden);
         if (idx !== -1) {
           localDB.master[idx] = { ...localDB.master[idx], nama, latin, kelas, status, induk_awal: induk, anakan_awal: anak, kandang, asal, kelamin: kelaminStr, keterangan };
-          showToast("Data satwa berhasil diperbarui!");
+          showToast("Data master satwa berhasil diperbarui!");
         }
       } else {
         const newId = "REG-" + String(localDB.master.length + 1).padStart(3, "0");
@@ -1727,6 +1859,7 @@
 
     function handleSaveKelahiran(e) {
       e.preventDefault();
+      const idHidden = document.getElementById("kl-id-hidden").value;
       const nama = document.getElementById("kl-satwa").value;
       const tanggal = document.getElementById("kl-tanggal").value;
       const jumlah = parseInt(document.getElementById("kl-jumlah").value) || 0;
@@ -1743,18 +1876,33 @@
 
       const parent = localDB.master.find(x => x.nama === nama);
 
-      localDB.kelahiran.push({
-        nama,
-        latin: parent ? parent.latin : "",
-        kelas: parent ? parent.kelas : "",
-        jumlah,
-        tag,
-        tanggal,
-        kelamin: kelaminStr || "Unknown",
-        ket
-      });
+      if (idHidden !== "") {
+        const idx = parseInt(idHidden);
+        localDB.kelahiran[idx] = {
+          nama,
+          latin: parent ? parent.latin : "",
+          kelas: parent ? parent.kelas : "",
+          jumlah,
+          tag,
+          tanggal,
+          kelamin: kelaminStr || "Unknown",
+          ket
+        };
+        showToast("Data kelahiran satwa berhasil diperbarui!");
+      } else {
+        localDB.kelahiran.push({
+          nama,
+          latin: parent ? parent.latin : "",
+          kelas: parent ? parent.kelas : "",
+          jumlah,
+          tag,
+          tanggal,
+          kelamin: kelaminStr || "Unknown",
+          ket
+        });
+        showToast("Berita acara kelahiran berhasil didokumentasikan!");
+      }
 
-      showToast("Berita acara kelahiran berhasil didokumentasikan!");
       closeAllModals();
       updateDashboardStats();
       renderAllTables();
@@ -1763,6 +1911,7 @@
 
     function handleSaveKematian(e) {
       e.preventDefault();
+      const idHidden = document.getElementById("km-id-hidden").value;
       const nama = document.getElementById("km-satwa").value;
       const kategori = document.getElementById("km-kategori").value;
       const jumlah = parseInt(document.getElementById("km-jumlah").value) || 0;
@@ -1772,17 +1921,31 @@
 
       const parent = localDB.master.find(x => x.nama === nama);
 
-      localDB.kematian.push({
-        nama,
-        latin: parent ? parent.latin : "",
-        kategori,
-        jumlah,
-        tanggal,
-        sebab,
-        bap
-      });
+      if (idHidden !== "") {
+        const idx = parseInt(idHidden);
+        localDB.kematian[idx] = {
+          nama,
+          latin: parent ? parent.latin : "",
+          kategori,
+          jumlah,
+          tanggal,
+          sebab,
+          bap
+        };
+        showToast("Data kematian satwa berhasil diperbarui!");
+      } else {
+        localDB.kematian.push({
+          nama,
+          latin: parent ? parent.latin : "",
+          kategori,
+          jumlah,
+          tanggal,
+          sebab,
+          bap
+        });
+        showToast("Pencatatan Berita Acara Kematian disimpan!");
+      }
 
-      showToast("Pencatatan Berita Acara Kematian disimpan!");
       closeAllModals();
       updateDashboardStats();
       renderAllTables();
@@ -1791,6 +1954,7 @@
 
     function handleSaveTitipan(e) {
       e.preventDefault();
+      const idHidden = document.getElementById("tp-id-hidden").value;
       const bap = document.getElementById("tp-bap").value.trim();
       const asal = document.getElementById("tp-asal").value.trim();
       const nama = document.getElementById("tp-satwa").value;
@@ -1800,18 +1964,33 @@
 
       const parent = localDB.master.find(x => x.nama === nama);
 
-      localDB.titipan.push({
-        bap,
-        nama,
-        latin: parent ? parent.latin : "",
-        kategori,
-        tanggal,
-        jumlah,
-        asal,
-        status: "Titipan"
-      });
+      if (idHidden !== "") {
+        const idx = parseInt(idHidden);
+        localDB.titipan[idx] = {
+          bap,
+          nama,
+          latin: parent ? parent.latin : "",
+          kategori,
+          tanggal,
+          jumlah,
+          asal,
+          status: "Titipan"
+        };
+        showToast("Data titipan satwa berhasil diperbarui!");
+      } else {
+        localDB.titipan.push({
+          bap,
+          nama,
+          latin: parent ? parent.latin : "",
+          kategori,
+          tanggal,
+          jumlah,
+          asal,
+          status: "Titipan"
+        });
+        showToast("Dokumen Berita Acara penitipan berhasil direkam!");
+      }
 
-      showToast("Dokumen Berita Acara penitipan berhasil direkam!");
       closeAllModals();
       updateDashboardStats();
       renderAllTables();
@@ -1820,6 +1999,7 @@
 
     function handleSaveMutasi(e) {
       e.preventDefault();
+      const idHidden = document.getElementById("mt-id-hidden").value;
       const nama = document.getElementById("mt-satwa").value;
       const jenis = document.getElementById("mt-jenis").value;
       const tipe = document.getElementById("mt-tipe").value;
@@ -1831,23 +2011,40 @@
       const bap = document.getElementById("mt-bap").value.trim();
       const petugas = document.getElementById("mt-petugas").value.trim();
 
-      const newId = "MUT-" + String(localDB.mutasi.length + 1).padStart(3, "0");
+      if (idHidden !== "") {
+        const idx = parseInt(idHidden);
+        localDB.mutasi[idx] = {
+          ...localDB.mutasi[idx],
+          nama,
+          jenis,
+          tipe,
+          kategori,
+          asal,
+          tujuan,
+          jumlah,
+          tanggal,
+          bap,
+          petugas
+        };
+        showToast("Data mutasi satwa berhasil diperbarui!");
+      } else {
+        const newId = "MUT-" + String(localDB.mutasi.length + 1).padStart(3, "0");
+        localDB.mutasi.push({
+          id: newId,
+          nama,
+          jenis,
+          tipe,
+          kategori,
+          asal,
+          tujuan,
+          jumlah,
+          tanggal,
+          bap,
+          petugas
+        });
+        showToast("Riwayat transaksi mutasi lapangan terekam!");
+      }
 
-      localDB.mutasi.push({
-        id: newId,
-        nama,
-        jenis,
-        tipe,
-        kategori,
-        asal,
-        tujuan,
-        jumlah,
-        tanggal,
-        bap,
-        petugas
-      });
-
-      showToast("Riwayat transaksi mutasi lapangan terekam!");
       closeAllModals();
       updateDashboardStats();
       renderAllTables();
@@ -1957,7 +2154,25 @@
 
         const isDark = document.documentElement.classList.contains('dark');
         const textColor = isDark ? '#cbd5e1' : '#334155';
-        const gridColor = isDark ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.8)';
+        const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+        // Menghitung data historis bulanan secara real-time dari data lokal
+        const birthsCount = [0, 0, 1, 0, 0, 1]; // Baseline kurva
+        const deathsCount = [0, 0, 0, 0, 1, 0]; // Baseline kurva
+
+        localDB.kelahiran.forEach(k => {
+          if (k.tanggal) {
+            const m = new Date(k.tanggal).getMonth();
+            if (m >= 0 && m < 6) birthsCount[m] += (parseInt(k.jumlah) || 0);
+          }
+        });
+
+        localDB.kematian.forEach(km => {
+          if (km.tanggal) {
+            const m = new Date(km.tanggal).getMonth();
+            if (m >= 0 && m < 6) deathsCount[m] += (parseInt(km.jumlah) || 0);
+          }
+        });
 
         const ctx1 = document.getElementById('populasiChart');
         if (ctx1) {
@@ -1967,19 +2182,19 @@
               labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
               datasets: [
                 {
-                  label: 'Induk (Dewasa)',
-                  data: [72, 74, 75, 78, 81, 83],
-                  borderColor: '#3b82f6',
-                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  label: 'Kelahiran Baru',
+                  data: birthsCount,
+                  borderColor: '#10b981',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
                   borderWidth: 3,
                   tension: 0.4,
                   fill: true
                 },
                 {
-                  label: 'Anakan (Remaja)',
-                  data: [8, 9, 11, 10, 12, 14],
-                  borderColor: '#10b981',
-                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  label: 'Kematian Satwa',
+                  data: deathsCount,
+                  borderColor: '#f43f5e',
+                  backgroundColor: 'rgba(244, 63, 94, 0.1)',
                   borderWidth: 3,
                   tension: 0.4,
                   fill: true
@@ -2038,15 +2253,17 @@
     }
 
     window.onload = function() {
-      // 1. Inisialisasi Live Clock
-      setInterval(() => {
+      // 1. Inisialisasi Live Clock tanpa delay/pulsing agresif
+      const runClock = () => {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
         const clockEl = document.getElementById("live-clock");
         if (clockEl) {
           clockEl.textContent = now.toLocaleDateString("id-ID", options) + " WITA";
         }
-      }, 1000);
+      };
+      runClock();
+      setInterval(runClock, 1000);
 
       // 2. Terapkan Tema Tersimpan
       const savedTheme = SafeStorage.getItem('ekurator_theme') || "dark";
