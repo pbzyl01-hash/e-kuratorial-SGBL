@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Conservasi</title>
+  <title>e-Kuratorial Satwa - Sistem Informasi Koleksi Lembaga Konservasi</title>
   
   <link class="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1Rl8nYaQcGc120i81Txyl4l5wFZ-lB1oj&sz=w100">
   
@@ -34,8 +34,20 @@
     }
   </script>
   
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js untuk visualisasi data -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    /* === CRITICAL: Login / App toggle === */
+    /* MEMASTIKAN FONT SEBELUMNYA (PLUS JAKARTA SANS) DIGUNAKAN DI SELURUH ELEMEN SECARA KHUSUS */
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+
+    /* === login/layout screen display toggling === */
     body #login-screen              { display: flex !important; }
     body #main-layout               { display: none !important; }
     body #login-screen.app-hidden   { display: none !important; }
@@ -81,13 +93,16 @@
       transform: translateY(-3px);
       box-shadow: 0 20px 40px -5px rgba(59, 130, 246, 0.15);
     }
-  </style>
 
-  <!-- Google Fonts & FontAwesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    /* Custom Scrollbar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </head>
 
 <body class="bg-slate-50 dark:bg-obsidian-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
@@ -245,7 +260,7 @@
       <main class="flex-1 p-6 space-y-6">
 
         <!-- 1. DASHBOARD TAB -->
-        <section id="tab-dashboard" class="space-y-6 fade-in">
+        <section id="tab-dashboard" class="space-y-6">
           <!-- Grid Populasi Premium -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Total Populasi -->
@@ -375,7 +390,7 @@
         </section>
 
         <!-- 2. DATA MASTER SATWA TAB -->
-        <section id="tab-master" class="space-y-6 hidden fade-in">
+        <section id="tab-master" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-wrap gap-3 items-center">
             <div class="relative flex-1 min-w-[180px]">
               <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
@@ -427,7 +442,7 @@
         </section>
 
         <!-- 3. KELAHIRAN SATWA TAB -->
-        <section id="tab-kelahiran" class="space-y-6 hidden fade-in">
+        <section id="tab-kelahiran" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
               <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kelahiran Satwa</h3>
@@ -462,7 +477,7 @@
         </section>
 
         <!-- 4. KEMATIAN SATWA TAB -->
-        <section id="tab-kematian" class="space-y-6 hidden fade-in">
+        <section id="tab-kematian" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
               <h3 class="font-bold text-lg text-slate-800 dark:text-white">Histori Kematian Satwa</h3>
@@ -497,7 +512,7 @@
         </section>
 
         <!-- 5. SATWA TITIPAN TAB -->
-        <section id="tab-titipan" class="space-y-6 hidden fade-in">
+        <section id="tab-titipan" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
               <h3 class="font-bold text-lg text-slate-800 dark:text-white">Satwa Titipan BKSDA & Instansi Lain</h3>
@@ -533,7 +548,7 @@
         </section>
 
         <!-- 6. MUTASI SATWA TAB -->
-        <section id="tab-mutasi" class="space-y-6 hidden fade-in">
+        <section id="tab-mutasi" class="space-y-6 hidden">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
               <h3 class="font-bold text-lg text-slate-800 dark:text-white">Rekapitulasi Mutasi & Dinamika Satwa (BKSDA)</h3>
@@ -622,7 +637,7 @@
   <!-- MODAL BACKDROP -->
   <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-40 hidden flex items-center justify-center p-4"></div>
 
-  <!-- 1. MODAL REGISTER/EDIT SATWA MASTER (Dengan isian input jenis kelamin detail) -->
+  <!-- 1. MODAL REGISTER/EDIT SATWA MASTER -->
   <div id="add-satwa-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
       <h3 id="modal-satwa-title" class="font-bold text-lg text-blue-600 dark:text-blue-400"><i class="fa-solid fa-circle-plus mr-2"></i>Registrasi Satwa Baru</h3>
@@ -670,9 +685,8 @@
         </div>
       </div>
 
-      <!-- TEMPAT INPUT GENDER DINAMIS BERDASARKAN TOTAL INDUK/ANAK -->
       <div id="gender-input-container" class="bg-slate-50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300">
-        <!-- Terisi secara otomatis melalui Javascript -->
+        <!-- Dinamis -->
       </div>
 
       <div class="grid grid-cols-2 gap-3">
@@ -696,7 +710,7 @@
     </form>
   </div>
 
-  <!-- 2. MODAL TAMBAH KELAHIRAN (Dengan inputan jenis kelamin anak yang dinamis) -->
+  <!-- 2. MODAL TAMBAH KELAHIRAN -->
   <div id="add-kelahiran-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
       <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400"><i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa</h3>
@@ -720,9 +734,8 @@
         </div>
       </div>
 
-      <!-- TEMPAT INPUT GENDER DINAMIS ANAK -->
       <div id="birth-gender-container" class="bg-slate-50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300">
-        <!-- Terisi secara otomatis melalui Javascript -->
+        <!-- Dinamis -->
       </div>
 
       <div class="grid grid-cols-2 gap-3">
@@ -836,7 +849,7 @@
     </form>
   </div>
 
-  <!-- 5. MODAL TAMBAH MUTASI (Dengan sinkronisasi otomatis tipe sifat transaksi) -->
+  <!-- 5. MODAL TAMBAH MUTASI -->
   <div id="add-mutasi-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
       <h3 class="font-bold text-lg text-violet-500"><i class="fa-solid fa-route mr-2"></i>Catat Pemindahan & Mutasi</h3>
@@ -852,7 +865,6 @@
       <div class="grid grid-cols-3 gap-3">
         <div>
           <label class="block text-xs font-bold mb-1.5">Klasifikasi Mutasi</label>
-          <!-- KLASIFIKASI ONCHANGE UNTUK AUTO-SET SIFAT TRANSAKSI -->
           <select id="mt-jenis" onchange="handleMutationTypeChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Mutasi Penitipan">Mutasi Penitipan</option>
             <option value="Barter Masuk">Barter Masuk (LK)</option>
@@ -953,11 +965,9 @@
   <script>
     const API_URL = "";
 
-    // Deklarasi global instance grafik agar tidak memicu ReferenceError pada renderCharts()
     let populationChartInstance = null;
     let proporsiChartInstance = null;
 
-    // --- SECURE STORAGE WRAPPER ENGINE ---
     const SafeStorage = {
       getItem(key) {
         try {
@@ -976,7 +986,6 @@
       fallback: {}
     };
 
-    // --- RE-ARCHITECTURE DATA MODEL: INDUK & ANAKAN SEPERTI FORMAT RESMI BKSDA ---
     let localDB = {
       master: JSON.parse(SafeStorage.getItem('sgbl_master')) || [
         { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", induk_awal: 18, anakan_awal: 2, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan Negara (BKSDA)", generasi: "F0", kelamin: "18 ♂, 2 ♀", keterangan: "Kondisi Sehat" },
@@ -989,8 +998,8 @@
         { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", induk_awal: 8, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", generasi: "F0", kelamin: "8 ♂", keterangan: "Sehat klinis" }
       ],
       kelahiran: JSON.parse(SafeStorage.getItem('sgbl_kelahiran')) || [
-        { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "Noband", tanggal: "2026-03-02", kelamin: "Unknown", ket: "Anak lahir sehat di LK" },
-        { nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 2, tag: "Noband", tanggal: "2026-03-06", kelamin: "2 ♀", ket: "Lahir kembar sehat" }
+        { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "REG-003-N", tanggal: "2026-03-02", kelamin: "Unknown", ket: "Anak lahir sehat di LK" },
+        { nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 2, tag: "REG-004-K", tanggal: "2026-03-06", kelamin: "2 ♀", ket: "Lahir kembar sehat" }
       ],
       kematian: JSON.parse(SafeStorage.getItem('sgbl_kematian')) || [
         { nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kategori: "Induk", jumlah: 1, tanggal: "2026-05-12", sebab: "Sakit tua", bap: "BA.Kematian/021/V/2026" }
@@ -1011,14 +1020,12 @@
       SafeStorage.setItem('sgbl_mutasi', JSON.stringify(localDB.mutasi));
     }
 
-    // Google Apps Script Async synchronization with REST API fallback
     function saveAndSync() {
       saveToLocalStorage();
-      
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(function() {
-            showToast("Database Google Sheets berhasil diselaraskan!", "success");
+            showToast("Database cloud berhasil diselaraskan!", "success");
           })
           .withFailureHandler(function(err) {
             showToast("Sinkronisasi gagal: " + err, "error");
@@ -1041,7 +1048,24 @@
       }
     }
 
-    // PIN Sandi Eye Visibility Toggle
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = `p-4 rounded-xl shadow-lg border text-xs font-bold transition-all duration-300 transform translate-y-2 pointer-events-auto flex items-center gap-2 ${
+        type === "success" 
+          ? "bg-emerald-500/90 text-white border-emerald-400" 
+          : "bg-rose-500/90 text-white border-rose-400"
+      }`;
+      toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.remove("translate-y-2");
+        toast.classList.add("translate-y-0", "opacity-0");
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
     function togglePasswordVisibility() {
       const pinField = document.getElementById("login-password");
       const icon = document.getElementById("password-toggle-icon");
@@ -1065,10 +1089,10 @@
       }
       if (pin === savedPin) {
         errEl.classList.add("hidden");
-        document.getElementById("login-screen").style.setProperty("display","none","important");
+        document.getElementById("login-screen").classList.add("app-hidden");
         
         const ml = document.getElementById("main-layout");
-        ml.style.setProperty("display","flex","important");
+        ml.classList.remove("hidden");
         ml.classList.add("app-visible");
         
         showToast("Selamat bekerja, Kurator!", "success");
@@ -1085,11 +1109,11 @@
 
     function handleLogout() {
       const ml = document.getElementById("main-layout");
-      ml.style.setProperty("display","none","important");
       ml.classList.remove("app-visible");
+      ml.classList.add("hidden");
       
       const ls = document.getElementById("login-screen");
-      ls.style.setProperty("display","flex","important");
+      ls.classList.remove("app-hidden");
       
       const passwordEl = document.getElementById("login-password");
       if (passwordEl) { passwordEl.value = ""; passwordEl.type = "password"; }
@@ -1097,6 +1121,13 @@
       
       window.scrollTo(0,0);
       showToast("Berhasil keluar dari sesi.", "success");
+    }
+
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+      applyTheme(!isDark);
+      setTimeout(renderCharts, 100);
     }
 
     function applyTheme(dark) {
@@ -1111,12 +1142,56 @@
         html.classList.add('light');
         if (icon) icon.className = "fa-solid fa-moon text-blue-600 text-lg";
       }
-      localStorage.setItem('ekurator_theme', dark ? 'dark' : 'light');
+      SafeStorage.setItem('ekurator_theme', dark ? 'dark' : 'light');
     }
 
-    // toggleDarkMode, switchTab, toggleMobileSidebar, dll. tetap sama...
-    
-    // --- PENYEMPURNAAN REKAPITULASI DOKUMEN BA MULTI-TRANSAKSI ---
+    function switchTab(tabId) {
+      const sections = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi'];
+      sections.forEach(s => {
+        const sec = document.getElementById(`tab-${s}`);
+        if (sec) sec.classList.add('hidden');
+      });
+
+      const activeSec = document.getElementById(`tab-${tabId}`);
+      if (activeSec) activeSec.classList.remove('hidden');
+
+      const titleMap = {
+        'dashboard': 'Dashboard Populasi',
+        'master': 'Master Registrasi Satwa',
+        'kelahiran': 'Histori Pencatatan Kelahiran',
+        'kematian': 'Histori Pencatatan Kematian',
+        'titipan': 'Manajemen Satwa Titipan',
+        'mutasi': 'Mutasi & Dinamika Laporan BKSDA'
+      };
+      document.getElementById('header-title').textContent = titleMap[tabId] || 'e-Kuratorial Satwa';
+
+      const buttons = document.querySelectorAll('#sidebar-nav button');
+      buttons.forEach(btn => {
+        const btnTab = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+        if (btnTab === tabId) {
+          btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-brand-500 text-white dark:bg-brand-900/40 dark:text-brand-400";
+        } else {
+          btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50";
+        }
+      });
+
+      const sidebar = document.querySelector('aside');
+      if (sidebar && sidebar.classList.contains('mobile-open')) {
+        sidebar.classList.remove('mobile-open');
+      }
+
+      if (tabId === 'dashboard') {
+        setTimeout(renderCharts, 100);
+      }
+    }
+
+    function toggleMobileSidebar() {
+      const sidebar = document.querySelector('aside');
+      if (sidebar) {
+        sidebar.classList.toggle('hidden');
+      }
+    }
+
     function getRecalculatedSatwa(satwa) {
       // 1. Hitung Penambahan
       const penambahanKelahiran = localDB.kelahiran
@@ -1139,7 +1214,6 @@
         .filter(m => m.nama === satwa.nama && m.tipe === 'Penambahan' && m.kategori === 'Anakan')
         .reduce((sum, item) => sum + (parseInt(item.jumlah) || 0), 0);
 
-      // Total Penambahan
       const totalTambahInduk = penambahanTitipanInduk + penambahanMutasiInduk;
       const totalTambahAnakan = penambahanKelahiran + penambahanTitipanAnakan + penambahanMutasiAnakan;
 
@@ -1160,13 +1234,12 @@
         .filter(m => m.nama === satwa.nama && m.tipe === 'Pengurangan' && m.kategori === 'Anakan')
         .reduce((sum, item) => sum + (parseInt(item.jumlah) || 0), 0);
 
-      // Total Pengurangan
       const totalKurangInduk = penguranganKematianInduk + penguranganMutasiInduk;
       const totalKurangAnakan = penguranganKematianAnakan + penguranganMutasiAnakan;
 
       // 3. Stok Akhir
-      const induk_akhir = Math.max(0, satwa.induk_awal + totalTambahInduk - totalKurangInduk);
-      const anakan_akhir = Math.max(0, satwa.anakan_awal + totalTambahAnakan - totalKurangAnakan);
+      const induk_akhir = Math.max(0, parseInt(satwa.induk_awal) + totalTambahInduk - totalKurangInduk);
+      const anakan_akhir = Math.max(0, parseInt(satwa.anakan_awal) + totalTambahAnakan - totalKurangAnakan);
 
       // --- LOGIKA UTAMA: MEREKAM SEMUA DOKUMEN BERITA ACARA (BA) SECARA LENGKAP ---
       const listBAs = [];
@@ -1174,38 +1247,39 @@
       // A. Ambil Berita Acara Kelahiran
       localDB.kelahiran.filter(k => k.nama === satwa.nama).forEach(k => {
         let tagInfo = k.tag && k.tag !== "Noband" ? ` (Tag: ${k.tag})` : "";
-        let docStr = `Kelahiran${tagInfo}`;
+        let docStr = `<span class="inline-block px-2 py-0.5 m-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px]">Kelahiran${tagInfo}</span>`;
         if (!listBAs.includes(docStr)) listBAs.push(docStr);
       });
 
       // B. Ambil Berita Acara Kematian
       localDB.kematian.filter(km => km.nama === satwa.nama).forEach(km => {
         let bapInfo = km.bap && km.bap !== "-" && km.bap !== "" ? ` (${km.bap})` : "";
-        let docStr = `Kematian${bapInfo}`;
+        let docStr = `<span class="inline-block px-2 py-0.5 m-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-[10px]">Kematian${bapInfo}</span>`;
         if (!listBAs.includes(docStr)) listBAs.push(docStr);
       });
 
       // C. Ambil Berita Acara Penitipan
       localDB.titipan.filter(t => t.nama === satwa.nama).forEach(t => {
         let bapInfo = t.bap && t.bap !== "-" && t.bap !== "" ? ` (${t.bap})` : "";
-        let docStr = `Titipan${bapInfo}`;
+        let docStr = `<span class="inline-block px-2 py-0.5 m-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[10px]">Titipan${bapInfo}</span>`;
         if (!listBAs.includes(docStr)) listBAs.push(docStr);
       });
 
-      // D. Ambil Berita Acara Pemindahan & Mutasi Lainnya (Barter Masuk, Barter Keluar, Pelepasliaran, dll.)
+      // D. Ambil Berita Acara Pemindahan & Mutasi Lainnya
       localDB.mutasi.filter(m => m.nama === satwa.nama).forEach(m => {
         let bapInfo = m.bap && m.bap !== "-" && m.bap !== "" && m.bap !== "BA.Mutasi-" ? ` (${m.bap})` : "";
-        let docStr = `${m.jenis}${bapInfo}`;
+        let badgeColor = m.tipe === "Penambahan" ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20";
+        if (m.jenis === "Kandang Ke Kandang") badgeColor = "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+        let docStr = `<span class="inline-block px-2 py-0.5 m-0.5 rounded ${badgeColor} border text-[10px]">${m.jenis}${bapInfo}</span>`;
         if (!listBAs.includes(docStr)) listBAs.push(docStr);
       });
 
-      // Gabungkan semua riwayat BA dengan pemisah line break agar terlihat rapi dan terbaca asal-usulnya
-      const docBA = listBAs.length > 0 ? listBAs.join("<br>") : "-";
+      const docBA = listBAs.length > 0 ? listBAs.join("<br>") : `<span class="text-slate-400">-</span>`;
 
       return {
         ...satwa,
-        induk_awal: satwa.induk_awal,
-        anakan_awal: satwa.anakan_awal,
+        induk_awal: parseInt(satwa.induk_awal) || 0,
+        anakan_awal: parseInt(satwa.anakan_awal) || 0,
         tambah_induk: totalTambahInduk,
         tambah_anakan: totalTambahAnakan,
         kurang_induk: totalKurangInduk,
@@ -1215,6 +1289,758 @@
         total_populasi: induk_akhir + anakan_akhir,
         docBA: docBA
       };
+    }
+
+    function updateDashboardStats() {
+      let totalP = 0;
+      let totalLahir = 0;
+      let totalMati = 0;
+      let totalTitipan = 0;
+      let totalLindung = 0;
+      let totalBebas = 0;
+      let totalEksotis = 0;
+      let totalMut = localDB.mutasi.length;
+
+      localDB.master.forEach(item => {
+        const recalc = getRecalculatedSatwa(item);
+        totalP += recalc.total_populasi;
+
+        if (recalc.status === "Dilindungi") {
+          totalLindung += recalc.total_populasi;
+        } else if (recalc.status === "Tidak Dilindungi") {
+          totalBebas += recalc.total_populasi;
+        } else if (recalc.status === "Eksotis") {
+          totalEksotis += recalc.total_populasi;
+        }
+      });
+
+      localDB.kelahiran.forEach(k => totalLahir += (parseInt(k.jumlah) || 0));
+      localDB.kematian.forEach(k => totalMati += (parseInt(k.jumlah) || 0));
+      localDB.titipan.forEach(t => totalTitipan += (parseInt(t.jumlah) || 0));
+
+      document.getElementById("stat-total-populasi").textContent = totalP;
+      document.getElementById("stat-kelahiran").textContent = totalLahir;
+      document.getElementById("stat-kematian").textContent = totalMati;
+      document.getElementById("stat-titipan").textContent = totalTitipan;
+      document.getElementById("stat-dilindungi").textContent = totalLindung;
+      document.getElementById("stat-tidak-dilindungi").textContent = totalBebas;
+      document.getElementById("stat-eksotis").textContent = totalEksotis;
+      document.getElementById("stat-mutasi").textContent = totalMut;
+    }
+
+    function renderAllTables() {
+      renderMasterTable();
+      renderKelahiranTable();
+      renderKematianTable();
+      renderTitipanTable();
+      renderMutasiTable();
+      renderRecapTable();
+      populateDropdowns();
+    }
+
+    function renderMasterTable() {
+      const tbody = document.getElementById("master-table-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localDB.master.forEach((item, index) => {
+        const recalc = getRecalculatedSatwa(item);
+        const statusBadge = recalc.status === "Dilindungi"
+          ? `<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-800/30">Dilindungi</span>`
+          : recalc.status === "Eksotis"
+            ? `<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-800/30">Eksotis</span>`
+            : `<span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400">Bebas</span>`;
+
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors";
+        row.innerHTML = `
+          <td class="p-4">
+            <div class="font-bold text-slate-900 dark:text-white">${recalc.nama}</div>
+            <div class="text-xs italic text-slate-400">${recalc.latin}</div>
+          </td>
+          <td class="p-4 text-slate-600 dark:text-slate-300 font-semibold">${recalc.kelas}</td>
+          <td class="p-4"><code class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-950 text-xs font-bold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800">${recalc.id}</code></td>
+          <td class="p-4 text-center text-slate-600 dark:text-slate-300 font-bold">${recalc.induk_awal}</td>
+          <td class="p-4 text-center text-slate-600 dark:text-slate-300 font-bold">${recalc.anakan_awal}</td>
+          <td class="p-4 text-center"><span class="px-2 py-1 bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 rounded-lg font-black">${recalc.total_populasi}</span></td>
+          <td class="p-4">${statusBadge}</td>
+          <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">${recalc.kandang}</td>
+          <td class="p-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="editSatwa('${recalc.id}')" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-colors"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="deleteSatwa('${recalc.id}')" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderKelahiranTable() {
+      const tbody = document.getElementById("kelahiran-table-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localDB.kelahiran.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors";
+        row.innerHTML = `
+          <td class="p-4 font-bold text-slate-900 dark:text-white">${item.nama}</td>
+          <td class="p-4 text-slate-600 dark:text-slate-300 font-semibold">${item.tanggal}</td>
+          <td class="p-4 text-center font-extrabold text-emerald-500">${item.jumlah}</td>
+          <td class="p-4"><span class="px-2 py-1 bg-slate-100 dark:bg-slate-950 text-xs rounded border border-slate-200 dark:border-slate-800">${item.tag}</span></td>
+          <td class="p-4 text-slate-500">${item.kelamin || '-'}</td>
+          <td class="p-4 text-slate-500 italic">${item.ket}</td>
+          <td class="p-4 text-center">
+            <button onclick="deleteKelahiran(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderKematianTable() {
+      const tbody = document.getElementById("kematian-table-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localDB.kematian.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/20";
+        row.innerHTML = `
+          <td class="p-4 font-bold text-slate-900 dark:text-white">${item.nama}</td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-xs font-semibold">${item.kategori}</span></td>
+          <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">${item.tanggal}</td>
+          <td class="p-4 text-center font-extrabold text-rose-500">${item.jumlah}</td>
+          <td class="p-4 text-slate-500 font-semibold">${item.sebab}</td>
+          <td class="p-4 font-mono text-xs text-slate-400">${item.bap}</td>
+          <td class="p-4 text-center">
+            <button onclick="deleteKematian(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderTitipanTable() {
+      const tbody = document.getElementById("titipan-table-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localDB.titipan.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/20";
+        row.innerHTML = `
+          <td class="p-4 font-mono text-xs text-amber-600 dark:text-amber-400 font-bold">${item.bap}</td>
+          <td class="p-4 font-bold text-slate-900 dark:text-white">${item.nama}</td>
+          <td class="p-4 text-xs font-semibold text-slate-400">${item.kategori}</td>
+          <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">${item.tanggal}</td>
+          <td class="p-4 text-center font-black text-slate-800 dark:text-slate-200">${item.jumlah}</td>
+          <td class="p-4 font-semibold text-slate-600 dark:text-slate-300">${item.asal}</td>
+          <td class="p-4"><span class="px-2 py-1 text-xs font-bold rounded-lg bg-amber-500 text-white">${item.status}</span></td>
+          <td class="p-4 text-center">
+            <button onclick="deleteTitipan(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderMutasiTable() {
+      const tbody = document.getElementById("mutasi-table-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localDB.mutasi.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/20 text-xs";
+        row.innerHTML = `
+          <td class="p-3 font-mono font-bold">${item.id}</td>
+          <td class="p-3 font-bold">${item.nama}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+              item.tipe === 'Penambahan' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-rose-500/20 text-rose-500'
+            }">${item.tipe}</span>
+          </td>
+          <td class="p-3 font-semibold text-slate-400">${item.kategori}</td>
+          <td class="p-3 font-semibold text-slate-500 dark:text-slate-300">${item.jenis}</td>
+          <td class="p-3 font-black text-center">${item.jumlah}</td>
+          <td class="p-3 font-mono text-slate-400">${item.bap}</td>
+          <td class="p-3 text-slate-400">${item.tanggal}</td>
+          <td class="p-3 text-slate-400">${item.petugas}</td>
+          <td class="p-3 text-center">
+            <button onclick="deleteMutasi(${index})" class="p-1 text-rose-500 hover:bg-rose-50 rounded"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderRecapTable() {
+      const tbody = document.getElementById("mutasi-rekap-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localDB.master.forEach((satwa, idx) => {
+        const recalc = getRecalculatedSatwa(satwa);
+        const row = document.createElement("tr");
+        row.className = "hover:bg-slate-50 dark:hover:bg-slate-800/20 text-xs transition-colors";
+        row.innerHTML = `
+          <td class="p-3 text-center border-r border-slate-200 dark:border-slate-700/60 font-semibold text-slate-400">${idx + 1}</td>
+          <td class="p-3 text-left border-r border-slate-200 dark:border-slate-700/60">
+            <div class="font-extrabold text-slate-800 dark:text-slate-100">${recalc.nama}</div>
+            <div class="text-[10px] italic text-slate-400">${recalc.latin}</div>
+          </td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold">${recalc.induk_awal}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold">${recalc.anakan_awal}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 text-[10px] text-slate-400">${recalc.asal}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-emerald-500">${recalc.tambah_induk}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-emerald-500">${recalc.tambah_anakan}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-rose-500">${recalc.kurang_induk}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-rose-500">${recalc.kurang_anakan}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 text-center font-semibold text-slate-600 dark:text-slate-300">${recalc.docBA}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-black text-brand-600 dark:text-brand-400">${recalc.induk_akhir}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-black text-brand-600 dark:text-brand-400">${recalc.anakan_akhir}</td>
+          <td class="p-3 text-slate-400 font-semibold">${recalc.status}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function populateDropdowns() {
+      const klSelect = document.getElementById("kl-satwa");
+      const kmSelect = document.getElementById("km-satwa");
+      const tpSelect = document.getElementById("tp-satwa");
+      const mtSelect = document.getElementById("mt-satwa");
+
+      const options = localDB.master.map(item => `<option value="${item.nama}">${item.nama}</option>`).join("");
+      
+      if (klSelect) klSelect.innerHTML = options;
+      if (kmSelect) kmSelect.innerHTML = options;
+      if (tpSelect) tpSelect.innerHTML = options;
+      if (mtSelect) mtSelect.innerHTML = options;
+    }
+
+    function filterMasterTable() {
+      const q = document.getElementById("master-search").value.toLowerCase();
+      const status = document.getElementById("master-filter-status").value;
+      const kelas = document.getElementById("master-filter-kelas").value;
+
+      const rows = document.querySelectorAll("#master-table-body tr");
+      rows.forEach(row => {
+        const text = row.querySelector("td").textContent.toLowerCase();
+        const statusText = row.querySelector("td:nth-child(7)").textContent;
+        const kelasText = row.querySelector("td:nth-child(2)").textContent;
+
+        const matchQ = text.includes(q);
+        const matchStatus = !status || statusText.includes(status);
+        const matchKelas = !kelas || kelasText.includes(kelas);
+
+        if (matchQ && matchStatus && matchKelas) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    }
+
+    function openModal(id) {
+      document.getElementById("modal-backdrop").classList.remove("hidden");
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    function openAddSatwaModal() {
+      document.getElementById("add-satwa-form").reset();
+      document.getElementById("ms-id-hidden").value = "";
+      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-circle-plus mr-2"></i>Registrasi Satwa Baru`;
+      document.getElementById("gender-input-container").innerHTML = "";
+      openModal("add-satwa-modal");
+    }
+
+    function editSatwa(id) {
+      const item = localDB.master.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById("ms-id-hidden").value = item.id;
+      document.getElementById("ms-nama").value = item.nama;
+      document.getElementById("ms-latin").value = item.latin;
+      document.getElementById("ms-kelas").value = item.kelas;
+      document.getElementById("ms-status").value = item.status;
+      document.getElementById("ms-induk-awal").value = item.induk_awal;
+      document.getElementById("ms-anakan-awal").value = item.anakan_awal;
+      document.getElementById("ms-kandang").value = item.kandang;
+      document.getElementById("ms-asal").value = item.asal;
+      document.getElementById("ms-keterangan").value = item.keterangan || "";
+
+      document.getElementById("modal-satwa-title").innerHTML = `<i class="fa-solid fa-pen-to-square mr-2"></i>Edit Registrasi Satwa`;
+      adjustGenderInputFields();
+      openModal("add-satwa-modal");
+    }
+
+    function closeAllModals() {
+      document.getElementById("modal-backdrop").classList.add("hidden");
+      const modals = ["add-satwa-modal", "add-kelahiran-modal", "add-kematian-modal", "add-titipan-modal", "add-mutasi-modal", "change-pin-modal"];
+      modals.forEach(m => {
+        const el = document.getElementById(m);
+        if (el) el.classList.add("hidden");
+      });
+    }
+
+    function adjustGenderInputFields() {
+      const container = document.getElementById("gender-input-container");
+      const induk = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anak = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const total = induk + anak;
+
+      if (total === 0) {
+        container.innerHTML = `<span class="text-xs text-slate-400">Silakan isi jumlah induk atau anakan terlebih dahulu untuk melengkapi data kelamin.</span>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2">Rasio Kelamin Riil Satwa (Total: ${total} Ekor)</h4>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="text-[10px] font-bold text-blue-500">Jantan (♂)</label>
+            <input type="number" id="ms-jantan" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-rose-500">Betina (♀)</label>
+            <input type="number" id="ms-betina" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-400">Unknown</label>
+            <input type="number" id="ms-unknown" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs">
+          </div>
+        </div>
+      `;
+    }
+
+    function openAddKelahiranModal() {
+      document.getElementById("add-kelahiran-form").reset();
+      adjustBirthGenderInputFields();
+      openModal("add-kelahiran-modal");
+    }
+
+    function adjustBirthGenderInputFields() {
+      const container = document.getElementById("birth-gender-container");
+      const jml = parseInt(document.getElementById("kl-jumlah").value) || 0;
+
+      if (jml <= 0) {
+        container.innerHTML = "";
+        return;
+      }
+
+      container.innerHTML = `
+        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2">Rasio Jenis Kelamin Anakan Baru</h4>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="text-[10px] font-bold text-blue-500">Jantan (♂)</label>
+            <input type="number" id="kl-jantan" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-rose-500">Betina (♀)</label>
+            <input type="number" id="kl-betina" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-slate-400">Unknown</label>
+            <input type="number" id="kl-unknown" min="0" value="${jml}" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs">
+          </div>
+        </div>
+      `;
+    }
+
+    function handleMutationTypeChange() {
+      const jenis = document.getElementById("mt-jenis").value;
+      const tipeSelect = document.getElementById("mt-tipe");
+      const asalInput = document.getElementById("mt-asal");
+      const tujuanInput = document.getElementById("mt-tujuan");
+
+      if (jenis === "Mutasi Penitipan" || jenis === "Barter Masuk") {
+        tipeSelect.value = "Penambahan";
+        asalInput.value = "Pihak Ketiga / BKSDA";
+        tujuanInput.value = "Kandang LK";
+      } else if (jenis === "Kematian" || jenis === "Barter Keluar" || jenis === "Pelepasliaran") {
+        tipeSelect.value = "Pengurangan";
+        asalInput.value = "Kandang LK";
+        tujuanInput.value = "Luar / Alam Bebas";
+      } else {
+        tipeSelect.value = "Internal";
+        asalInput.value = "Kandang A";
+        tujuanInput.value = "Kandang B";
+      }
+    }
+
+    function handleSaveSatwa(e) {
+      e.preventDefault();
+      const idHidden = document.getElementById("ms-id-hidden").value;
+      const nama = document.getElementById("ms-nama").value.trim();
+      const latin = document.getElementById("ms-latin").value.trim();
+      const kelas = document.getElementById("ms-kelas").value;
+      const status = document.getElementById("ms-status").value;
+      const induk = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anak = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const kandang = document.getElementById("ms-kandang").value.trim();
+      const asal = document.getElementById("ms-asal").value.trim();
+      const keterangan = document.getElementById("ms-keterangan").value.trim();
+
+      const j = parseInt(document.getElementById("ms-jantan")?.value) || 0;
+      const b = parseInt(document.getElementById("ms-betina")?.value) || 0;
+      const u = parseInt(document.getElementById("ms-unknown")?.value) || 0;
+      let kelaminStr = "";
+      if (j > 0) kelaminStr += `${j} ♂ `;
+      if (b > 0) kelaminStr += `${b} ♀ `;
+      if (u > 0) kelaminStr += `${u} Unknown`;
+      if (!kelaminStr) kelaminStr = "Belum teridentifikasi";
+
+      if (idHidden) {
+        const idx = localDB.master.findIndex(x => x.id === idHidden);
+        if (idx !== -1) {
+          localDB.master[idx] = { ...localDB.master[idx], nama, latin, kelas, status, induk_awal: induk, anakan_awal: anak, kandang, asal, kelamin: kelaminStr, keterangan };
+          showToast("Data satwa berhasil diperbarui!");
+        }
+      } else {
+        const newId = "REG-" + String(localDB.master.length + 1).padStart(3, "0");
+        localDB.master.push({ id: newId, nama, latin, kelas, induk_awal: induk, anakan_awal: anak, status, kandang, asal, generasi: "F0", kelamin: kelaminStr, keterangan });
+        showToast("Registrasi satwa baru berhasil disimpan!");
+      }
+
+      closeAllModals();
+      updateDashboardStats();
+      renderAllTables();
+      saveAndSync();
+    }
+
+    function handleSaveKelahiran(e) {
+      e.preventDefault();
+      const nama = document.getElementById("kl-satwa").value;
+      const tanggal = document.getElementById("kl-tanggal").value;
+      const jumlah = parseInt(document.getElementById("kl-jumlah").value) || 0;
+      const tag = document.getElementById("kl-tag").value.trim();
+      const ket = document.getElementById("kl-keterangan").value.trim();
+
+      const j = parseInt(document.getElementById("kl-jantan")?.value) || 0;
+      const b = parseInt(document.getElementById("kl-betina")?.value) || 0;
+      const u = parseInt(document.getElementById("kl-unknown")?.value) || 0;
+      let kelaminStr = "";
+      if (j > 0) kelaminStr += `${j} ♂ `;
+      if (b > 0) kelaminStr += `${b} ♀ `;
+      if (u > 0) kelaminStr += `${u} Unk`;
+
+      const parent = localDB.master.find(x => x.nama === nama);
+
+      localDB.kelahiran.push({
+        nama,
+        latin: parent ? parent.latin : "",
+        kelas: parent ? parent.kelas : "",
+        jumlah,
+        tag,
+        tanggal,
+        kelamin: kelaminStr || "Unknown",
+        ket
+      });
+
+      showToast("Berita acara kelahiran berhasil didokumentasikan!");
+      closeAllModals();
+      updateDashboardStats();
+      renderAllTables();
+      saveAndSync();
+    }
+
+    function handleSaveKematian(e) {
+      e.preventDefault();
+      const nama = document.getElementById("km-satwa").value;
+      const kategori = document.getElementById("km-kategori").value;
+      const jumlah = parseInt(document.getElementById("km-jumlah").value) || 0;
+      const tanggal = document.getElementById("km-tanggal").value;
+      const sebab = document.getElementById("km-sebab").value.trim();
+      const bap = document.getElementById("km-bap").value.trim();
+
+      const parent = localDB.master.find(x => x.nama === nama);
+
+      localDB.kematian.push({
+        nama,
+        latin: parent ? parent.latin : "",
+        kategori,
+        jumlah,
+        tanggal,
+        sebab,
+        bap
+      });
+
+      showToast("Pencatatan Berita Acara Kematian disimpan!");
+      closeAllModals();
+      updateDashboardStats();
+      renderAllTables();
+      saveAndSync();
+    }
+
+    function handleSaveTitipan(e) {
+      e.preventDefault();
+      const bap = document.getElementById("tp-bap").value.trim();
+      const asal = document.getElementById("tp-asal").value.trim();
+      const nama = document.getElementById("tp-satwa").value;
+      const kategori = document.getElementById("tp-kategori").value;
+      const jumlah = parseInt(document.getElementById("tp-jumlah").value) || 0;
+      const tanggal = document.getElementById("tp-tanggal").value;
+
+      const parent = localDB.master.find(x => x.nama === nama);
+
+      localDB.titipan.push({
+        bap,
+        nama,
+        latin: parent ? parent.latin : "",
+        kategori,
+        tanggal,
+        jumlah,
+        asal,
+        status: "Titipan"
+      });
+
+      showToast("Dokumen Berita Acara penitipan berhasil direkam!");
+      closeAllModals();
+      updateDashboardStats();
+      renderAllTables();
+      saveAndSync();
+    }
+
+    function handleSaveMutasi(e) {
+      e.preventDefault();
+      const nama = document.getElementById("mt-satwa").value;
+      const jenis = document.getElementById("mt-jenis").value;
+      const tipe = document.getElementById("mt-tipe").value;
+      const kategori = document.getElementById("mt-kategori").value;
+      const asal = document.getElementById("mt-asal").value.trim();
+      const tujuan = document.getElementById("mt-tujuan").value.trim();
+      const jumlah = parseInt(document.getElementById("mt-jumlah").value) || 0;
+      const tanggal = document.getElementById("mt-tanggal").value;
+      const bap = document.getElementById("mt-bap").value.trim();
+      const petugas = document.getElementById("mt-petugas").value.trim();
+
+      const newId = "MUT-" + String(localDB.mutasi.length + 1).padStart(3, "0");
+
+      localDB.mutasi.push({
+        id: newId,
+        nama,
+        jenis,
+        tipe,
+        kategori,
+        asal,
+        tujuan,
+        jumlah,
+        tanggal,
+        bap,
+        petugas
+      });
+
+      showToast("Riwayat transaksi mutasi lapangan terekam!");
+      closeAllModals();
+      updateDashboardStats();
+      renderAllTables();
+      saveAndSync();
+    }
+
+    function deleteSatwa(id) {
+      if (confirm("Apakah Anda yakin ingin menghapus data master satwa ini?")) {
+        localDB.master = localDB.master.filter(x => x.id !== id);
+        showToast("Data master dihapus.", "error");
+        updateDashboardStats();
+        renderAllTables();
+        saveAndSync();
+      }
+    }
+
+    function deleteKelahiran(idx) {
+      if (confirm("Hapus catatan kelahiran ini?")) {
+        localDB.kelahiran.splice(idx, 1);
+        showToast("Catatan kelahiran dihapus.", "error");
+        updateDashboardStats();
+        renderAllTables();
+        saveAndSync();
+      }
+    }
+
+    function deleteKematian(idx) {
+      if (confirm("Hapus catatan kematian ini?")) {
+        localDB.kematian.splice(idx, 1);
+        showToast("Catatan kematian dihapus.", "error");
+        updateDashboardStats();
+        renderAllTables();
+        saveAndSync();
+      }
+    }
+
+    function deleteTitipan(idx) {
+      if (confirm("Hapus catatan satwa titipan ini?")) {
+        localDB.titipan.splice(idx, 1);
+        showToast("Catatan titipan dihapus.", "error");
+        updateDashboardStats();
+        renderAllTables();
+        saveAndSync();
+      }
+    }
+
+    function deleteMutasi(idx) {
+      if (confirm("Hapus catatan transaksi mutasi ini?")) {
+        localDB.mutasi.splice(idx, 1);
+        showToast("Catatan mutasi dihapus.", "error");
+        updateDashboardStats();
+        renderAllTables();
+        saveAndSync();
+      }
+    }
+
+    function openChangePinModal() {
+      document.getElementById("change-pin-form").reset();
+      document.getElementById("cp-error").classList.add("hidden");
+      openModal("change-pin-modal");
+    }
+
+    function closeChangePinModal() {
+      document.getElementById("change-pin-modal").classList.add("hidden");
+      document.getElementById("modal-backdrop").classList.add("hidden");
+    }
+
+    function handleChangePin(e) {
+      e.preventDefault();
+      const oldPin = document.getElementById("cp-old").value.trim();
+      const newPin = document.getElementById("cp-new").value.trim();
+      const confirmPin = document.getElementById("cp-confirm").value.trim();
+      const errorEl = document.getElementById("cp-error");
+      const currentSavedPin = SafeStorage.getItem('sgbl_pin') || "1234";
+
+      if (oldPin !== currentSavedPin) {
+        errorEl.textContent = "PIN Sandi lama salah!";
+        errorEl.classList.remove("hidden");
+        return;
+      }
+      if (newPin.length < 4) {
+        errorEl.textContent = "PIN baru minimal berukuran 4 digit.";
+        errorEl.classList.remove("hidden");
+        return;
+      }
+      if (newPin !== confirmPin) {
+        errorEl.textContent = "Konfirmasi PIN sandi baru tidak serasi.";
+        errorEl.classList.remove("hidden");
+        return;
+      }
+
+      SafeStorage.setItem('sgbl_pin', newPin);
+      showToast("PIN Sandi akses sistem diperbarui!", "success");
+      closeChangePinModal();
+    }
+
+    function renderCharts() {
+      try {
+        if (populationChartInstance) {
+          populationChartInstance.destroy();
+          populationChartInstance = null;
+        }
+        if (proporsiChartInstance) {
+          proporsiChartInstance.destroy();
+          proporsiChartInstance = null;
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+        const textColor = isDark ? '#cbd5e1' : '#334155';
+        const gridColor = isDark ? 'rgba(51, 65, 85, 0.5)' : 'rgba(226, 232, 240, 0.8)';
+
+        const ctx1 = document.getElementById('populasiChart');
+        if (ctx1) {
+          populationChartInstance = new Chart(ctx1, {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+              datasets: [
+                {
+                  label: 'Induk (Dewasa)',
+                  data: [72, 74, 75, 78, 81, 83],
+                  borderColor: '#3b82f6',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  borderWidth: 3,
+                  tension: 0.4,
+                  fill: true
+                },
+                {
+                  label: 'Anakan (Remaja)',
+                  data: [8, 9, 11, 10, 12, 14],
+                  borderColor: '#10b981',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  borderWidth: 3,
+                  tension: 0.4,
+                  fill: true
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
+              },
+              scales: {
+                x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                y: { grid: { color: gridColor }, ticks: { color: textColor } }
+              }
+            }
+          });
+        }
+
+        const ctx2 = document.getElementById('proporsiChart');
+        if (ctx2) {
+          let totalLindung = 0;
+          let totalBebas = 0;
+          let totalEksotis = 0;
+
+          localDB.master.forEach(item => {
+            const r = getRecalculatedSatwa(item);
+            if (r.status === "Dilindungi") totalLindung += r.total_populasi;
+            else if (r.status === "Tidak Dilindungi") totalBebas += r.total_populasi;
+            else if (r.status === "Eksotis") totalEksotis += r.total_populasi;
+          });
+
+          proporsiChartInstance = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+              labels: ['Dilindungi', 'Bebas', 'Eksotis'],
+              datasets: [{
+                data: [totalLindung || 1, totalBebas || 1, totalEksotis || 1],
+                backgroundColor: ['#8b5cf6', '#64748b', '#14b8a6'],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.error("Gagal menggambar grafik: ", e);
+      }
+    }
+
+    window.onload = function() {
+      // 1. Inisialisasi Live Clock
+      setInterval(() => {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const clockEl = document.getElementById("live-clock");
+        if (clockEl) {
+          clockEl.textContent = now.toLocaleDateString("id-ID", options) + " WITA";
+        }
+      }, 1000);
+
+      // 2. Terapkan Tema Tersimpan
+      const savedTheme = SafeStorage.getItem('ekurator_theme') || "dark";
+      applyTheme(savedTheme === "dark");
+
+      // 3. Muat Data Awal ke Dasbor
+      updateDashboardStats();
+      renderAllTables();
     }
   </script>
 </body>
