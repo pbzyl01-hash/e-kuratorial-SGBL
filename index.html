@@ -461,7 +461,7 @@
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div>
               <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-baby-carriage text-emerald-500"></i>Histori Kelahiran Satwa</h3>
-              <p class="text-xs text-slate-400">Pencatatan perkembangan biak & penetasan di Lembaga Konservasi.</p>
+              <p class="text-xs text-slate-400">Pencatatan perkembangan biak, penetasan, dan Berita Acara Kelahiran di Lembaga Konservasi.</p>
             </div>
             <button onclick="openAddKelahiranModal()" class="w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] duration-200 shadow-md">
               <i class="fa-solid fa-baby-carriage"></i>
@@ -475,6 +475,7 @@
                 <thead>
                   <tr class="bg-slate-50 dark:bg-slate-900 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700/50">
                     <th class="p-4">Nama Jenis Satwa</th>
+                    <th class="p-4">No. BA Kelahiran</th>
                     <th class="p-4">Tanggal Lahir</th>
                     <th class="p-4 text-center">Jumlah (Ekor)</th>
                     <th class="p-4">Tag / No. ID</th>
@@ -726,7 +727,7 @@
   <!-- 2. MODAL TAMBAH KELAHIRAN -->
   <div id="add-kelahiran-modal" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-lg">
     <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-4">
-      <h3 id="modal-kelahiran-title" class="font-bold text-lg text-blue-600 dark:text-blue-400"><i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa</h3>
+      <h3 id="modal-kelahiran-title" class="font-bold text-lg text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa</h3>
       <button onclick="closeAllModals()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="add-kelahiran-form" onsubmit="handleSaveKelahiran(event)" class="space-y-4">
@@ -754,13 +755,17 @@
 
       <div class="grid grid-cols-2 gap-3">
         <div>
+          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nomor BA Kelahiran</label>
+          <input type="text" id="kl-bap" value="BA.Kelahiran/" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
+        </div>
+        <div>
           <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Nomor Band / Tag ID</label>
           <input type="text" id="kl-tag" value="Noband" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
         </div>
-        <div>
-          <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Keterangan Kondisi Anak</label>
-          <input type="text" id="kl-keterangan" value="Sehat secara klinis" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
-        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Keterangan Kondisi Anak</label>
+        <input type="text" id="kl-keterangan" value="Sehat secara klinis" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none" required>
       </div>
       <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end gap-2">
         <button type="button" onclick="closeAllModals()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
@@ -978,6 +983,22 @@
     </form>
   </div>
 
+  <!-- CUSTOM CONFIRMATION MODAL (REPLACES NATIVE BROWSER CONFIRM) -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-sm transform scale-95 transition-all duration-300">
+      <h4 class="font-bold text-lg text-rose-600 dark:text-rose-400 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Konfirmasi Hapus</span>
+      </h4>
+      <p id="confirm-modal-message" class="text-sm text-slate-500 dark:text-slate-400 mb-6">Apakah Anda yakin ingin menghapus data ini secara permanen?</p>
+      <div class="flex justify-end gap-2">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button id="confirm-modal-action-btn" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold">Hapus Data</button>
+      </div>
+    </div>
+  </div>
+
+
   <!-- JAVASCRIPT SYSTEM & ENGINE -->
   <script>
     // URL Web App Google Apps Script Anda (WAJIB disematkan agar tersinkronisasi penuh dengan Google Sheet)
@@ -985,6 +1006,7 @@
 
     let populationChartInstance = null;
     let proporsiChartInstance = null;
+    let confirmAction = null; // Custom modal confirmation callback
 
     const SafeStorage = {
       getItem(key) {
@@ -1004,20 +1026,21 @@
       fallback: {}
     };
 
+    // DATABASE UTAMA (DILENGKAPI DATA BA KELAHIRAN BARU)
     let localDB = {
       master: JSON.parse(SafeStorage.getItem('sgbl_master')) || [
-        { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", induk_awal: 18, anakan_awal: 2, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan Negara (BKSDA)", generasi: "F0", kelamin: "18 ♂, 2 ♀", keterangan: "Kondisi Sehat" },
-        { id: "REG-002", nama: "Betet Ekor Panjang", latin: "Psittacula longicauda", kelas: "Aves", induk_awal: 3, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Kawat 4", asal: "Rescue BKSDA", generasi: "F0", kelamin: "3 ♂", keterangan: "Sehat" },
-        { id: "REG-003", nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", induk_awal: 6, anakan_awal: 2, status: "Dilindungi", kandang: "Kandang Besar Kasuari", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "4 ♂, 4 ♀", keterangan: "Sangat Aktif" },
-        { id: "REG-004", nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", induk_awal: 10, anakan_awal: 2, status: "Tidak Dilindungi", kandang: "Kandang Lemur", asal: "Import", generasi: "F0", kelamin: "6 ♂, 6 ♀", keterangan: "Lincah" },
-        { id: "REG-005", nama: "Sigung", latin: "Mephitis mephitis", kelas: "Mamalia", induk_awal: 12, anakan_awal: 3, status: "Tidak Dilindungi", kandang: "Kandang Kubah Sigung", asal: "Lembaga Konservasi", generasi: "F1", kelamin: "8 ♂, 7 ♀", keterangan: "Sehat" },
-        { id: "REG-006", nama: "Tamandua", latin: "Tamandua tetradactyla", kelas: "Mamalia", induk_awal: 4, anakan_awal: 0, status: "Tidak Dilindungi", kandang: "Kandang Khusus", asal: "Import", generasi: "F0", kelamin: "2 ♂, 2 ♀", keterangan: "Sehat klinis" },
-        { id: "REG-007", nama: "Beruang Madu", latin: "Helarctos malayanus", kelas: "Mamalia", induk_awal: 15, anakan_awal: 1, status: "Dilindungi", kandang: "Kandang Hutan Beruang", asal: "Penyelamatan", generasi: "F0", kelamin: "16 ♀", keterangan: "Aktif" },
-        { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", induk_awal: 8, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", generasi: "F0", kelamin: "8 ♂", keterangan: "Sehat klinis" }
+        { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", induk_awal: 18, anakan_awal: 2, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan Negara (BKSDA)", kelamin: "18 Jantan (♂), 2 Betina (♀)", keterangan: "Kondisi Sehat" },
+        { id: "REG-002", nama: "Betet Ekor Panjang", latin: "Psittacula longicauda", kelas: "Aves", induk_awal: 3, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Kawat 4", asal: "Rescue BKSDA", kelamin: "3 Jantan (♂)", keterangan: "Sehat" },
+        { id: "REG-003", nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", induk_awal: 6, anakan_awal: 2, status: "Dilindungi", kandang: "Kandang Besar Kasuari", asal: "Lembaga Konservasi", kelamin: "4 Jantan (♂), 4 Betina (♀)", keterangan: "Sangat Aktif" },
+        { id: "REG-004", nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", induk_awal: 10, anakan_awal: 2, status: "Tidak Dilindungi", kandang: "Kandang Lemur", asal: "Import", kelamin: "6 Jantan (♂), 6 Betina (♀)", keterangan: "Lincah" },
+        { id: "REG-005", nama: "Sigung", latin: "Mephitis mephitis", kelas: "Mamalia", induk_awal: 12, anakan_awal: 3, status: "Tidak Dilindungi", kandang: "Kandang Kubah Sigung", asal: "Lembaga Konservasi", kelamin: "8 Jantan (♂), 7 Betina (♀)", keterangan: "Sehat" },
+        { id: "REG-006", nama: "Tamandua", latin: "Tamandua tetradactyla", kelas: "Mamalia", induk_awal: 4, anakan_awal: 0, status: "Tidak Dilindungi", kandang: "Kandang Khusus", asal: "Import", kelamin: "2 Jantan (♂), 2 Betina (♀)", keterangan: "Sehat klinis" },
+        { id: "REG-007", nama: "Beruang Madu", latin: "Helarctos malayanus", kelas: "Mamalia", induk_awal: 15, anakan_awal: 1, status: "Dilindungi", kandang: "Kandang Hutan Beruang", asal: "Penyelamatan", kelamin: "16 Betina (♀)", keterangan: "Aktif" },
+        { id: "REG-008", nama: "Harimau Sumatera", latin: "Panthera tigris sumatrae", kelas: "Mamalia", induk_awal: 8, anakan_awal: 0, status: "Dilindungi", kandang: "Kandang Utama Harimau", asal: "Penyelamatan", kelamin: "8 Jantan (♂)", keterangan: "Sehat klinis" }
       ],
       kelahiran: JSON.parse(SafeStorage.getItem('sgbl_kelahiran')) || [
-        { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "REG-003-N", tanggal: "2026-03-02", kelamin: "Unknown", ket: "Anak lahir sehat di LK" },
-        { nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 2, tag: "REG-004-K", tanggal: "2026-03-06", kelamin: "2 ♀", ket: "Lahir kembar sehat" }
+        { nama: "Kasuari Gelambir-ganda", latin: "Casuarius casuarius", kelas: "Aves", jumlah: 1, tag: "REG-003-N", tanggal: "2026-03-02", kelamin: "1 Tidak Diketahui", ket: "Anak lahir sehat di LK", bap: "BA.Kelahiran/001/III/2026" },
+        { nama: "Lemur Ekor Cincin", latin: "Lemur catta", kelas: "Mamalia", jumlah: 2, tag: "REG-004-K", tanggal: "2026-03-06", kelamin: "2 Betina (♀)", ket: "Lahir kembar sehat", bap: "BA.Kelahiran/002/III/2026" }
       ],
       kematian: JSON.parse(SafeStorage.getItem('sgbl_kematian')) || [
         { nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kategori: "Induk", jumlah: 1, tanggal: "2026-05-12", sebab: "Sakit tua", bap: "BA.Kematian/021/V/2026" }
@@ -1065,6 +1088,75 @@
         });
       }
     }
+
+    function loadFromSpreadsheet() {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(data) {
+            if (data) {
+              localDB = data;
+              saveToLocalStorage();
+              updateDashboardStats();
+              renderAllTables();
+              setTimeout(renderCharts, 100);
+              showToast("Data cloud berhasil dimuat!", "success");
+            }
+          })
+          .withFailureHandler(function(err) {
+            showToast("Gagal memuat data dari cloud: " + err, "error");
+            updateDashboardStats();
+            renderAllTables();
+            setTimeout(renderCharts, 100);
+          })
+          .getDataFromSheets();
+      } else if (API_URL) {
+        fetch(API_URL + "?action=getData")
+          .then(res => res.json())
+          .then(data => {
+            if (data && !data.error) {
+              localDB = data;
+              saveToLocalStorage();
+              updateDashboardStats();
+              renderAllTables();
+              setTimeout(renderCharts, 100);
+              showToast("Data cloud berhasil dimuat!", "success");
+            } else {
+              updateDashboardStats();
+              renderAllTables();
+              setTimeout(renderCharts, 100);
+            }
+          })
+          .catch(err => {
+            console.log("Menggunakan database lokal (offline):", err.message);
+            updateDashboardStats();
+            renderAllTables();
+            setTimeout(renderCharts, 100);
+          });
+      } else {
+        updateDashboardStats();
+        renderAllTables();
+        setTimeout(renderCharts, 100);
+      }
+    }
+
+    // CUSTOM CONFIRM MODAL CONTROLLERS
+    function showCustomConfirm(message, actionCallback) {
+      document.getElementById("confirm-modal-message").textContent = message;
+      document.getElementById("confirm-modal").classList.remove("hidden");
+      confirmAction = actionCallback;
+    }
+
+    function closeConfirmModal() {
+      document.getElementById("confirm-modal").classList.add("hidden");
+      confirmAction = null;
+    }
+
+    document.getElementById("confirm-modal-action-btn").onclick = function() {
+      if (confirmAction) {
+        confirmAction();
+      }
+      closeConfirmModal();
+    };
 
     function showToast(message, type = "success") {
       const container = document.getElementById("toast-container");
@@ -1210,22 +1302,20 @@
       }
     }
 
-    // --- FORM PARSER JENIS KELAMIN ANAK ---
+    // --- FORM PARSER JENIS KELAMIN SATWA (BAHASA INDONESIA) ---
     function parseGenderValue(genderStr, totalCount = 0) {
       let jantan = 0, betina = 0, unknown = 0;
-      if (!genderStr) return { jantan, betina, unknown };
+      if (!genderStr) return { jantan, betina, unknown: totalCount };
 
-      if (genderStr.includes('♂') || genderStr.includes('♀') || genderStr.includes('Unknown') || genderStr.includes('Unk')) {
-        const parts = genderStr.split(' ');
-        for (let i = 0; i < parts.length; i++) {
-          const val = parseInt(parts[i]);
-          if (!isNaN(val)) {
-            const label = parts[i + 1] || "";
-            if (label.includes('♂')) jantan = val;
-            else if (label.includes('♀')) betina = val;
-            else if (label.includes('Unknown') || label.includes('Unk')) unknown = val;
-          }
-        }
+      if (genderStr.includes('♂') || genderStr.includes('♀') || genderStr.toLowerCase().includes('tidak diketahui') || genderStr.toLowerCase().includes('unknown') || genderStr.toLowerCase().includes('unk')) {
+        const parts = genderStr.split(',');
+        parts.forEach(p => {
+          const clean = p.trim();
+          const val = parseInt(clean) || 0;
+          if (clean.includes('♂') || clean.toLowerCase().includes('jantan')) jantan = val;
+          else if (clean.includes('♀') || clean.toLowerCase().includes('betina')) betina = val;
+          else if (clean.toLowerCase().includes('tidak diketahui') || clean.toLowerCase().includes('unknown') || clean.toLowerCase().includes('unk')) unknown = val;
+        });
       } else {
         if (genderStr.toLowerCase().includes("jantan")) jantan = totalCount;
         else if (genderStr.toLowerCase().includes("betina")) betina = totalCount;
@@ -1286,10 +1376,11 @@
       // --- LOGIKA UTAMA: MEREKAM SEMUA DOKUMEN BERITA ACARA (BA) SECARA LENGKAP ---
       const listBAs = [];
 
-      // A. Ambil Berita Acara Kelahiran
+      // A. Ambil Berita Acara Kelahiran dengan Nomor BA Kelahiran
       localDB.kelahiran.filter(k => k.nama === satwa.nama).forEach(k => {
-        let tagInfo = k.tag && k.tag !== "Noband" ? ` (Tag: ${k.tag})` : "";
-        let docStr = `<span class="inline-block px-2 py-0.5 m-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px]">Kelahiran${tagInfo}</span>`;
+        let bapInfo = k.bap && k.bap !== "" ? ` (${k.bap})` : "";
+        let tagInfo = k.tag && k.tag !== "Noband" ? ` [Tag: ${k.tag}]` : "";
+        let docStr = `<span class="inline-block px-2 py-0.5 m-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px]">Kelahiran${bapInfo}${tagInfo}</span>`;
         if (!listBAs.includes(docStr)) listBAs.push(docStr);
       });
 
@@ -1431,6 +1522,7 @@
             <div class="font-bold text-slate-900 dark:text-white">${item.nama}</div>
             <div class="text-xs italic text-slate-400">${item.latin || ''}</div>
           </td>
+          <td class="p-4 font-mono text-xs text-emerald-600 dark:text-emerald-400 font-bold">${item.bap || '-'}</td>
           <td class="p-4 text-slate-600 dark:text-slate-300 font-semibold">${item.tanggal}</td>
           <td class="p-4 text-center font-extrabold text-emerald-500">${item.jumlah}</td>
           <td class="p-4"><span class="px-2 py-1 bg-slate-100 dark:bg-slate-950 text-xs rounded border border-slate-200 dark:border-slate-800">${item.tag}</span></td>
@@ -1439,7 +1531,7 @@
           <td class="p-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
               <button onclick="editKelahiran(${index})" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
-              <button onclick="deleteKelahiran(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+              <button onclick="deleteKelahiran(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors" title="Hapus"><i class="fa-solid fa-trash"></i></button>
             </div>
           </td>
         `;
@@ -1468,7 +1560,7 @@
           <td class="p-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
               <button onclick="editKematian(${index})" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
-              <button onclick="deleteKematian(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+              <button onclick="deleteKematian(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors" title="Hapus"><i class="fa-solid fa-trash"></i></button>
             </div>
           </td>
         `;
@@ -1498,7 +1590,7 @@
           <td class="p-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
               <button onclick="editTitipan(${index})" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
-              <button onclick="deleteTitipan(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+              <button onclick="deleteTitipan(${index})" class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors" title="Hapus"><i class="fa-solid fa-trash"></i></button>
             </div>
           </td>
         `;
@@ -1531,7 +1623,7 @@
           <td class="p-3 text-center">
             <div class="flex items-center justify-center gap-1.5">
               <button onclick="editMutasi(${index})" class="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded transition-all" title="Edit"><i class="fa-solid fa-pencil"></i></button>
-              <button onclick="deleteMutasi(${index})" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors"><i class="fa-solid fa-trash"></i></button>
+              <button onclick="deleteMutasi(${index})" class="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded transition-colors" title="Hapus"><i class="fa-solid fa-trash"></i></button>
             </div>
           </td>
         `;
@@ -1647,9 +1739,24 @@
         if (j) j.value = breakdown.jantan;
         if (b) b.value = breakdown.betina;
         if (u) u.value = breakdown.unknown;
+        
+        syncMasterGenderFields('none');
       }, 50);
 
       openModal("add-satwa-modal");
+    }
+
+    function openAddKelahiranModal() {
+      document.getElementById("add-kelahiran-form").reset();
+      document.getElementById("kl-id-hidden").value = "";
+      document.getElementById("modal-kelahiran-title").innerHTML = `<i class="fa-solid fa-baby mr-2 text-emerald-500"></i>Catat Kelahiran Satwa`;
+      document.getElementById("kl-bap").value = "BA.Kelahiran/" + String(localDB.kelahiran.length + 1).padStart(3, "0") + "/VI/2026";
+      
+      // Mengatur tanggal kelahiran default ke hari ini (19 Juni 2026)
+      document.getElementById("kl-tanggal").value = "2026-06-19";
+      
+      adjustBirthGenderInputFields();
+      openModal("add-kelahiran-modal");
     }
 
     function editKelahiran(index) {
@@ -1660,6 +1767,7 @@
       document.getElementById("kl-satwa").value = item.nama;
       document.getElementById("kl-tanggal").value = item.tanggal;
       document.getElementById("kl-jumlah").value = item.jumlah;
+      document.getElementById("kl-bap").value = item.bap || "";
       document.getElementById("kl-tag").value = item.tag;
       document.getElementById("kl-keterangan").value = item.ket;
 
@@ -1674,6 +1782,9 @@
         if (j) j.value = breakdown.jantan;
         if (b) b.value = breakdown.betina;
         if (u) u.value = breakdown.unknown;
+        
+        // Panggil fungsi sinkronisasi awal
+        syncBirthGenderFields('none');
       }, 50);
 
       openModal("add-kelahiran-modal");
@@ -1752,58 +1863,148 @@
       }
 
       container.innerHTML = `
-        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2"><i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i>Rasio Kelamin Riil Satwa (Total: ${total} Ekor)</h4>
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-xs font-bold uppercase text-slate-500"><i class="fa-solid fa-venus-mars mr-1 text-blue-500"></i>Rasio Kelamin Riil Satwa (Total: ${total} Ekor)</h4>
+          <span id="ms-gender-badge" class="text-[10px] px-2 py-0.5 rounded font-extrabold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">Sesuai ✓</span>
+        </div>
         <div class="grid grid-cols-3 gap-2">
           <div>
             <label class="text-[10px] font-bold text-blue-500">Jantan (♂)</label>
-            <input type="number" id="ms-jantan" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
+            <input type="number" id="ms-jantan" oninput="syncMasterGenderFields('jantan')" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
           </div>
           <div>
             <label class="text-[10px] font-bold text-rose-500">Betina (♀)</label>
-            <input type="number" id="ms-betina" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
+            <input type="number" id="ms-betina" oninput="syncMasterGenderFields('betina')" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
           </div>
           <div>
-            <label class="text-[10px] font-bold text-slate-400">Unknown</label>
-            <input type="number" id="ms-unknown" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
+            <label class="text-[10px] font-bold text-slate-400">Tidak Diketahui</label>
+            <input type="number" id="ms-unknown" oninput="syncMasterGenderFields('unknown')" min="0" value="${total}" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
           </div>
         </div>
+        <p id="ms-gender-error-msg" class="text-[10px] text-rose-500 font-semibold mt-1 hidden">Jumlah rasio tidak sesuai dengan total induk & anakan!</p>
       `;
     }
 
-    function openAddKelahiranModal() {
-      document.getElementById("add-kelahiran-form").reset();
-      document.getElementById("kl-id-hidden").value = "";
-      document.getElementById("modal-kelahiran-title").innerHTML = `<i class="fa-solid fa-baby mr-2"></i>Catat Kelahiran Satwa`;
-      adjustBirthGenderInputFields();
-      openModal("add-kelahiran-modal");
+    function syncMasterGenderFields(changed) {
+      const induk = parseInt(document.getElementById("ms-induk-awal").value) || 0;
+      const anak = parseInt(document.getElementById("ms-anakan-awal").value) || 0;
+      const total = induk + anak;
+
+      const jantanEl = document.getElementById("ms-jantan");
+      const betinaEl = document.getElementById("ms-betina");
+      const unknownEl = document.getElementById("ms-unknown");
+      const badge = document.getElementById("ms-gender-badge");
+      const errorMsg = document.getElementById("ms-gender-error-msg");
+      const saveBtn = document.querySelector("#add-satwa-form button[type='submit']");
+
+      if (!jantanEl || !betinaEl || !unknownEl) return;
+
+      let j = parseInt(jantanEl.value) || 0;
+      let b = parseInt(betinaEl.value) || 0;
+      let u = parseInt(unknownEl.value) || 0;
+
+      // Smart auto-adjustment
+      if (changed === 'jantan' || changed === 'betina') {
+        u = Math.max(0, total - j - b);
+        unknownEl.value = u;
+      }
+
+      const sum = j + b + u;
+
+      if (sum === total) {
+        if (badge) {
+          badge.className = "text-[10px] px-2 py-0.5 rounded font-extrabold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
+          badge.innerText = "Sesuai ✓";
+        }
+        if (errorMsg) errorMsg.classList.add("hidden");
+        if (saveBtn) saveBtn.removeAttribute("disabled");
+      } else {
+        if (badge) {
+          badge.className = "text-[10px] px-2.5 py-0.5 rounded font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800";
+          badge.innerText = `Belum Sesuai (${sum}/${total})`;
+        }
+        if (errorMsg) {
+          errorMsg.textContent = `Jumlah total alokasi gender (${sum}) tidak sama dengan total induk & anakan awal (${total}).`;
+          errorMsg.classList.remove("hidden");
+        }
+        if (saveBtn) saveBtn.setAttribute("disabled", "true");
+      }
     }
 
+    // --- INTEGRASI & SINKRONISASI JENIS KELAMIN KELAHIRAN ---
     function adjustBirthGenderInputFields() {
       const container = document.getElementById("birth-gender-container");
       const jml = parseInt(document.getElementById("kl-jumlah").value) || 0;
 
       if (jml <= 0) {
-        container.innerHTML = "";
+        container.innerHTML = `<span class="text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>Masukkan jumlah lahir terlebih dahulu.</span>`;
         return;
       }
 
       container.innerHTML = `
-        <h4 class="text-xs font-bold uppercase text-slate-500 mb-2"><i class="fa-solid fa-venus-mars mr-1 text-emerald-500"></i>Rasio Jenis Kelamin Anakan Baru</h4>
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-xs font-bold uppercase text-slate-500"><i class="fa-solid fa-venus-mars mr-1 text-emerald-500"></i>Rasio Jenis Kelamin Anakan Baru (Total: ${jml} Ekor)</h4>
+          <span id="birth-gender-validation-badge" class="text-[10px] px-2 py-0.5 rounded font-extrabold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">Sesuai ✓</span>
+        </div>
         <div class="grid grid-cols-3 gap-2">
           <div>
             <label class="text-[10px] font-bold text-blue-500">Jantan (♂)</label>
-            <input type="number" id="kl-jantan" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
+            <input type="number" id="kl-jantan" oninput="syncBirthGenderFields('jantan')" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
           </div>
           <div>
             <label class="text-[10px] font-bold text-rose-500">Betina (♀)</label>
-            <input type="number" id="kl-betina" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
+            <input type="number" id="kl-betina" oninput="syncBirthGenderFields('betina')" min="0" value="0" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
           </div>
           <div>
-            <label class="text-[10px] font-bold text-slate-400">Unknown</label>
-            <input type="number" id="kl-unknown" min="0" value="${jml}" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
+            <label class="text-[10px] font-bold text-slate-400">Tidak Diketahui</label>
+            <input type="number" id="kl-unknown" oninput="syncBirthGenderFields('unknown')" min="0" value="${jml}" class="w-full px-2 py-1 bg-white dark:bg-slate-900 border rounded text-xs text-slate-900 dark:text-white">
           </div>
         </div>
+        <p id="kl-gender-error-msg" class="text-[10px] text-rose-500 font-semibold mt-1 hidden">Jumlah rasio tidak sesuai dengan total kelahiran!</p>
       `;
+    }
+
+    function syncBirthGenderFields(changed) {
+      const total = parseInt(document.getElementById("kl-jumlah").value) || 0;
+      const jantanEl = document.getElementById("kl-jantan");
+      const betinaEl = document.getElementById("kl-betina");
+      const unknownEl = document.getElementById("kl-unknown");
+      const badge = document.getElementById("birth-gender-validation-badge");
+      const errorMsg = document.getElementById("kl-gender-error-msg");
+      const saveBtn = document.querySelector("#add-kelahiran-form button[type='submit']");
+
+      if (!jantanEl || !betinaEl || !unknownEl) return;
+
+      let j = parseInt(jantanEl.value) || 0;
+      let b = parseInt(betinaEl.value) || 0;
+      let u = parseInt(unknownEl.value) || 0;
+
+      // Smart auto-adjustment (menyelaraskan dengan isian kolom jumlah)
+      if (changed === 'jantan' || changed === 'betina') {
+        u = Math.max(0, total - j - b);
+        unknownEl.value = u;
+      }
+
+      const sum = j + b + u;
+
+      if (sum === total && j >= 0 && b >= 0 && u >= 0) {
+        if (badge) {
+          badge.className = "text-[10px] px-2 py-0.5 rounded font-extrabold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
+          badge.innerText = "Sesuai ✓";
+        }
+        if (errorMsg) errorMsg.classList.add("hidden");
+        if (saveBtn) saveBtn.removeAttribute("disabled");
+      } else {
+        if (badge) {
+          badge.className = "text-[10px] px-2.5 py-0.5 rounded font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800";
+          badge.innerText = `Belum Sesuai (${sum}/${total})`;
+        }
+        if (errorMsg) {
+          errorMsg.textContent = `Jumlah total alokasi gender anak (${sum}) tidak sama dengan total kelahiran (${total}).`;
+          errorMsg.classList.remove("hidden");
+        }
+        if (saveBtn) saveBtn.setAttribute("disabled", "true");
+      }
     }
 
     function handleMutationTypeChange() {
@@ -1843,11 +2044,12 @@
       const j = parseInt(document.getElementById("ms-jantan")?.value) || 0;
       const b = parseInt(document.getElementById("ms-betina")?.value) || 0;
       const u = parseInt(document.getElementById("ms-unknown")?.value) || 0;
-      let kelaminStr = "";
-      if (j > 0) kelaminStr += `${j} ♂ `;
-      if (b > 0) kelaminStr += `${b} ♀ `;
-      if (u > 0) kelaminStr += `${u} Unknown`;
-      if (!kelaminStr) kelaminStr = "Belum teridentifikasi";
+      
+      let parts = [];
+      if (j > 0) parts.push(`${j} Jantan (♂)`);
+      if (b > 0) parts.push(`${b} Betina (♀)`);
+      if (u > 0) parts.push(`${u} Tidak Diketahui`);
+      const kelaminStr = parts.length > 0 ? parts.join(", ") : `${induk + anak} Tidak Diketahui`;
 
       if (idHidden) {
         const idx = localDB.master.findIndex(x => x.id === idHidden);
@@ -1873,16 +2075,19 @@
       const nama = document.getElementById("kl-satwa").value;
       const tanggal = document.getElementById("kl-tanggal").value;
       const jumlah = parseInt(document.getElementById("kl-jumlah").value) || 0;
+      const bap = document.getElementById("kl-bap").value.trim();
       const tag = document.getElementById("kl-tag").value.trim();
       const ket = document.getElementById("kl-keterangan").value.trim();
 
       const j = parseInt(document.getElementById("kl-jantan")?.value) || 0;
       const b = parseInt(document.getElementById("kl-betina")?.value) || 0;
       const u = parseInt(document.getElementById("kl-unknown")?.value) || 0;
-      let kelaminStr = "";
-      if (j > 0) kelaminStr += `${j} ♂ `;
-      if (b > 0) kelaminStr += `${b} ♀ `;
-      if (u > 0) kelaminStr += `${u} Unk`;
+      
+      let parts = [];
+      if (j > 0) parts.push(`${j} Jantan (♂)`);
+      if (b > 0) parts.push(`${b} Betina (♀)`);
+      if (u > 0) parts.push(`${u} Tidak Diketahui`);
+      const kelaminStr = parts.length > 0 ? parts.join(", ") : `${jumlah} Tidak Diketahui`;
 
       const parent = localDB.master.find(x => x.nama === nama);
 
@@ -1895,8 +2100,9 @@
           jumlah,
           tag,
           tanggal,
-          kelamin: kelaminStr || "Unknown",
-          ket
+          kelamin: kelaminStr,
+          ket,
+          bap
         };
         showToast("Data kelahiran satwa berhasil diperbarui!");
       } else {
@@ -1907,8 +2113,9 @@
           jumlah,
           tag,
           tanggal,
-          kelamin: kelaminStr || "Unknown",
-          ket
+          kelamin: kelaminStr,
+          ket,
+          bap
         });
         showToast("Berita acara kelahiran berhasil didokumentasikan!");
       }
@@ -2061,54 +2268,55 @@
       saveAndSync();
     }
 
+    // --- INTEGRASI MODAL KONFIRMASI CUSTOM (PREVENT BROWSER POP-UP WARNINGS) ---
     function deleteSatwa(id) {
-      if (confirm("Apakah Anda yakin ingin menghapus data master satwa ini?")) {
+      showCustomConfirm("Apakah Anda yakin ingin menghapus data master satwa ini secara permanen?", function() {
         localDB.master = localDB.master.filter(x => x.id !== id);
         showToast("Data master dihapus.", "error");
         updateDashboardStats();
         renderAllTables();
         saveAndSync();
-      }
+      });
     }
 
     function deleteKelahiran(idx) {
-      if (confirm("Hapus catatan kelahiran ini?")) {
+      showCustomConfirm("Hapus catatan Berita Acara Kelahiran ini secara permanen?", function() {
         localDB.kelahiran.splice(idx, 1);
         showToast("Catatan kelahiran dihapus.", "error");
         updateDashboardStats();
         renderAllTables();
         saveAndSync();
-      }
+      });
     }
 
     function deleteKematian(idx) {
-      if (confirm("Hapus catatan kematian ini?")) {
+      showCustomConfirm("Hapus catatan nekropsi kematian ini secara permanen?", function() {
         localDB.kematian.splice(idx, 1);
         showToast("Catatan kematian dihapus.", "error");
         updateDashboardStats();
         renderAllTables();
         saveAndSync();
-      }
+      });
     }
 
     function deleteTitipan(idx) {
-      if (confirm("Hapus catatan satwa titipan ini?")) {
+      showCustomConfirm("Hapus dokumen penitipan satwa ini secara permanen?", function() {
         localDB.titipan.splice(idx, 1);
         showToast("Catatan titipan dihapus.", "error");
         updateDashboardStats();
         renderAllTables();
         saveAndSync();
-      }
+      });
     }
 
     function deleteMutasi(idx) {
-      if (confirm("Hapus catatan transaksi mutasi ini?")) {
+      showCustomConfirm("Hapus log transaksi mutasi lapangan ini secara permanen?", function() {
         localDB.mutasi.splice(idx, 1);
         showToast("Catatan mutasi dihapus.", "error");
         updateDashboardStats();
         renderAllTables();
         saveAndSync();
-      }
+      });
     }
 
     function openChangePinModal() {
@@ -2174,7 +2382,6 @@
           if (k.tanggal) {
             const dateObj = new Date(k.tanggal);
             const m = dateObj.getMonth();
-            // Ambil rentang index 0 (Januari) s.d 5 (Juni) untuk grafik semester awal 2026
             if (m >= 0 && m < 6 && dateObj.getFullYear() === 2026) {
               birthsCount[m] += (parseInt(k.jumlah) || 0);
             }
@@ -2302,20 +2509,21 @@
     }
   </script>
   
+  <!-- SECURITY OVERRIDES -->
   <script type="text/javascript">
     // Keamanan Premium - Menolak Klik Kanan untuk mencegah inspeksi kode
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
 
-    // Keamanan Premium - Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
+    // Keamanan Premium - Menyembunyikan fungsionalitas inspeksi
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
             (e.ctrlKey && e.key === 'u')) {
             e.preventDefault();
         }
-      });
+    });
   </script>
 </body>
 </html>
