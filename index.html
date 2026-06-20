@@ -2522,5 +2522,325 @@
         }
       });
   </script>
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-Kuratorial</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  
+  <style>
+    /* Animasi Judul Neon Menyala dan Berdenyut (Glowing Neon Pulse) */
+    .glowing-title {
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 5px #00d2ff, 0 0 10px #00d2ff, 0 0 20px #00d2ff;
+      animation: pulse 2.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% {
+        text-shadow: 0 0 5px #00d2ff, 0 0 10px #00d2ff, 0 0 20px #00d2ff, 0 0 40px #0066ff;
+        transform: scale(1);
+      }
+      100% {
+        text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff, 0 0 40px #00d2ff, 0 0 60px #0066ff, 0 0 80px #0066ff;
+        transform: scale(1.015);
+      }
+    }
+
+    .login-container {
+      max-width: 450px;
+      margin-top: 8%;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      z-index: 1050;
+    }
+    
+    .cursor-pointer {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-body-tertiary">
+
+  <div class="theme-toggle" onclick="toggleTheme()">
+    <i id="theme-icon" class="bi bi-sun-fill fs-4 text-warning"></i>
+  </div>
+
+  <div id="login-page" class="container login-container p-3">
+    <div class="card shadow border-0 p-4">
+      <div class="text-center mb-4">
+        <span class="badge bg-danger rounded-pill px-3 py-2 mb-2" style="font-weight: bold; letter-spacing: 1px;">SGBL</span>
+        <h1 class="glowing-title my-2 fs-2">e-Kuratorial</h1>
+        <small class="text-muted d-block">SATWA GUNUNG BAYAN LESTARI</small>
+      </div>
+      
+      <div id="login-alert" class="alert alert-danger d-none" role="alert"></div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" id="username" class="form-control" placeholder="Masukkan username" required>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" id="password" class="form-control" placeholder="Masukkan password" required>
+            <span class="input-group-text cursor-pointer" onclick="togglePasswordVisibility()">
+              <i id="eye-icon" class="bi bi-eye"></i>
+            </span>
+          </div>
+        </div>
+        <button type="submit" id="btn-login" class="btn btn-primary w-100 py-2">
+          <span id="login-spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+          Masuk Aplikasi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="main-page" class="container py-5 d-none">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h1 class="glowing-title fs-3 text-center text-md-start">e-Kuratorial</h1>
+        <small class="text-muted">Selamat datang, <strong id="user-display" class="text-primary"></strong></small>
+      </div>
+      <button class="btn btn-outline-danger btn-sm" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card shadow border-0 p-4">
+          <h5 class="card-title mb-3"><i class="bi bi-plus-circle-fill text-primary"></i> Input Data Kuratorial</h5>
+          <form id="data-form" onsubmit="handleSimpanData(event)">
+            <div class="mb-3">
+              <label class="form-label">Nama Satwa</label>
+              <input type="text" id="namaSatwa" class="form-control" required placeholder="Contoh: Badak Jawa">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Spesies</label>
+              <input type="text" id="spesies" class="form-control" required placeholder="Contoh: Rhinoceros sondaicus">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Jumlah</label>
+              <input type="number" id="jumlah" class="form-control" required min="1">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Kondisi</label>
+              <select id="kondisi" class="form-select" required>
+                <option value="Sehat">Sehat</option>
+                <option value="Dalam Pemantauan">Dalam Pemantauan</option>
+                <option value="Sakit">Sakit</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Catatan Medis/Perilaku</label>
+              <textarea id="catatan" class="form-control" rows="3" placeholder="Masukkan rekam medis atau catatan perilaku..."></textarea>
+            </div>
+            <button type="submit" id="btn-simpan" class="btn btn-success w-100">Simpan Data</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="card shadow border-0 p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title m-0"><i class="bi bi-table text-primary"></i> Live-Monitoring Data Spreadsheet</h5>
+            <span class="badge bg-info-subtle text-info animate-pulse" id="live-indicator"><i class="bi bi-broadcast"></i> Sync Real-time Aktif</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tanggal</th>
+                  <th>Nama Satwa</th>
+                  <th>Spesies</th>
+                  <th>Jumlah</th>
+                  <th>Kondisi</th>
+                </tr>
+              </thead>
+              <tbody id="table-body">
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-4">Menghubungkan ke server real-time...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Variabel state global untuk memantau sinkronisasi database
+    let realTimeInterval = null;
+    let dataLamaString = ""; 
+
+    // Fitur Mata Elang (Melihat / Menyembunyikan Password)
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eye-icon');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.className = 'bi bi-eye-slash';
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.className = 'bi bi-eye';
+      }
+    }
+
+    // Mengganti Tema (Dark Mode / Light Mode)
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const themeIcon = document.getElementById('theme-icon');
+      if (htmlEl.getAttribute('data-bs-theme') === 'dark') {
+        htmlEl.setAttribute('data-bs-theme', 'light');
+        themeIcon.className = 'bi bi-moon-fill text-dark';
+      } else {
+        htmlEl.setAttribute('data-bs-theme', 'dark');
+        themeIcon.className = 'bi bi-sun-fill text-warning';
+      }
+    }
+
+    // Penanganan Event Submit Login Form
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const btn = document.getElementById('btn-login');
+      const spinner = document.getElementById('login-spinner');
+      const alertEl = document.getElementById('login-alert');
+
+      btn.disabled = true;
+      spinner.classList.remove('d-none');
+      alertEl.classList.add('d-none');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false;
+          spinner.classList.add('d-none');
+          if (res.status === "success") {
+            document.getElementById('login-page').classList.add('d-none');
+            document.getElementById('main-page').classList.remove('d-none');
+            document.getElementById('user-display').innerText = res.nama;
+            
+            // Ambil data pertama kali saat masuk aplikasi
+            loadTableDataRealTime();
+            
+            // SISTEM REAL-TIME: Periksa server spreadsheet setiap 4 detik secara otomatis
+            realTimeInterval = setInterval(loadTableDataRealTime, 4000);
+          } else {
+            alertEl.innerText = res.message;
+            alertEl.classList.remove('d-none');
+          }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          spinner.classList.add('d-none');
+          alertEl.innerText = "Gagal menghubungi server Apps Script.";
+          alertEl.classList.remove('d-none');
+        })
+        .cekLogin(user, pass);
+    }
+
+    // Fungsi Pengambil Data Otomatis & Komparasi State (Mencegah Kedipan Layar)
+    function loadTableDataRealTime() {
+      const tbody = document.getElementById('table-body');
+
+      google.script.run
+        .withSuccessHandler(function(data) {
+          // Lakukan serialisasi objek JSON ke string untuk dicocokkan
+          let dataSekarangString = JSON.stringify(data);
+          
+          // JIKA DATA DI SPREADSHEET MASIH SAMA, LEWATI PROSES RENDER ULANG DOM HTML
+          if (dataSekarangString === dataLamaString) {
+            return; 
+          }
+          
+          // Jika ada perbedaan terdeteksi (data dihapus/ditambah dari browser lain), jalankan update
+          dataLamaString = dataSekarangString;
+          tbody.innerHTML = '';
+          
+          if(data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Tidak ada data terdeteksi di Google Sheets.</td></tr>';
+            return;
+          }
+          
+          data.forEach(function(row) {
+            let badgeColor = row.Kondisi === 'Sehat' ? 'bg-success' : (row.Kondisi === 'Sakit' ? 'bg-danger' : 'bg-warning');
+            tbody.innerHTML += `
+              <tr>
+                <td><small class="text-monospace text-secondary">${row.ID || '-'}</small></td>
+                <td>${row.Tanggal || '-'}</td>
+                <td><strong>${row.NamaSatwa || '-'}</strong></td>
+                <td><em>${row.Spesies || '-'}</em></td>
+                <td><span class="badge bg-secondary">${row.Jumlah || '0'} ekor</span></td>
+                <td><span class="badge ${badgeColor}">${row.Kondisi || '-'}</span></td>
+              </tr>
+            `;
+          });
+        })
+        .getDataKuratorial();
+    }
+
+    // Penanganan Aksi Simpan Data Baru
+    function handleSimpanData(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-simpan');
+      btn.disabled = true;
+
+      const payload = {
+        namaSatwa: document.getElementById('namaSatwa').value,
+        spesies: document.getElementById('spesies').value,
+        jumlah: document.getElementById('jumlah').value,
+        kondisi: document.getElementById('kondisi').value,
+        catatan: document.getElementById('catatan').value
+      };
+
+      google.script.run
+        .withSuccessHandler(function(msg) {
+          btn.disabled = false;
+          document.getElementById('data-form').reset();
+          // Segera panggil sinkronisasi tanpa perlu menunggu siklus jeda 4 detik
+          loadTableDataRealTime();
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          alert("Gagal melakukan penulisan ke Google Sheets.");
+        })
+        .tambahData(payload);
+    }
+
+    // Fungsi Keluar (Logout)
+    function logout() {
+      // WAJIB: Bersihkan / hentikan background interval request saat logout demi performa kuota request Google
+      if (realTimeInterval) {
+        clearInterval(realTimeInterval);
+      }
+      dataLamaString = "";
+      document.getElementById('login-form').reset();
+      document.getElementById('main-page').classList.add('d-none');
+      document.getElementById('login-page').classList.remove('d-none');
+    }
+  </script>
+</body>
+</html>
 </body>
 </html>
