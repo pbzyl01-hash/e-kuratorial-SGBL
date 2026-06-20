@@ -887,6 +887,7 @@
       <div class="grid grid-cols-3 gap-3">
         <div>
           <label class="block text-xs font-bold mb-1.5 text-slate-500 dark:text-slate-400">Klasifikasi Mutasi</label>
+          <!-- KLASIFIKASI ONCHANGE UNTUK AUTO-SET SIFAT TRANSAKSI -->
           <select id="mt-jenis" onchange="handleMutationTypeChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none">
             <option value="Mutasi Penitipan">Mutasi Penitipan</option>
             <option value="Barter Masuk">Barter Masuk (LK)</option>
@@ -983,7 +984,7 @@
     </form>
   </div>
 
-  <!-- CUSTOM CONFIRMATION MODAL -->
+  <!-- CUSTOM CONFIRMATION MODAL (REPLACES NATIVE BROWSER CONFIRM) -->
   <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-sm transform scale-95 transition-all duration-300">
       <h4 class="font-bold text-lg text-rose-600 dark:text-rose-400 mb-2 flex items-center gap-2">
@@ -1026,7 +1027,7 @@
       fallback: {}
     };
 
-    // DATABASE UTAMA
+    // DATABASE UTAMA (DILENGKAPI DATA BA KELAHIRAN BARU)
     let localDB = {
       master: JSON.parse(SafeStorage.getItem('sgbl_master')) || [
         { id: "REG-001", nama: "Bangau Tongtong", latin: "Leptoptilos javanicus", kelas: "Aves", induk_awal: 18, anakan_awal: 2, status: "Dilindungi", kandang: "Aviary Barat 2", asal: "Titipan Negara (BKSDA)", kelamin: "18 Jantan (♂), 2 Betina (♀)", keterangan: "Kondisi Sehat" },
@@ -1302,7 +1303,7 @@
       }
     }
 
-    // --- FORM PARSER JENIS KELAMIN SATWA (BAHASA INDONESIA) ---
+    // --- FORM PARSER JENIS KELAMIN SATWA (BAHASA INDONESIA YANG AMAN DARI NaN) ---
     function parseGenderValue(genderStr, totalCount = 0) {
       let jantan = 0, betina = 0, unknown = 0;
       if (!genderStr) return { jantan, betina, unknown: totalCount };
@@ -1324,12 +1325,13 @@
       return { jantan, betina, unknown };
     }
 
+    // --- REKAPITULASI DENGAN PENANGANAN DATA KOSONG SECARA TOTAL (BEBAS DARI NaN) ---
     function getRecalculatedSatwa(satwa) {
-      // Pastikan semua properti angka awal valid agar tidak memicu NaN
+      // Pastikan data awal adalah numerik murni, jatuh ke 0 jika kosong/bukan angka
       const induk_awal = parseInt(satwa.induk_awal) || 0;
       const anakan_awal = parseInt(satwa.anakan_awal) || 0;
 
-      // 1. Hitung Penambahan
+      // 1. Hitung Penambahan secara aman
       const penambahanKelahiran = localDB.kelahiran
         .filter(k => k.nama === satwa.nama)
         .reduce((sum, item) => sum + (parseInt(item.jumlah) || 0), 0);
@@ -1353,7 +1355,7 @@
       const totalTambahInduk = penambahanTitipanInduk + penambahanMutasiInduk;
       const totalTambahAnakan = penambahanKelahiran + penambahanTitipanAnakan + penambahanMutasiAnakan;
 
-      // 2. Hitung Pengurangan
+      // 2. Hitung Pengurangan secara aman
       const penguranganKematianInduk = localDB.kematian
         .filter(k => k.nama === satwa.nama && k.kategori === 'Induk')
         .reduce((sum, item) => sum + (parseInt(item.jumlah) || 0), 0);
@@ -1373,7 +1375,7 @@
       const totalKurangInduk = penguranganKematianInduk + penguranganMutasiInduk;
       const totalKurangAnakan = penguranganKematianAnakan + penguranganMutasiAnakan;
 
-      // 3. Stok Akhir
+      // 3. Stok Akhir (Aman dari NaN)
       const induk_akhir = Math.max(0, induk_awal + totalTambahInduk - totalKurangInduk);
       const anakan_akhir = Math.max(0, anakan_awal + totalTambahAnakan - totalKurangAnakan);
 
@@ -1440,17 +1442,14 @@
 
       localDB.master.forEach(item => {
         const recalc = getRecalculatedSatwa(item);
-        
-        // Atasi NaN dengan memaksa hasil akumulasi yang aman
-        const populasiItem = parseInt(recalc.total_populasi) || 0;
-        totalP += populasiItem;
+        totalP += recalc.total_populasi;
 
         if (recalc.status === "Dilindungi") {
-          totalLindung += populasiItem;
+          totalLindung += recalc.total_populasi;
         } else if (recalc.status === "Tidak Dilindungi") {
-          totalBebas += populasiItem;
+          totalBebas += recalc.total_populasi;
         } else if (recalc.status === "Eksotis") {
-          totalEksotis += populasiItem;
+          totalEksotis += recalc.total_populasi;
         }
       });
 
@@ -1458,14 +1457,14 @@
       localDB.kematian.forEach(k => totalMati += (parseInt(k.jumlah) || 0));
       localDB.titipan.forEach(t => totalTitipan += (parseInt(t.jumlah) || 0));
 
-      document.getElementById("stat-total-populasi").textContent = isNaN(totalP) ? 0 : totalP;
-      document.getElementById("stat-kelahiran").textContent = isNaN(totalLahir) ? 0 : totalLahir;
-      document.getElementById("stat-kematian").textContent = isNaN(totalMati) ? 0 : totalMati;
-      document.getElementById("stat-titipan").textContent = isNaN(totalTitipan) ? 0 : totalTitipan;
-      document.getElementById("stat-dilindungi").textContent = isNaN(totalLindung) ? 0 : totalLindung;
-      document.getElementById("stat-tidak-dilindungi").textContent = isNaN(totalBebas) ? 0 : totalBebas;
-      document.getElementById("stat-eksotis").textContent = isNaN(totalEksotis) ? 0 : totalEksotis;
-      document.getElementById("stat-mutasi").textContent = isNaN(totalMut) ? 0 : totalMut;
+      document.getElementById("stat-total-populasi").textContent = totalP;
+      document.getElementById("stat-kelahiran").textContent = totalLahir;
+      document.getElementById("stat-kematian").textContent = totalMati;
+      document.getElementById("stat-titipan").textContent = totalTitipan;
+      document.getElementById("stat-dilindungi").textContent = totalLindung;
+      document.getElementById("stat-tidak-dilindungi").textContent = totalBebas;
+      document.getElementById("stat-eksotis").textContent = totalEksotis;
+      document.getElementById("stat-mutasi").textContent = totalMut;
     }
 
     function renderAllTables() {
@@ -1650,20 +1649,20 @@
         row.innerHTML = `
           <td class="p-3 text-center border-r border-slate-200 dark:border-slate-700/60 font-semibold text-slate-400">${idx + 1}</td>
           <td class="p-3 text-left border-r border-slate-200 dark:border-slate-700/60">
-            <div class="font-extrabold text-slate-800 dark:text-white leading-tight">${recalc.nama}</div>
+            <div class="font-extrabold text-slate-800 dark:text-slate-100">${recalc.nama}</div>
             <div class="text-[10px] italic text-slate-400">${recalc.latin}</div>
           </td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-center">${recalc.induk_awal}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-center">${recalc.anakan_awal}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 text-[10px] text-slate-500 text-left font-medium">${recalc.asal}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-emerald-500 text-center">${recalc.tambah_induk}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-emerald-500 text-center">${recalc.tambah_anakan}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-rose-500 text-center">${recalc.kurang_induk}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-rose-500 text-center">${recalc.kurang_anakan}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 text-center font-semibold text-slate-600 dark:text-slate-300 leading-relaxed">${recalc.docBA}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-black text-brand-600 dark:text-brand-400 text-center text-sm">${recalc.induk_akhir}</td>
-          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-black text-brand-600 dark:text-brand-400 text-center text-sm">${recalc.anakan_akhir}</td>
-          <td class="p-3 text-left font-bold text-slate-500 dark:text-slate-400">${recalc.status}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold">${recalc.induk_awal}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold">${recalc.anakan_awal}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 text-[10px] text-slate-400">${recalc.asal}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-emerald-500">${recalc.tambah_induk}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-emerald-500">${recalc.tambah_anakan}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-rose-500">${recalc.kurang_induk}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-bold text-rose-500">${recalc.kurang_anakan}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 text-center font-semibold text-slate-600 dark:text-slate-300">${recalc.docBA}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-black text-brand-600 dark:text-brand-400">${recalc.induk_akhir}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-slate-700/60 font-black text-brand-600 dark:text-brand-400">${recalc.anakan_akhir}</td>
+          <td class="p-3 text-slate-400 font-semibold">${recalc.status}</td>
         `;
         tbody.appendChild(row);
       });
@@ -1738,7 +1737,8 @@
       adjustGenderInputFields();
 
       // Isi rasio kelamin dari string jika ada
-      const breakdown = parseGenderValue(item.kelamin, (parseInt(item.induk_awal) + parseInt(item.anakan_awal)));
+      const total = (parseInt(item.induk_awal) || 0) + (parseInt(item.anakan_awal) || 0);
+      const breakdown = parseGenderValue(item.kelamin, total);
       setTimeout(() => {
         const j = document.getElementById("ms-jantan");
         const b = document.getElementById("ms-betina");
@@ -1759,8 +1759,8 @@
       document.getElementById("modal-kelahiran-title").innerHTML = `<i class="fa-solid fa-baby mr-2 text-emerald-500"></i>Catat Kelahiran Satwa`;
       document.getElementById("kl-bap").value = "BA.Kelahiran/" + String(localDB.kelahiran.length + 1).padStart(3, "0") + "/VI/2026";
       
-      // Mengatur tanggal kelahiran default ke hari ini
-      document.getElementById("kl-tanggal").value = "2026-06-19";
+      // Mengatur tanggal kelahiran default ke hari ini (20 Juni 2026)
+      document.getElementById("kl-tanggal").value = "2026-06-20";
       
       adjustBirthGenderInputFields();
       openModal("add-kelahiran-modal");
@@ -1865,7 +1865,7 @@
       const total = induk + anak;
 
       if (total === 0) {
-        container.innerHTML = `<span class="text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>Silakan isi jumlah induk atau anakan terlebih dahulu untuk melengkapi data kelamin.</span>`;
+        container.innerHTML = `<span class="text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>Silakan isi jumlah induk atau anakan awal terlebih dahulu untuk melengkapi data kelamin.</span>`;
         return;
       }
 
@@ -1910,6 +1910,7 @@
       let b = parseInt(betinaEl.value) || 0;
       let u = parseInt(unknownEl.value) || 0;
 
+      // Smart auto-adjustment
       if (changed === 'jantan' || changed === 'betina') {
         u = Math.max(0, total - j - b);
         unknownEl.value = u;
@@ -1937,6 +1938,7 @@
       }
     }
 
+    // --- INTEGRASI & SINKRONISASI JENIS KELAMIN KELAHIRAN ---
     function adjustBirthGenderInputFields() {
       const container = document.getElementById("birth-gender-container");
       const jml = parseInt(document.getElementById("kl-jumlah").value) || 0;
@@ -1984,6 +1986,7 @@
       let b = parseInt(betinaEl.value) || 0;
       let u = parseInt(unknownEl.value) || 0;
 
+      // Smart auto-adjustment (menyelaraskan dengan isian kolom jumlah)
       if (changed === 'jantan' || changed === 'betina') {
         u = Math.max(0, total - j - b);
         unknownEl.value = u;
@@ -2019,7 +2022,7 @@
 
       if (jenis === "Mutasi Penitipan" || jenis === "Barter Masuk") {
         tipeSelect.value = "Penambahan";
-        asalInput.value = "Pihak Tiga / BKSDA";
+        asalInput.value = "Pihak Ketiga / BKSDA";
         tujuanInput.value = "Kandang LK";
       } else if (jenis === "Kematian" || jenis === "Barter Keluar" || jenis === "Pelepasliaran") {
         tipeSelect.value = "Pengurangan";
@@ -2272,6 +2275,7 @@
       saveAndSync();
     }
 
+    // --- INTEGRASI MODAL KONFIRMASI CUSTOM (PREVENT BROWSER POP-UP WARNINGS) ---
     function deleteSatwa(id) {
       showCustomConfirm("Apakah Anda yakin ingin menghapus data master satwa ini secara permanen?", function() {
         localDB.master = localDB.master.filter(x => x.id !== id);
@@ -2377,6 +2381,7 @@
         const textColor = isDark ? '#cbd5e1' : '#334155';
         const gridColor = isDark ? '#334155' : '#e2e8f0';
 
+        // Menghitung data historis bulanan secara dinamis & real-time langsung dari database (localDB)
         const birthsCount = [0, 0, 0, 0, 0, 0]; 
         const deathsCount = [0, 0, 0, 0, 0, 0]; 
 
@@ -2456,12 +2461,12 @@
 
           localDB.master.forEach(item => {
             const r = getRecalculatedSatwa(item);
-            const popItem = parseInt(r.total_populasi) || 0;
-            if (r.status === "Dilindungi") totalLindung += popItem;
-            else if (r.status === "Tidak Dilindungi") totalBebas += popItem;
-            else if (r.status === "Eksotis") totalEksotis += popItem;
+            if (r.status === "Dilindungi") totalLindung += r.total_populasi;
+            else if (r.status === "Tidak Dilindungi") totalBebas += r.total_populasi;
+            else if (r.status === "Eksotis") totalEksotis += r.total_populasi;
           });
 
+          // Tampilkan visualisasi proporsi perlindungan berdasarkan sebaran riil
           const totalProportion = totalLindung + totalBebas + totalEksotis;
           const finalData = totalProportion > 0 ? [totalLindung, totalBebas, totalEksotis] : [1, 1, 1];
 
@@ -2490,6 +2495,7 @@
     }
 
     window.onload = function() {
+      // 1. Inisialisasi Live Clock tanpa delay/pulsing agresif
       const runClock = () => {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -2501,26 +2507,30 @@
       runClock();
       setInterval(runClock, 1000);
 
+      // 2. Terapkan Tema Tersimpan
       const savedTheme = SafeStorage.getItem('ekurator_theme') || "dark";
       applyTheme(savedTheme === "dark");
 
+      // 3. Muat Data Awal ke Dasbor & database
       loadFromSpreadsheet();
     }
   </script>
   
   <!-- SECURITY OVERRIDES -->
   <script type="text/javascript">
+    // Keamanan Premium - Menolak Klik Kanan untuk mencegah inspeksi kode
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
 
+    // Keamanan Premium - Menyembunyikan fungsionalitas inspeksi
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
             (e.ctrlKey && e.key === 'u')) {
             e.preventDefault();
         }
-      });
+    });
   </script>
 </body>
 </html>
