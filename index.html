@@ -288,9 +288,15 @@
                   <i class="fa-solid fa-users text-sm"></i>
                 </div>
               </div>
-              <div class="flex items-baseline justify-between mt-5">
+              <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-total-populasi" class="text-4xl font-black text-brand-600 dark:text-brand-400">0</span>
                 <span class="text-[10px] bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 px-2.5 py-1 rounded-lg font-bold">Ekor</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-layer-group text-brand-400 text-[10px]"></i>Jumlah Jenis
+                </span>
+                <span id="stat-total-jenis" class="text-sm font-black text-brand-500 dark:text-brand-300">0 <span class="text-[10px] font-semibold text-slate-400">jenis</span></span>
               </div>
             </div>
             <!-- Kelahiran -->
@@ -343,9 +349,15 @@
                   <i class="fa-solid fa-shield-halved text-sm"></i>
                 </div>
               </div>
-              <div class="flex items-baseline justify-between mt-5">
+              <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-dilindungi" class="text-4xl font-black text-purple-500 dark:text-purple-400">0</span>
                 <span class="text-[10px] bg-purple-50 dark:bg-purple-950/30 text-purple-500 dark:text-purple-400 px-2.5 py-1 rounded-lg font-bold">UU</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-layer-group text-purple-400 text-[10px]"></i>Jumlah Jenis
+                </span>
+                <span id="stat-jenis-dilindungi" class="text-sm font-black text-purple-500 dark:text-purple-300">0 <span class="text-[10px] font-semibold text-slate-400">jenis</span></span>
               </div>
             </div>
             <!-- Satwa TIDAK Dilindungi -->
@@ -356,9 +368,15 @@
                   <i class="fa-solid fa-ban text-sm"></i>
                 </div>
               </div>
-              <div class="flex items-baseline justify-between mt-5">
+              <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-tidak-dilindungi" class="text-4xl font-black text-slate-600 dark:text-slate-300">0</span>
                 <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2.5 py-1 rounded-lg font-bold">Bebas</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-layer-group text-slate-400 text-[10px]"></i>Jumlah Jenis
+                </span>
+                <span id="stat-jenis-bebas" class="text-sm font-black text-slate-600 dark:text-slate-300">0 <span class="text-[10px] font-semibold text-slate-400">jenis</span></span>
               </div>
             </div>
             <!-- Satwa Eksotis -->
@@ -369,9 +387,15 @@
                   <i class="fa-solid fa-dragon text-sm"></i>
                 </div>
               </div>
-              <div class="flex items-baseline justify-between mt-5">
+              <div class="flex items-baseline justify-between mt-4">
                 <span id="stat-eksotis" class="text-4xl font-black text-teal-500 dark:text-teal-400">0</span>
                 <span class="text-[10px] bg-teal-50 dark:bg-teal-950/30 text-teal-500 dark:text-teal-400 px-2.5 py-1 rounded-lg font-bold">Asing</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-layer-group text-teal-400 text-[10px]"></i>Jumlah Jenis
+                </span>
+                <span id="stat-jenis-eksotis" class="text-sm font-black text-teal-500 dark:text-teal-300">0 <span class="text-[10px] font-semibold text-slate-400">jenis</span></span>
               </div>
             </div>
             <!-- Total Mutasi -->
@@ -402,6 +426,18 @@
               <div class="h-64 flex items-center justify-center">
                 <canvas id="proporsiChart"></canvas>
               </div>
+            </div>
+          </div>
+          <!-- Panel Rekap Populasi Per Kelas -->
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+              <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2">
+                <i class="fa-solid fa-table-cells text-brand-500"></i>Rekap Populasi Per Kelas
+              </h3>
+              <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Jenis · Individu</span>
+            </div>
+            <div id="rekap-per-kelas" class="divide-y divide-slate-100 dark:divide-slate-700/40">
+              <!-- diisi oleh JS -->
             </div>
           </div>
         </section>
@@ -1467,36 +1503,127 @@
       let totalLahir = 0;
       let totalMati = 0;
       let totalTitipan = 0;
-      let totalLindung = 0;
-      let totalBebas = 0;
-      let totalEksotis = 0;
+      let totalLindung = 0, jenisLindung = 0;
+      let totalBebas = 0,   jenisBebas = 0;
+      let totalEksotis = 0, jenisEksotis = 0;
       let totalMut = localDB.mutasi.length;
+
+      // Akumulasi per kelas: { "Aves": { jenis: Set, individu: 0 }, ... }
+      const perKelas = {};
 
       localDB.master.forEach(item => {
         const recalc = getRecalculatedSatwa(item);
         totalP += recalc.total_populasi;
 
+        // Hitung per status (jenis = 1 baris master = 1 jenis)
         if (recalc.status === "Dilindungi") {
           totalLindung += recalc.total_populasi;
+          jenisLindung++;
         } else if (recalc.status === "Tidak Dilindungi") {
           totalBebas += recalc.total_populasi;
+          jenisBebas++;
         } else if (recalc.status === "Eksotis") {
           totalEksotis += recalc.total_populasi;
+          jenisEksotis++;
         }
+
+        // Hitung per kelas
+        const kelas = recalc.kelas || "Lainnya";
+        if (!perKelas[kelas]) perKelas[kelas] = { jenis: 0, individu: 0 };
+        perKelas[kelas].jenis++;
+        perKelas[kelas].individu += recalc.total_populasi;
       });
 
       localDB.kelahiran.forEach(k => totalLahir += (parseInt(k.jumlah) || 0));
       localDB.kematian.forEach(k => totalMati += (parseInt(k.jumlah) || 0));
       localDB.titipan.forEach(t => totalTitipan += (parseInt(t.jumlah) || 0));
 
+      // Update kartu utama
       document.getElementById("stat-total-populasi").textContent = totalP;
+      document.getElementById("stat-total-jenis").innerHTML = `${localDB.master.length} <span class="text-[10px] font-semibold text-slate-400">jenis</span>`;
       document.getElementById("stat-kelahiran").textContent = totalLahir;
       document.getElementById("stat-kematian").textContent = totalMati;
       document.getElementById("stat-titipan").textContent = totalTitipan;
       document.getElementById("stat-dilindungi").textContent = totalLindung;
+      document.getElementById("stat-jenis-dilindungi").innerHTML = `${jenisLindung} <span class="text-[10px] font-semibold text-slate-400">jenis</span>`;
       document.getElementById("stat-tidak-dilindungi").textContent = totalBebas;
+      document.getElementById("stat-jenis-bebas").innerHTML = `${jenisBebas} <span class="text-[10px] font-semibold text-slate-400">jenis</span>`;
       document.getElementById("stat-eksotis").textContent = totalEksotis;
+      document.getElementById("stat-jenis-eksotis").innerHTML = `${jenisEksotis} <span class="text-[10px] font-semibold text-slate-400">jenis</span>`;
       document.getElementById("stat-mutasi").textContent = totalMut;
+
+      // Render panel rekap per kelas
+      const kelasIcons = {
+        "Aves":    { icon: "fa-dove",        color: "text-sky-500",    bg: "bg-sky-50 dark:bg-sky-900/20",    border: "border-sky-200/50 dark:border-sky-800/30" },
+        "Mamalia": { icon: "fa-paw",          color: "text-amber-500",  bg: "bg-amber-50 dark:bg-amber-900/20", border: "border-amber-200/50 dark:border-amber-800/30" },
+        "Reptil":  { icon: "fa-worm",         color: "text-green-500",  bg: "bg-green-50 dark:bg-green-900/20", border: "border-green-200/50 dark:border-green-800/30" },
+        "Lainnya": { icon: "fa-fish",         color: "text-teal-500",   bg: "bg-teal-50 dark:bg-teal-900/20",  border: "border-teal-200/50 dark:border-teal-800/30" }
+      };
+
+      const container = document.getElementById("rekap-per-kelas");
+      if (!container) return;
+
+      const kelasList = Object.keys(perKelas).sort();
+      if (kelasList.length === 0) {
+        container.innerHTML = `<div class="px-6 py-8 text-center text-slate-400 text-sm">Belum ada data populasi.</div>`;
+        return;
+      }
+
+      container.innerHTML = kelasList.map(kelas => {
+        const d = perKelas[kelas];
+        const cfg = kelasIcons[kelas] || kelasIcons["Lainnya"];
+        const pctJenis = localDB.master.length > 0 ? Math.round((d.jenis / localDB.master.length) * 100) : 0;
+        const pctInd   = totalP > 0 ? Math.round((d.individu / totalP) * 100) : 0;
+        return `
+          <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+            <!-- Label kelas -->
+            <div class="flex items-center gap-3 min-w-[140px]">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center ${cfg.bg} border ${cfg.border} flex-shrink-0">
+                <i class="fa-solid ${cfg.icon} ${cfg.color} text-sm"></i>
+              </div>
+              <span class="font-bold text-slate-800 dark:text-white text-sm">${kelas}</span>
+            </div>
+            <!-- Stat jenis -->
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 uppercase tracking-wide font-semibold">Jenis</span>
+                <span class="text-sm font-black ${cfg.color}">${d.jenis} <span class="text-[10px] font-semibold text-slate-400">jenis</span></span>
+              </div>
+              <div class="h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                <div class="h-full rounded-full bg-current ${cfg.color} opacity-60 transition-all duration-500" style="width:${pctJenis}%"></div>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-0.5 text-right">${pctJenis}% dari total jenis</div>
+            </div>
+            <!-- Stat individu -->
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 uppercase tracking-wide font-semibold">Individu</span>
+                <span class="text-sm font-black ${cfg.color}">${d.individu} <span class="text-[10px] font-semibold text-slate-400">ekor</span></span>
+              </div>
+              <div class="h-1.5 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                <div class="h-full rounded-full bg-current ${cfg.color} transition-all duration-500" style="width:${pctInd}%"></div>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-0.5 text-right">${pctInd}% dari total individu</div>
+            </div>
+          </div>`;
+      }).join("") + `
+        <!-- Baris total keseluruhan -->
+        <div class="px-6 py-3 bg-slate-50 dark:bg-slate-700/30 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6">
+          <div class="min-w-[140px] flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-brand-50 dark:bg-brand-900/20 border border-brand-200/50 dark:border-brand-800/30 flex-shrink-0">
+              <i class="fa-solid fa-sigma text-brand-500 text-sm"></i>
+            </div>
+            <span class="font-black text-slate-700 dark:text-slate-200 text-sm">Total</span>
+          </div>
+          <div class="flex-1 flex items-center justify-between">
+            <span class="text-[11px] text-slate-500 uppercase tracking-wide font-semibold">Total Jenis</span>
+            <span class="text-sm font-black text-brand-600 dark:text-brand-400">${localDB.master.length} <span class="text-[10px] font-semibold text-slate-400">jenis</span></span>
+          </div>
+          <div class="flex-1 flex items-center justify-between">
+            <span class="text-[11px] text-slate-500 uppercase tracking-wide font-semibold">Total Individu</span>
+            <span class="text-sm font-black text-brand-600 dark:text-brand-400">${totalP} <span class="text-[10px] font-semibold text-slate-400">ekor</span></span>
+          </div>
+        </div>`;
     }
 
     function renderAllTables() {
