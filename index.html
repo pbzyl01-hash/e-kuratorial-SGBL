@@ -2992,7 +2992,7 @@
     }
 
     /** CSS umum untuk halaman cetak */
-    const KOP_IMG_URL = "https://drive.google.com/uc?export=view&id=1tY8n5rx6pdb_QKeXT_eKBCQb9mwB21fG";
+    const KOP_IMG_URL = "https://i.ibb.co/5hg1v7QC/Kop-Surat.png";
 
     function cssLaporan() {
       return `
@@ -3142,7 +3142,7 @@
       </tr>`;
 
       const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(label, 'Laporan Bulanan Lembaga Konservasi', label)}
+        ${kopSurat(label, 'Laporan Bulanan Lembaga Konservasi', '')}
         <table class="lap-tbl">
           <thead>
             <tr>
@@ -3219,7 +3219,7 @@
       </tr>`;
 
       const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(labelTW, 'Laporan Triwulan Lembaga Konservasi', labelTW)}
+        ${kopSurat(labelTW, 'Laporan Triwulan Lembaga Konservasi', '')}
         <table class="lap-tbl">
           <thead>
             <tr>
