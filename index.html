@@ -116,6 +116,23 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* ===== CSS PRINT untuk Laporan ===== */
+    @media print {
+      body > *:not(#main-layout) { display: none !important; }
+      #main-layout aside,
+      #main-layout header,
+      #main-layout footer,
+      .no-print { display: none !important; }
+      #main-layout { display: block !important; }
+      main { padding: 0 !important; }
+      section { display: none !important; }
+      section.print-active { display: block !important; }
+      .print-area { border: none !important; box-shadow: none !important; border-radius: 0 !important; }
+      .lap-tbl { page-break-inside: auto; }
+      .lap-tbl tr { page-break-inside: avoid; page-break-after: auto; }
+      @page { size: A4 landscape; margin: 14mm 12mm; }
+    }
   </style>
 </head>
 
@@ -215,6 +232,26 @@
         </button>
 
         <div class="pt-2 pb-1"><div class="border-t border-slate-200 dark:border-slate-700/80"></div></div>
+        <p class="px-3 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 pt-1 pb-0.5">Laporan Resmi</p>
+
+        <button onclick="switchTab('laporan-bulanan')" data-tab="laporan-bulanan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+          <i class="fa-solid fa-calendar-days w-5 text-center text-orange-500"></i>
+          <span>Laporan Bulanan</span>
+        </button>
+        <button onclick="switchTab('laporan-triwulan')" data-tab="laporan-triwulan" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+          <i class="fa-solid fa-chart-bar w-5 text-center text-indigo-500"></i>
+          <span>Laporan Triwulan</span>
+        </button>
+        <button onclick="switchTab('surat-kelahiran')" data-tab="surat-kelahiran" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+          <i class="fa-solid fa-baby w-5 text-center text-emerald-500"></i>
+          <span>Surat Lap. Kelahiran</span>
+        </button>
+        <button onclick="switchTab('surat-kematian')" data-tab="surat-kematian" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+          <i class="fa-solid fa-skull w-5 text-center text-rose-500"></i>
+          <span>Surat Lap. Kematian</span>
+        </button>
+
+        <div class="pt-2 pb-1"><div class="border-t border-slate-200 dark:border-slate-700/80"></div></div>
 
         <a href="https://drive.google.com/drive/folders/1fpCSQca5nzDEIBMQI90bB1nISDh7aadu?usp=sharing" target="_blank" rel="noopener noreferrer"
           class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 dark:hover:text-blue-400 group transform hover:scale-[1.02] active:scale-[0.98] duration-200">
@@ -234,9 +271,9 @@
       </nav>
 
       <div class="p-4 border-t border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between gap-2">
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Yonas Adestira</p>
-          <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold truncate">Kurator Utama</p>
+        <div class="flex-1 min-w-0 cursor-pointer group" onclick="editNamaKurator()" title="Klik untuk ubah nama kurator">
+          <p id="sidebar-nama-kurator" class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate group-hover:text-brand-600 transition-colors">Yonas Adestira</p>
+          <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold truncate">Kurator Utama <i class="fa-solid fa-pen text-[8px] ml-1 opacity-0 group-hover:opacity-60 transition-opacity"></i></p>
         </div>
         <button onclick="openChangePinModal()" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-lg transition-all" title="Ganti PIN">
           <i class="fa-solid fa-key text-sm"></i>
@@ -679,6 +716,123 @@
           </div>
         </section>
 
+        <!-- ===== TAB LAPORAN BULANAN ===== -->
+        <section id="tab-laporan-bulanan" class="space-y-5 hidden">
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-calendar-days text-orange-500"></i>Laporan Bulanan Koleksi Satwa</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Pilih bulan & tahun untuk menghasilkan laporan resmi berformat PDF yang siap cetak/unduh.</p>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <select id="lb-bulan" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400">
+                <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
+                <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
+                <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
+                <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+              </select>
+              <select id="lb-tahun" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-400"></select>
+              <button onclick="generateLaporanBulanan()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-eye"></i> Tampilkan Preview
+              </button>
+              <button onclick="cetakLaporan('laporan-bulanan-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-print"></i> Cetak / Unduh
+              </button>
+            </div>
+          </div>
+          <!-- Preview Area -->
+          <div id="lb-preview-wrapper" class="hidden">
+            <div id="laporan-bulanan-preview" class="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-area" style="font-family:'Times New Roman',serif;">
+              <!-- diisi oleh generateLaporanBulanan() -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== TAB LAPORAN TRIWULAN ===== -->
+        <section id="tab-laporan-triwulan" class="space-y-5 hidden">
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-chart-bar text-indigo-500"></i>Laporan Triwulan Koleksi Satwa</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Pilih triwulan & tahun untuk menghasilkan laporan rekapitulasi per kuartal.</p>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <select id="lt-triwulan" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                <option value="1">Triwulan I (Jan–Mar)</option>
+                <option value="2">Triwulan II (Apr–Jun)</option>
+                <option value="3">Triwulan III (Jul–Sep)</option>
+                <option value="4">Triwulan IV (Okt–Des)</option>
+              </select>
+              <select id="lt-tahun" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-400"></select>
+              <button onclick="generateLaporanTriwulan()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-eye"></i> Tampilkan Preview
+              </button>
+              <button onclick="cetakLaporan('laporan-triwulan-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-print"></i> Cetak / Unduh
+              </button>
+            </div>
+          </div>
+          <div id="lt-preview-wrapper" class="hidden">
+            <div id="laporan-triwulan-preview" class="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-area" style="font-family:'Times New Roman',serif;"></div>
+          </div>
+        </section>
+
+        <!-- ===== TAB SURAT LAPORAN KELAHIRAN ===== -->
+        <section id="tab-surat-kelahiran" class="space-y-5 hidden">
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-baby text-emerald-500"></i>Surat Laporan Kelahiran Satwa</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Pilih periode untuk menampilkan surat laporan kelahiran yang siap dicetak.</p>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <select id="sk-bulan" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                <option value="0">Semua Bulan</option>
+                <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
+                <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
+                <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
+                <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+              </select>
+              <select id="sk-tahun" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400"></select>
+              <button onclick="generateSuratKelahiran()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-eye"></i> Tampilkan Preview
+              </button>
+              <button onclick="cetakLaporan('surat-kelahiran-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-print"></i> Cetak / Unduh
+              </button>
+            </div>
+          </div>
+          <div id="sk-preview-wrapper" class="hidden">
+            <div id="surat-kelahiran-preview" class="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-area" style="font-family:'Times New Roman',serif;"></div>
+          </div>
+        </section>
+
+        <!-- ===== TAB SURAT LAPORAN KEMATIAN ===== -->
+        <section id="tab-surat-kematian" class="space-y-5 hidden">
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            <div>
+              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-skull text-rose-500"></i>Surat Laporan Kematian Satwa</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Pilih periode untuk menampilkan surat laporan kematian yang siap dicetak.</p>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+              <select id="skm-bulan" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400">
+                <option value="0">Semua Bulan</option>
+                <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
+                <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
+                <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
+                <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+              </select>
+              <select id="skm-tahun" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400"></select>
+              <button onclick="generateSuratKematian()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-eye"></i> Tampilkan Preview
+              </button>
+              <button onclick="cetakLaporan('surat-kematian-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                <i class="fa-solid fa-print"></i> Cetak / Unduh
+              </button>
+            </div>
+          </div>
+          <div id="skm-preview-wrapper" class="hidden">
+            <div id="surat-kematian-preview" class="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-area" style="font-family:'Times New Roman',serif;"></div>
+          </div>
+        </section>
+
       </main>
 
       <footer class="p-6 bg-white dark:bg-slate-800/90 border-t border-slate-200 dark:border-slate-700/80 text-center text-xs text-slate-400 dark:text-slate-500 no-print">
@@ -1023,6 +1177,31 @@
     </form>
   </div>
 
+  <!-- MODAL GANTI NAMA KURATOR -->
+  <div id="modal-nama-kurator" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 w-full max-w-sm">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-5">
+      <h3 class="font-bold text-lg text-brand-600 dark:text-brand-400"><i class="fa-solid fa-user-pen mr-2"></i>Nama Kurator</h3>
+      <button onclick="closeNamaKuratorModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold mb-1.5 text-slate-600 dark:text-slate-400">Nama Lengkap Kurator</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-user"></i></span>
+          <input type="text" id="input-nama-kurator"
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-white"
+            placeholder="Masukkan nama kurator..." />
+        </div>
+        <p class="text-[10px] text-slate-400 mt-1.5">Nama ini akan muncul pada tanda tangan di seluruh laporan resmi.</p>
+      </div>
+      <div class="pt-2 flex justify-end gap-2">
+        <button onclick="closeNamaKuratorModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-bold">Batal</button>
+        <button onclick="saveNamaKurator()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transform active:scale-95 duration-200">Simpan</button>
+      </div>
+    </div>
+  </div>
+  <div id="overlay-nama-kurator" class="hidden fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-40" onclick="closeNamaKuratorModal()"></div>
+
   <!-- CUSTOM CONFIRMATION MODAL (REPLACES NATIVE BROWSER CONFIRM) -->
   <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl w-full max-w-sm transform scale-95 transition-all duration-300">
@@ -1325,7 +1504,8 @@
     }
 
     function switchTab(tabId) {
-      const sections = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi'];
+      const sections = ['dashboard', 'master', 'kelahiran', 'kematian', 'titipan', 'mutasi',
+                        'laporan-bulanan', 'laporan-triwulan', 'surat-kelahiran', 'surat-kematian'];
       sections.forEach(s => {
         const sec = document.getElementById(`tab-${s}`);
         if (sec) sec.classList.add('hidden');
@@ -1340,7 +1520,11 @@
         'kelahiran': 'Histori Pencatatan Kelahiran',
         'kematian': 'Histori Pencatatan Kematian',
         'titipan': 'Manajemen Satwa Titipan',
-        'mutasi': 'Mutasi & Dinamika Laporan BKSDA'
+        'mutasi': 'Mutasi & Dinamika Laporan BKSDA',
+        'laporan-bulanan': 'Laporan Bulanan Koleksi Satwa',
+        'laporan-triwulan': 'Laporan Triwulan Koleksi Satwa',
+        'surat-kelahiran': 'Surat Laporan Kelahiran Satwa',
+        'surat-kematian': 'Surat Laporan Kematian Satwa'
       };
       document.getElementById('header-title').textContent = titleMap[tabId] || 'e-Kuratorial';
 
@@ -2676,6 +2860,579 @@
       setTimeout(renderCharts, 100);
       // Tarik data terbaru dari cloud (menggantikan data localStorage yang mungkin sudah usang)
       loadFromSpreadsheet();
+
+      // 4. Isi dropdown tahun laporan (5 tahun ke belakang s.d. sekarang)
+      initLaporanDropdowns();
+    }
+
+    // =====================================================================
+    // NAMA KURATOR — simpan di localStorage, dipakai di TTD laporan
+    // =====================================================================
+    function getNamaKurator() {
+      return SafeStorage.getItem('sgbl_nama_kurator') || 'Yonas Adestira';
+    }
+
+    function editNamaKurator() {
+      document.getElementById("input-nama-kurator").value = getNamaKurator();
+      document.getElementById("modal-nama-kurator").classList.remove("hidden");
+      document.getElementById("overlay-nama-kurator").classList.remove("hidden");
+      setTimeout(() => document.getElementById("input-nama-kurator").focus(), 100);
+    }
+
+    function closeNamaKuratorModal() {
+      document.getElementById("modal-nama-kurator").classList.add("hidden");
+      document.getElementById("overlay-nama-kurator").classList.add("hidden");
+    }
+
+    function saveNamaKurator() {
+      const nama = document.getElementById("input-nama-kurator").value.trim();
+      if (!nama) { showToast("Nama kurator tidak boleh kosong.", "error"); return; }
+      SafeStorage.setItem('sgbl_nama_kurator', nama);
+      document.getElementById("sidebar-nama-kurator").textContent = nama;
+      closeNamaKuratorModal();
+      showToast("Nama kurator berhasil diperbarui.", "success");
+    }
+
+    // =====================================================================
+    // HELPER UMUM LAPORAN
+    // =====================================================================
+    const NAMA_BULAN = ["","Januari","Februari","Maret","April","Mei","Juni",
+                        "Juli","Agustus","September","Oktober","November","Desember"];
+    const INFO_PERUSAHAAN = {
+      nama   : "PT. Satwa Gunung Bayan Lestari",
+      sk     : "",
+      alamat_kantor : "Jln. M.T. Haryono, Komplek Balikpapan Baru Blok D-4 No. 9-10, Kota Balikpapan.",
+      alamat_lk     : "Tabang Zoo, Desa Umaq Dian, Kec. Tabang, Kab. Kutai Kartanegara",
+      tempat : "Tabang"
+    };
+
+    function initLaporanDropdowns() {
+      // Muat nama kurator tersimpan
+      const namaEl = document.getElementById("sidebar-nama-kurator");
+      if (namaEl) namaEl.textContent = getNamaKurator();
+
+      const tahunNow = new Date().getFullYear();
+      const ids = ["lb-tahun","lt-tahun","sk-tahun","skm-tahun"];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = "";
+        for (let y = tahunNow; y >= tahunNow - 5; y--) {
+          el.innerHTML += `<option value="${y}">${y}</option>`;
+        }
+      });
+      // Preset bulan sekarang
+      const bNow = new Date().getMonth() + 1;
+      ["lb-bulan","sk-bulan","skm-bulan"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = bNow;
+      });
+    }
+
+    function tglIndo(dateStr) {
+      if (!dateStr) return "-";
+      const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
+      return `${d.getDate()} ${NAMA_BULAN[d.getMonth()+1]} ${d.getFullYear()}`;
+    }
+
+    function tglIndoHari(d) {
+      return `${d.getDate()} ${NAMA_BULAN[d.getMonth()+1]} ${d.getFullYear()}`;
+    }
+
+    /** Filter data berdasarkan bulan & tahun dari field tanggal */
+    function filterByBulanTahun(arr, bulan, tahun) {
+      return arr.filter(item => {
+        const d = new Date(item.tanggal);
+        if (isNaN(d)) return false;
+        const cocokTahun = d.getFullYear() === tahun;
+        const cocokBulan = bulan === 0 || (d.getMonth()+1) === bulan;
+        return cocokTahun && cocokBulan;
+      });
+    }
+
+    /** Filter data berdasarkan range bulan (triwulan) */
+    function filterByRange(arr, bulanMulai, bulanAkhir, tahun) {
+      return arr.filter(item => {
+        const d = new Date(item.tanggal);
+        if (isNaN(d)) return false;
+        const m = d.getMonth()+1;
+        return d.getFullYear() === tahun && m >= bulanMulai && m <= bulanAkhir;
+      });
+    }
+
+    /** Hitung rekap per satwa untuk periode tertentu (mutasi + kelahiran + kematian dalam range) */
+    function getRecalcForPeriod(satwa, bulanMulai, bulanAkhir, tahun) {
+      const induk_awal  = parseInt(satwa.induk_awal)  || 0;
+      const anakan_awal = parseInt(satwa.anakan_awal) || 0;
+
+      const inRange = arr => filterByRange(arr.filter(x => x.nama === satwa.nama), bulanMulai, bulanAkhir, tahun);
+
+      const tambahInduk   = inRange(localDB.mutasi).filter(m => m.tipe==='Penambahan' && m.kategori==='Induk').reduce((s,m)=>s+(parseInt(m.jumlah)||0),0)
+                          + inRange(localDB.titipan).filter(t => t.kategori==='Induk').reduce((s,t)=>s+(parseInt(t.jumlah)||0),0);
+      const tambahAnakan  = inRange(localDB.kelahiran).reduce((s,k)=>s+(parseInt(k.jumlah)||0),0)
+                          + inRange(localDB.mutasi).filter(m => m.tipe==='Penambahan' && m.kategori==='Anakan').reduce((s,m)=>s+(parseInt(m.jumlah)||0),0)
+                          + inRange(localDB.titipan).filter(t => t.kategori==='Anakan').reduce((s,t)=>s+(parseInt(t.jumlah)||0),0);
+      const kurangInduk   = inRange(localDB.kematian).filter(k => k.kategori==='Induk').reduce((s,k)=>s+(parseInt(k.jumlah)||0),0)
+                          + inRange(localDB.mutasi).filter(m => m.tipe==='Pengurangan' && m.kategori==='Induk').reduce((s,m)=>s+(parseInt(m.jumlah)||0),0);
+      const kurangAnakan  = inRange(localDB.kematian).filter(k => k.kategori==='Anakan').reduce((s,k)=>s+(parseInt(k.jumlah)||0),0)
+                          + inRange(localDB.mutasi).filter(m => m.tipe==='Pengurangan' && m.kategori==='Anakan').reduce((s,m)=>s+(parseInt(m.jumlah)||0),0);
+
+      // Nomor BA mutasi dalam periode
+      const listBA = [];
+      inRange(localDB.mutasi).filter(m=>m.nama===satwa.nama).forEach(m=>{if(m.bap && m.bap!=='-')listBA.push(m.bap);});
+      inRange(localDB.kelahiran).filter(k=>k.nama===satwa.nama).forEach(k=>{if(k.bap && k.bap!=='-')listBA.push(k.bap);});
+      inRange(localDB.kematian).filter(k=>k.nama===satwa.nama).forEach(k=>{if(k.bap && k.bap!=='-')listBA.push(k.bap);});
+
+      const induk_akhir   = Math.max(0, induk_awal  + tambahInduk  - kurangInduk);
+      const anakan_akhir  = Math.max(0, anakan_awal + tambahAnakan - kurangAnakan);
+
+      return { induk_awal, anakan_awal, tambahInduk, tambahAnakan, kurangInduk, kurangAnakan,
+               induk_akhir, anakan_akhir, listBA: [...new Set(listBA)] };
+    }
+
+    /** CSS umum untuk halaman cetak */
+    function cssLaporan() {
+      return `
+        <style>
+          .lap-page { padding:32px 40px; font-family:'Times New Roman',serif; font-size:11pt; color:#111; background:#fff; }
+          .lap-kop  { margin-bottom:12px; }
+          .lap-kop table { width:100%; font-size:10.5pt; }
+          .lap-kop td { vertical-align:top; padding:1px 2px; }
+          .lap-judul{ text-align:center; font-size:13pt; font-weight:bold; text-transform:uppercase;
+                      letter-spacing:.5px; margin-bottom:14px; text-decoration:underline; }
+          .lap-tbl  { width:100%; border-collapse:collapse; font-size:9.5pt; margin-top:8px; }
+          .lap-tbl th, .lap-tbl td { border:1px solid #333; padding:4px 6px; text-align:center; vertical-align:middle; }
+          .lap-tbl th { background:#dbeafe; font-weight:bold; }
+          .lap-tbl td.left { text-align:left; }
+          .lap-tbl td.italic { font-style:italic; }
+          .lap-tbl tr:last-child td { font-weight:bold; background:#eff6ff; }
+          .lap-ttd  { margin-top:40px; display:flex; justify-content:space-between; }
+          .lap-ttd-box { text-align:center; min-width:220px; }
+          .lap-ttd-box .nama { border-top:1px solid #333; margin-top:64px; padding-top:4px; font-weight:bold; }
+        </style>`;
+    }
+
+    /** Blok KOP surat */
+    function kopSurat(periodeLabel) {
+      const p = INFO_PERUSAHAAN;
+      return `
+        <div class="lap-kop">
+          <div class="lap-judul">Laporan Bulanan Penangkaran Satwa Bulan :<br>
+            <span style="font-size:11pt;">${periodeLabel}</span>
+          </div>
+          <table>
+            <tr>
+              <td style="width:50%">
+                <table>
+                  <tr><td style="width:160px">Nama Perusahaan</td><td style="width:8px">:</td><td><b>${p.nama}</b></td></tr>
+                  <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${p.sk || "&nbsp;"}</td></tr>
+                  <tr><td>Alamat Kantor</td><td>:</td><td>${p.alamat_kantor}</td></tr>
+                  <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${p.alamat_lk}</td></tr>
+                </table>
+              </td>
+              <td style="width:50%; vertical-align:top; padding-left:24px;">
+                <table>
+                  <tr><td style="width:140px">Periode Bulan</td><td style="width:8px">:</td><td><b>${periodeLabel}</b></td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>`;
+    }
+
+    /** Blok TTD */
+    function blokTTD(tanggalStr) {
+      const p = INFO_PERUSAHAAN;
+      const nama = getNamaKurator();
+      return `
+        <div class="lap-ttd">
+          <div></div>
+          <div class="lap-ttd-box">
+            <div>${p.tempat}, ${tanggalStr}</div>
+            <div style="margin-top:4px;font-weight:bold;">${p.nama}</div>
+            <div class="nama">${nama}</div>
+            <div style="font-style:italic;">Kurator</div>
+          </div>
+        </div>`;
+    }
+
+    // =====================================================================
+    // LAPORAN BULANAN
+    // =====================================================================
+    function generateLaporanBulanan() {
+      const bulan  = parseInt(document.getElementById("lb-bulan").value);
+      const tahun  = parseInt(document.getElementById("lb-tahun").value);
+      const label  = `${NAMA_BULAN[bulan]} ${tahun}`;
+      const today  = new Date();
+
+      // Baris data per satwa
+      let rows = "";
+      let totIndukAwal=0, totAnakanAwal=0, totTambahI=0, totTambahA=0,
+          totKurangI=0, totKurangA=0, totAkhirI=0, totAkhirA=0;
+
+      localDB.master.forEach((satwa, i) => {
+        const r = getRecalcForPeriod(satwa, bulan, bulan, tahun);
+        totIndukAwal  += r.induk_awal;  totAnakanAwal += r.anakan_awal;
+        totTambahI    += r.tambahInduk; totTambahA    += r.tambahAnakan;
+        totKurangI    += r.kurangInduk; totKurangA    += r.kurangAnakan;
+        totAkhirI     += r.induk_akhir; totAkhirA     += r.anakan_akhir;
+
+        rows += `<tr>
+          <td>${i+1}</td>
+          <td class="left"><b>${satwa.nama}</b><br><i style="font-size:9pt;color:#555;">${satwa.latin||''}</i></td>
+          <td>${r.induk_awal}</td>
+          <td>${r.anakan_awal}</td>
+          <td class="left" style="font-size:8.5pt;">${satwa.asal||'-'}</td>
+          <td>${r.tambahInduk||''}</td>
+          <td>${r.tambahAnakan||''}</td>
+          <td>${r.kurangInduk||''}</td>
+          <td>${r.kurangAnakan||''}</td>
+          <td style="font-size:8pt;">${r.listBA.join('<br>')||'-'}</td>
+          <td><b>${r.induk_akhir}</b></td>
+          <td><b>${r.anakan_akhir}</b></td>
+          <td style="font-size:8.5pt;">${satwa.keterangan||''}</td>
+        </tr>`;
+      });
+
+      // Baris total
+      rows += `<tr style="background:#dbeafe;">
+        <td colspan="2"><b>Jumlah Total</b></td>
+        <td>${totIndukAwal}</td><td>${totAnakanAwal}</td><td></td>
+        <td>${totTambahI||''}</td><td>${totTambahA||''}</td>
+        <td>${totKurangI||''}</td><td>${totKurangA||''}</td>
+        <td></td>
+        <td>${totAkhirI}</td><td>${totAkhirA}</td><td></td>
+      </tr>`;
+
+      const html = cssLaporan() + `<div class="lap-page">
+        ${kopSurat(label)}
+        <table class="lap-tbl">
+          <thead>
+            <tr>
+              <th rowspan="3">No.</th>
+              <th rowspan="3" style="min-width:150px;">Nama Jenis/<br>Persilangan/Varietas</th>
+              <th colspan="2">Stok Awal</th>
+              <th rowspan="3">Asal-usul<br>Induk</th>
+              <th colspan="5">Jumlah Mutasi Bulan Ini</th>
+              <th colspan="2">Jumlah Stok Akhir</th>
+              <th rowspan="3">Keterangan</th>
+            </tr>
+            <tr>
+              <th rowspan="2">Induk</th><th rowspan="2">Anakan</th>
+              <th colspan="2">Penambahan</th>
+              <th colspan="2">Pengurangan</th>
+              <th rowspan="2">BA.<br>Mutasi</th>
+              <th rowspan="2">Induk</th><th rowspan="2">Anakan</th>
+            </tr>
+            <tr>
+              <th>Induk</th><th>Anakan</th><th>Induk</th><th>Anakan</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${blokTTD(tglIndoHari(today))}
+      </div>`;
+
+      document.getElementById("laporan-bulanan-preview").innerHTML = html;
+      document.getElementById("lb-preview-wrapper").classList.remove("hidden");
+      document.getElementById("laporan-bulanan-preview").scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    // =====================================================================
+    // LAPORAN TRIWULAN
+    // =====================================================================
+    function generateLaporanTriwulan() {
+      const tw    = parseInt(document.getElementById("lt-triwulan").value);
+      const tahun = parseInt(document.getElementById("lt-tahun").value);
+      const ranges = { 1:[1,3], 2:[4,6], 3:[7,9], 4:[10,12] };
+      const [bMulai, bAkhir] = ranges[tw];
+      const labelTW = `Triwulan ${["I","II","III","IV"][tw-1]} (${NAMA_BULAN[bMulai]}–${NAMA_BULAN[bAkhir]}) ${tahun}`;
+      const today   = new Date();
+
+      let rows = "";
+      let totIndukAwal=0,totAnakanAwal=0,totTambahI=0,totTambahA=0,
+          totKurangI=0,totKurangA=0,totAkhirI=0,totAkhirA=0;
+
+      localDB.master.forEach((satwa,i) => {
+        const r = getRecalcForPeriod(satwa, bMulai, bAkhir, tahun);
+        totIndukAwal+=r.induk_awal; totAnakanAwal+=r.anakan_awal;
+        totTambahI+=r.tambahInduk;  totTambahA+=r.tambahAnakan;
+        totKurangI+=r.kurangInduk;  totKurangA+=r.kurangAnakan;
+        totAkhirI+=r.induk_akhir;   totAkhirA+=r.anakan_akhir;
+
+        rows += `<tr>
+          <td>${i+1}</td>
+          <td class="left"><b>${satwa.nama}</b><br><i style="font-size:9pt;color:#555;">${satwa.latin||''}</i></td>
+          <td>${r.induk_awal}</td><td>${r.anakan_awal}</td>
+          <td class="left" style="font-size:8.5pt;">${satwa.asal||'-'}</td>
+          <td>${r.tambahInduk||''}</td><td>${r.tambahAnakan||''}</td>
+          <td>${r.kurangInduk||''}</td><td>${r.kurangAnakan||''}</td>
+          <td style="font-size:8pt;">${r.listBA.join('<br>')||'-'}</td>
+          <td><b>${r.induk_akhir}</b></td><td><b>${r.anakan_akhir}</b></td>
+          <td style="font-size:8.5pt;">${satwa.keterangan||''}</td>
+        </tr>`;
+      });
+
+      rows += `<tr style="background:#dbeafe;">
+        <td colspan="2"><b>Jumlah Total</b></td>
+        <td>${totIndukAwal}</td><td>${totAnakanAwal}</td><td></td>
+        <td>${totTambahI||''}</td><td>${totTambahA||''}</td>
+        <td>${totKurangI||''}</td><td>${totKurangA||''}</td>
+        <td></td><td>${totAkhirI}</td><td>${totAkhirA}</td><td></td>
+      </tr>`;
+
+      const html = cssLaporan() + `<div class="lap-page">
+        <div class="lap-judul">Laporan Triwulan Penangkaran Satwa<br>
+          <span style="font-size:11pt;">${labelTW}</span></div>
+        <table style="width:100%;font-size:10.5pt;margin-bottom:14px;">
+          <tr>
+            <td style="width:50%">
+              <table>
+                <tr><td style="width:180px">Nama Perusahaan</td><td>:</td><td><b>${INFO_PERUSAHAAN.nama}</b></td></tr>
+                <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.sk||'&nbsp;'}</td></tr>
+                <tr><td>Alamat Kantor</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_kantor}</td></tr>
+                <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_lk}</td></tr>
+              </table>
+            </td>
+            <td style="vertical-align:top;padding-left:24px;">
+              <table>
+                <tr><td style="width:140px">Periode</td><td>:</td><td><b>${labelTW}</b></td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table class="lap-tbl">
+          <thead>
+            <tr>
+              <th rowspan="3">No.</th>
+              <th rowspan="3" style="min-width:150px;">Nama Jenis/<br>Persilangan/Varietas</th>
+              <th colspan="2">Stok Awal</th>
+              <th rowspan="3">Asal-usul<br>Induk</th>
+              <th colspan="5">Jumlah Mutasi Periode Ini</th>
+              <th colspan="2">Jumlah Stok Akhir</th>
+              <th rowspan="3">Keterangan</th>
+            </tr>
+            <tr>
+              <th rowspan="2">Induk</th><th rowspan="2">Anakan</th>
+              <th colspan="2">Penambahan</th>
+              <th colspan="2">Pengurangan</th>
+              <th rowspan="2">BA.<br>Mutasi</th>
+              <th rowspan="2">Induk</th><th rowspan="2">Anakan</th>
+            </tr>
+            <tr><th>Induk</th><th>Anakan</th><th>Induk</th><th>Anakan</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${blokTTD(tglIndoHari(today))}
+      </div>`;
+
+      document.getElementById("laporan-triwulan-preview").innerHTML = html;
+      document.getElementById("lt-preview-wrapper").classList.remove("hidden");
+      document.getElementById("laporan-triwulan-preview").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    // =====================================================================
+    // SURAT LAPORAN KELAHIRAN
+    // =====================================================================
+    function generateSuratKelahiran() {
+      const bulan = parseInt(document.getElementById("sk-bulan").value);
+      const tahun = parseInt(document.getElementById("sk-tahun").value);
+      const label = bulan===0 ? `Tahun ${tahun}` : `${NAMA_BULAN[bulan]} ${tahun}`;
+      const today = new Date();
+
+      const data = filterByBulanTahun(localDB.kelahiran, bulan, tahun);
+
+      let rows = "";
+      let totJumlah = 0;
+      data.forEach((k,i) => {
+        const jml = parseInt(k.jumlah)||0;
+        totJumlah += jml;
+        rows += `<tr>
+          <td>${i+1}</td>
+          <td class="left"><b>${k.nama||'-'}</b></td>
+          <td class="italic">${k.latin||'-'}</td>
+          <td>${k.kelas||'-'}</td>
+          <td>${jml}</td>
+          <td>${k.kelamin||'-'}</td>
+          <td>${tglIndo(k.tanggal)}</td>
+          <td>${k.tag||'-'}</td>
+          <td class="left" style="font-size:8.5pt;">${k.ket||'-'}</td>
+          <td style="font-size:8pt;">${k.bap||'-'}</td>
+        </tr>`;
+      });
+
+      if (data.length === 0) {
+        rows = `<tr><td colspan="10" style="text-align:center;color:#888;font-style:italic;">Tidak ada data kelahiran pada periode ini.</td></tr>`;
+      }
+
+      rows += `<tr style="background:#dcfce7;">
+        <td colspan="4" style="text-align:right;font-weight:bold;">Jumlah Total</td>
+        <td><b>${totJumlah}</b></td>
+        <td colspan="5"></td>
+      </tr>`;
+
+      const html = cssLaporan() + `<div class="lap-page">
+        <div class="lap-judul">Surat Laporan Kelahiran Satwa<br>
+          <span style="font-size:11pt;">Periode: ${label}</span></div>
+        <table style="width:100%;font-size:10.5pt;margin-bottom:14px;">
+          <tr>
+            <td style="width:50%">
+              <table>
+                <tr><td style="width:180px">Nama Perusahaan</td><td>:</td><td><b>${INFO_PERUSAHAAN.nama}</b></td></tr>
+                <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.sk||'&nbsp;'}</td></tr>
+                <tr><td>Alamat Kantor</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_kantor}</td></tr>
+                <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_lk}</td></tr>
+              </table>
+            </td>
+            <td style="vertical-align:top;padding-left:24px;">
+              <table>
+                <tr><td style="width:120px">Periode Bulan</td><td>:</td><td><b>${label}</b></td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table class="lap-tbl">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th style="min-width:130px;">Nama Satwa</th>
+              <th>Nama Latin</th>
+              <th>Kelas</th>
+              <th>Jumlah</th>
+              <th>Kelamin</th>
+              <th>Tanggal Lahir</th>
+              <th>No. Tag</th>
+              <th style="min-width:120px;">Keterangan</th>
+              <th>No. BA Kelahiran</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${blokTTD(tglIndoHari(today))}
+      </div>`;
+
+      document.getElementById("surat-kelahiran-preview").innerHTML = html;
+      document.getElementById("sk-preview-wrapper").classList.remove("hidden");
+      document.getElementById("surat-kelahiran-preview").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    // =====================================================================
+    // SURAT LAPORAN KEMATIAN
+    // =====================================================================
+    function generateSuratKematian() {
+      const bulan = parseInt(document.getElementById("skm-bulan").value);
+      const tahun = parseInt(document.getElementById("skm-tahun").value);
+      const label = bulan===0 ? `Tahun ${tahun}` : `${NAMA_BULAN[bulan]} ${tahun}`;
+      const today = new Date();
+
+      const data = filterByBulanTahun(localDB.kematian, bulan, tahun);
+
+      let rows = "";
+      let totJumlah = 0;
+      data.forEach((k,i) => {
+        const jml = parseInt(k.jumlah)||0;
+        totJumlah += jml;
+        rows += `<tr>
+          <td>${i+1}</td>
+          <td class="left"><b>${k.nama||'-'}</b></td>
+          <td class="italic">${k.latin||'-'}</td>
+          <td>${k.kategori||'-'}</td>
+          <td>${jml}</td>
+          <td>${tglIndo(k.tanggal)}</td>
+          <td class="left" style="font-size:8.5pt;">${k.sebab||'-'}</td>
+          <td style="font-size:8pt;">${k.bap||'-'}</td>
+        </tr>`;
+      });
+
+      if (data.length === 0) {
+        rows = `<tr><td colspan="8" style="text-align:center;color:#888;font-style:italic;">Tidak ada data kematian pada periode ini.</td></tr>`;
+      }
+
+      rows += `<tr style="background:#fee2e2;">
+        <td colspan="4" style="text-align:right;font-weight:bold;">Jumlah Total</td>
+        <td><b>${totJumlah}</b></td>
+        <td colspan="3"></td>
+      </tr>`;
+
+      const html = cssLaporan() + `<div class="lap-page">
+        <div class="lap-judul">Surat Laporan Kematian Satwa<br>
+          <span style="font-size:11pt;">Periode: ${label}</span></div>
+        <table style="width:100%;font-size:10.5pt;margin-bottom:14px;">
+          <tr>
+            <td style="width:50%">
+              <table>
+                <tr><td style="width:180px">Nama Perusahaan</td><td>:</td><td><b>${INFO_PERUSAHAAN.nama}</b></td></tr>
+                <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.sk||'&nbsp;'}</td></tr>
+                <tr><td>Alamat Kantor</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_kantor}</td></tr>
+                <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_lk}</td></tr>
+              </table>
+            </td>
+            <td style="vertical-align:top;padding-left:24px;">
+              <table>
+                <tr><td style="width:120px">Periode Bulan</td><td>:</td><td><b>${label}</b></td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table class="lap-tbl">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th style="min-width:130px;">Nama Satwa</th>
+              <th>Nama Latin</th>
+              <th>Kategori</th>
+              <th>Jumlah</th>
+              <th>Tanggal Mati</th>
+              <th style="min-width:140px;">Sebab Kematian</th>
+              <th>No. BA Kematian</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${blokTTD(tglIndoHari(today))}
+      </div>`;
+
+      document.getElementById("surat-kematian-preview").innerHTML = html;
+      document.getElementById("skm-preview-wrapper").classList.remove("hidden");
+      document.getElementById("surat-kematian-preview").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    // =====================================================================
+    // CETAK / UNDUH PDF
+    // =====================================================================
+    function cetakLaporan(previewId) {
+      const el = document.getElementById(previewId);
+      if (!el || el.innerHTML.trim() === "") {
+        showToast("Harap tampilkan preview terlebih dahulu sebelum mencetak.", "error");
+        return;
+      }
+      const win = window.open("", "_blank", "width=1024,height=768");
+      win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+        <title>Laporan e-Kuratorial – ${INFO_PERUSAHAAN.nama}</title>
+        <style>
+          @page { size: A4 landscape; margin: 14mm 12mm; }
+          * { box-sizing: border-box; }
+          body { font-family:'Times New Roman',serif; font-size:11pt; color:#111; background:#fff; margin:0; padding:0; }
+          .lap-page { padding: 0; }
+          .lap-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin-top:8px; }
+          .lap-tbl th, .lap-tbl td { border:1px solid #333; padding:4px 6px; text-align:center; vertical-align:middle; }
+          .lap-tbl th { background:#dbeafe; font-weight:bold; }
+          .lap-tbl td.left { text-align:left; }
+          .lap-tbl td.italic { font-style:italic; }
+          .lap-tbl tr:last-child td { font-weight:bold; background:#eff6ff; }
+          .lap-judul { text-align:center; font-size:13pt; font-weight:bold; text-transform:uppercase;
+                       letter-spacing:.5px; margin-bottom:14px; text-decoration:underline; }
+          .lap-kop table { width:100%; font-size:10.5pt; }
+          .lap-kop td { vertical-align:top; padding:1px 2px; }
+          .lap-ttd { margin-top:40px; display:flex; justify-content:flex-end; }
+          .lap-ttd-box { text-align:center; min-width:220px; }
+          .lap-ttd-box .nama { border-top:1px solid #333; margin-top:64px; padding-top:4px; font-weight:bold; }
+        </style>
+      </head><body onload="setTimeout(()=>{window.print();},300);">
+        ${el.querySelector('.lap-page') ? el.innerHTML : `<div class="lap-page" style="padding:0;">${el.innerHTML}</div>`}
+      </body></html>`);
+      win.document.close();
     }
   </script>
   
