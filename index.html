@@ -257,6 +257,9 @@
             <i class="fa-solid fa-clock text-blue-600 animate-spin" style="animation-duration: 6s;"></i>
             <span id="live-clock">Mendeteksi waktu...</span>
           </div>
+          <button onclick="loadFromSpreadsheet()" title="Ambil data terbaru dari cloud" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 hover:text-emerald-600 flex items-center justify-center transition-all transform active:scale-90">
+            <i class="fa-solid fa-rotate text-sm"></i>
+          </button>
           <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-all transform active:scale-90" title="Ubah Tema">
             <i id="theme-icon" class="fa-solid fa-sun text-yellow-500 text-lg"></i>
           </button>
@@ -1090,7 +1093,10 @@
       }
     }
 
-    function loadFromSpreadsheet() {
+    // Interval ID untuk auto-polling sinkronisasi multi-device
+    let _autoSyncInterval = null;
+
+    function loadFromSpreadsheet(isSilent) {
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run
           .withSuccessHandler(function(data) {
@@ -1100,18 +1106,18 @@
               updateDashboardStats();
               renderAllTables();
               setTimeout(renderCharts, 100);
-              showToast("Data cloud berhasil dimuat!", "success");
+              if (!isSilent) showToast("Data cloud berhasil dimuat!", "success");
             }
           })
           .withFailureHandler(function(err) {
-            showToast("Gagal memuat data dari cloud: " + err, "error");
+            if (!isSilent) showToast("Gagal memuat data dari cloud: " + err, "error");
             updateDashboardStats();
             renderAllTables();
             setTimeout(renderCharts, 100);
           })
           .getDataFromSheets();
       } else if (API_URL) {
-        fetch(API_URL + "?action=getData")
+        fetch(API_URL + "?action=getData&t=" + Date.now(), { cache: "no-store" })
           .then(res => res.json())
           .then(data => {
             if (data && !data.error) {
@@ -1120,7 +1126,7 @@
               updateDashboardStats();
               renderAllTables();
               setTimeout(renderCharts, 100);
-              showToast("Data cloud berhasil dimuat!", "success");
+              if (!isSilent) showToast("Data cloud berhasil dimuat!", "success");
             } else {
               updateDashboardStats();
               renderAllTables();
@@ -1137,6 +1143,31 @@
         updateDashboardStats();
         renderAllTables();
         setTimeout(renderCharts, 100);
+      }
+    }
+
+    /**
+     * Memulai polling otomatis setiap 30 detik agar semua device/browser
+     * selalu mendapatkan data terbaru dari Spreadsheet (sinkronisasi multi-device).
+     */
+    function startAutoSync() {
+      if (_autoSyncInterval) clearInterval(_autoSyncInterval);
+      _autoSyncInterval = setInterval(function() {
+        // Hanya sinkronisasi jika halaman utama sedang aktif (sudah login)
+        const mainLayout = document.getElementById("main-layout");
+        if (mainLayout && mainLayout.classList.contains("app-visible")) {
+          loadFromSpreadsheet(true); // silent = tidak tampilkan toast agar tidak mengganggu
+        }
+      }, 30000); // 30 detik
+    }
+
+    /**
+     * Menghentikan polling otomatis (dipanggil saat logout).
+     */
+    function stopAutoSync() {
+      if (_autoSyncInterval) {
+        clearInterval(_autoSyncInterval);
+        _autoSyncInterval = null;
       }
     }
 
@@ -1207,9 +1238,9 @@
         ml.classList.add("app-visible");
         
         showToast("Selamat bekerja, Kurator!", "success");
-        updateDashboardStats();
-        renderAllTables();
+        loadFromSpreadsheet(); // Ambil data terbaru dari cloud saat login
         setTimeout(renderCharts, 300);
+        startAutoSync(); // Mulai polling otomatis 30 detik
       } else {
         errEl.textContent = "PIN salah!";
         errEl.classList.remove("hidden");
@@ -1219,6 +1250,7 @@
     }
 
     function handleLogout() {
+      stopAutoSync(); // Hentikan polling saat keluar
       const ml = document.getElementById("main-layout");
       ml.classList.remove("app-visible");
       ml.classList.add("hidden");
@@ -2511,7 +2543,11 @@
       const savedTheme = SafeStorage.getItem('ekurator_theme') || "dark";
       applyTheme(savedTheme === "dark");
 
-      // 3. Muat Data Awal ke Dasbor & database
+      // 3. Tampilkan data localStorage sementara (agar UI tidak kosong), lalu segera ambil dari cloud
+      updateDashboardStats();
+      renderAllTables();
+      setTimeout(renderCharts, 100);
+      // Tarik data terbaru dari cloud (menggantikan data localStorage yang mungkin sudah usang)
       loadFromSpreadsheet();
     }
   </script>
