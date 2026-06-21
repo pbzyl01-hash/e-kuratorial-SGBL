@@ -2994,6 +2994,29 @@
     /** CSS umum untuk halaman cetak */
     const KOP_IMG_URL = "https://i.ibb.co/5hg1v7QC/Kop-Surat.png";
 
+    // Cache base64 kop agar tidak fetch ulang tiap generate
+    let _kopBase64 = null;
+
+    /**
+     * Konversi gambar kop ke base64 di browser.
+     * Diperlukan agar gambar tetap muncul saat window.print() di tab baru.
+     */
+    async function getKopBase64() {
+      if (_kopBase64) return _kopBase64;
+      try {
+        const res  = await fetch(KOP_IMG_URL);
+        const blob = await res.blob();
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => { _kopBase64 = reader.result; resolve(_kopBase64); };
+          reader.readAsDataURL(blob);
+        });
+      } catch (e) {
+        console.warn("Gagal fetch kop, gunakan URL langsung:", e);
+        return KOP_IMG_URL; // fallback ke URL biasa
+      }
+    }
+
     function cssLaporan() {
       return `
         <style>
@@ -3045,17 +3068,14 @@
     }
 
     /** KOP dari gambar + info perusahaan + judul */
-    function kopSurat(periodeLabel, judulUtama, judulSub) {
-      const p = INFO_PERUSAHAAN;
+    function kopSurat(periodeLabel, judulUtama, judulSub, imgSrc) {
+      const p   = INFO_PERUSAHAAN;
+      const src = imgSrc || KOP_IMG_URL;
       return `
-        <img class="lap-kop-img" src="${KOP_IMG_URL}"
-             onerror="this.style.display='none';document.getElementById('kop-fallback').style.display='block';"
-             alt="Kop Surat">
-        <!-- Fallback teks jika gambar gagal load -->
-        <div id="kop-fallback" style="display:none;text-align:center;padding:6px 0;border-bottom:3px double #222;margin-bottom:8px;">
-          <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
-          <div style="font-size:9pt;">${p.alamat_kantor}</div>
-        </div>
+        <img class="lap-kop-img" src="${src}" alt="Kop Surat"
+             style="width:100%;display:block;margin-bottom:4px;"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <div style="display:none;text-align:center;padding:4px 0;font-size:12pt;font-weight:bold;text-transform:uppercase;">${p.nama}<br><span style="font-size:9pt;font-weight:normal;">${p.alamat_lk}</span></div>
         <hr class="lap-kop-line">
         <div class="lap-judul">${judulUtama || 'Laporan Bulanan Lembaga Konservasi'}</div>
         ${judulSub ? `<div class="lap-subjudul">${judulSub}</div>` : ''}
@@ -3096,7 +3116,7 @@
     // =====================================================================
     // LAPORAN BULANAN
     // =====================================================================
-    function generateLaporanBulanan() {
+    async function generateLaporanBulanan() {
       const bulan  = parseInt(document.getElementById("lb-bulan").value);
       const tahun  = parseInt(document.getElementById("lb-tahun").value);
       const label  = `${NAMA_BULAN[bulan]} ${tahun}`;
@@ -3141,8 +3161,11 @@
         <td>${totAkhirI}</td><td>${totAkhirA}</td><td></td>
       </tr>`;
 
+      showToast("Memuat kop surat...", "info");
+      const kopSrc = await getKopBase64();
+
       const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(label, 'Laporan Bulanan Lembaga Konservasi', '')}
+        ${kopSurat(label, 'Laporan Bulanan Lembaga Konservasi', '', kopSrc)}
         <table class="lap-tbl">
           <thead>
             <tr>
@@ -3178,7 +3201,7 @@
     // =====================================================================
     // LAPORAN TRIWULAN
     // =====================================================================
-    function generateLaporanTriwulan() {
+    async function generateLaporanTriwulan() {
       const tw    = parseInt(document.getElementById("lt-triwulan").value);
       const tahun = parseInt(document.getElementById("lt-tahun").value);
       const ranges = { 1:[1,3], 2:[4,6], 3:[7,9], 4:[10,12] };
@@ -3218,8 +3241,11 @@
         <td></td><td>${totAkhirI}</td><td>${totAkhirA}</td><td></td>
       </tr>`;
 
+      showToast("Memuat kop surat...", "info");
+      const kopSrc = await getKopBase64();
+
       const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(labelTW, 'Laporan Triwulan Lembaga Konservasi', '')}
+        ${kopSurat(labelTW, 'Laporan Triwulan Lembaga Konservasi', '', kopSrc)}
         <table class="lap-tbl">
           <thead>
             <tr>
@@ -3253,63 +3279,137 @@
     // =====================================================================
     // SURAT LAPORAN KELAHIRAN
     // =====================================================================
-    function generateSuratKelahiran() {
+    // SURAT LAPORAN KELAHIRAN — Format Surat Resmi Dinas
+    // =====================================================================
+    async function generateSuratKelahiran() {
       const bulan = parseInt(document.getElementById("sk-bulan").value);
       const tahun = parseInt(document.getElementById("sk-tahun").value);
       const label = bulan===0 ? `Tahun ${tahun}` : `${NAMA_BULAN[bulan]} ${tahun}`;
       const today = new Date();
+      const p     = INFO_PERUSAHAAN;
+      const nama  = getNamaKurator();
+
+      showToast("Memuat kop surat...", "info");
+      const kopSrc = await getKopBase64();
 
       const data = filterByBulanTahun(localDB.kelahiran, bulan, tahun);
-
-      let rows = "";
       let totJumlah = 0;
-      data.forEach((k,i) => {
-        const jml = parseInt(k.jumlah)||0;
-        totJumlah += jml;
-        rows += `<tr>
-          <td>${i+1}</td>
-          <td class="left"><b>${k.nama||'-'}</b></td>
-          <td class="italic">${k.latin||'-'}</td>
-          <td>${k.kelas||'-'}</td>
-          <td>${jml}</td>
-          <td>${k.kelamin||'-'}</td>
-          <td>${tglIndo(k.tanggal)}</td>
-          <td>${k.tag||'-'}</td>
-          <td class="left" style="font-size:8.5pt;">${k.ket||'-'}</td>
-          <td style="font-size:8pt;">${k.bap||'-'}</td>
-        </tr>`;
-      });
 
+      // Bangun isi paragraf per kejadian kelahiran
+      let isiSurat = "";
       if (data.length === 0) {
-        rows = `<tr><td colspan="10" style="text-align:center;color:#888;font-style:italic;">Tidak ada data kelahiran pada periode ini.</td></tr>`;
+        isiSurat = `<p style="text-align:center;color:#888;font-style:italic;margin:20px 0;">Tidak ada data kelahiran pada periode ini.</p>`;
+      } else {
+        data.forEach((k, i) => {
+          const jml = parseInt(k.jumlah)||0;
+          totJumlah += jml;
+          isiSurat += `
+          <tr>
+            <td style="text-align:center;padding:4px 6px;border:1px solid #555;">${i+1}.</td>
+            <td style="padding:4px 6px;border:1px solid #555;"><b>${k.nama||'-'}</b><br><i style="font-size:8.5pt;color:#444;">${k.latin||''}</i></td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.kelas||'-'}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${jml}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.kelamin||'-'}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${tglIndo(k.tanggal)}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.tag||'-'}</td>
+            <td style="padding:4px 6px;border:1px solid #555;">${k.ket||'-'}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;font-size:8pt;">${k.bap||'-'}</td>
+          </tr>`;
+        });
       }
 
-      rows += `<tr style="background:#dcfce7;">
-        <td colspan="4" style="text-align:right;font-weight:bold;">Jumlah Total</td>
-        <td><b>${totJumlah}</b></td>
-        <td colspan="5"></td>
-      </tr>`;
+      const nomorSurat = `B-${String(today.getDate()).padStart(2,'0')}/${today.getMonth()+1}/${tahun}`;
 
-      const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(label, 'Surat Laporan Kelahiran Satwa', 'Periode: ' + label)}
-        <table class="lap-tbl">
+      const css = `<style>
+        @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap');
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body, .sk-page { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
+        .sk-page { width:210mm; min-height:297mm; padding:0 14mm 14mm 14mm; }
+        .sk-kop-img { width:100%; display:block; }
+        .sk-line-tebal { border:none; border-top:4px solid #000; margin:2px 0 2px 0; }
+        .sk-line-tipis { border:none; border-top:1.5px solid #000; margin:0 0 10px 0; }
+        .sk-header-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px; }
+        .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
+        .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.3px; }
+        .sk-perihal { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:12px; }
+        .sk-perihal td { vertical-align:top; padding:1px 0; }
+        .sk-body p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
+        .sk-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin:10px 0; }
+        .sk-tbl th { background:#dbeafe; border:1px solid #555; padding:4px 6px; text-align:center; font-weight:bold; }
+        .sk-tbl td { border:1px solid #555; }
+        .sk-tbl .total-row td { font-weight:bold; background:#eff6ff; border:1px solid #555; padding:4px 6px; }
+        .sk-penutup p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
+        .sk-ttd { margin-top:24px; display:flex; justify-content:flex-end; }
+        .sk-ttd-box { text-align:center; min-width:210px; font-size:11pt; }
+        .sk-ttd-box .sk-garis { border-top:1px solid #000; margin-top:60px; padding-top:3px; font-weight:bold; }
+      </style>`;
+
+      const html = css + `<div class="sk-page">
+        <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <div style="display:none;text-align:center;padding:8px 0;">
+          <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
+          <div style="font-size:9pt;">${p.alamat_lk}</div>
+        </div>
+        <div class="sk-line-tebal"></div>
+        <div class="sk-line-tipis"></div>
+
+        <table class="sk-header-tbl">
+          <tr>
+            <td style="width:110px;">Nomor</td>
+            <td style="width:10px;">:</td>
+            <td>${nomorSurat}/LK-Kelahiran/${tahun}</td>
+          </tr>
+          <tr>
+            <td>Perihal</td>
+            <td>:</td>
+            <td><b>Laporan Kelahiran Satwa — Periode ${label}</b></td>
+          </tr>
+        </table>
+
+        <div class="sk-judul">Surat Laporan Kelahiran Satwa</div>
+        <div style="text-align:center;font-size:10.5pt;margin-bottom:14px;">Periode : ${label}</div>
+
+        <div class="sk-body">
+          <p>Yang bertanda tangan di bawah ini, Kurator <b>${p.nama}</b>, berlokasi di ${p.alamat_lk}, dengan ini melaporkan adanya kelahiran satwa koleksi Lembaga Konservasi pada periode <b>${label}</b>, sebagai berikut:</p>
+        </div>
+
+        <table class="sk-tbl">
           <thead>
             <tr>
-              <th>No.</th>
-              <th style="min-width:120px;">Nama Satwa</th>
-              <th>Nama Latin</th>
+              <th style="width:32px;">No.</th>
+              <th>Nama Jenis Satwa</th>
               <th>Kelas</th>
               <th>Jumlah</th>
               <th>Kelamin</th>
               <th>Tanggal Lahir</th>
-              <th>No. Tag</th>
-              <th style="min-width:110px;">Keterangan</th>
+              <th>No. Identitas / Tag</th>
+              <th>Keterangan</th>
               <th>No. BA Kelahiran</th>
             </tr>
           </thead>
-          <tbody>${rows}</tbody>
+          <tbody>
+            ${isiSurat || '<tr><td colspan="9" style="text-align:center;padding:8px;border:1px solid #555;font-style:italic;">Tidak ada data.</td></tr>'}
+            <tr class="total-row">
+              <td colspan="3" style="text-align:right;padding:4px 6px;">Jumlah Total</td>
+              <td style="text-align:center;padding:4px 6px;">${totJumlah}</td>
+              <td colspan="5" style="padding:4px 6px;"></td>
+            </tr>
+          </tbody>
         </table>
-        ${blokTTD(tglIndoHari(today))}
+
+        <div class="sk-penutup">
+          <p>Demikian laporan kelahiran satwa ini kami sampaikan untuk dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+        </div>
+
+        <div class="sk-ttd">
+          <div class="sk-ttd-box">
+            <div>${p.tempat}, ${tglIndoHari(today)}</div>
+            <div style="margin-top:4px;font-weight:bold;">${p.nama}</div>
+            <div class="sk-garis">${nama}</div>
+            <div style="font-style:italic;">Kurator</div>
+          </div>
+        </div>
       </div>`;
 
       document.getElementById("surat-kelahiran-preview").innerHTML = html;
@@ -3318,61 +3418,129 @@
     }
 
     // =====================================================================
-    // SURAT LAPORAN KEMATIAN
+    // SURAT LAPORAN KEMATIAN — Format Surat Resmi Dinas
     // =====================================================================
-    function generateSuratKematian() {
+    async function generateSuratKematian() {
       const bulan = parseInt(document.getElementById("skm-bulan").value);
       const tahun = parseInt(document.getElementById("skm-tahun").value);
       const label = bulan===0 ? `Tahun ${tahun}` : `${NAMA_BULAN[bulan]} ${tahun}`;
       const today = new Date();
+      const p     = INFO_PERUSAHAAN;
+      const nama  = getNamaKurator();
+
+      showToast("Memuat kop surat...", "info");
+      const kopSrc = await getKopBase64();
 
       const data = filterByBulanTahun(localDB.kematian, bulan, tahun);
-
-      let rows = "";
       let totJumlah = 0;
-      data.forEach((k,i) => {
-        const jml = parseInt(k.jumlah)||0;
-        totJumlah += jml;
-        rows += `<tr>
-          <td>${i+1}</td>
-          <td class="left"><b>${k.nama||'-'}</b></td>
-          <td class="italic">${k.latin||'-'}</td>
-          <td>${k.kategori||'-'}</td>
-          <td>${jml}</td>
-          <td>${tglIndo(k.tanggal)}</td>
-          <td class="left" style="font-size:8.5pt;">${k.sebab||'-'}</td>
-          <td style="font-size:8pt;">${k.bap||'-'}</td>
-        </tr>`;
-      });
 
+      let isiSurat = "";
       if (data.length === 0) {
-        rows = `<tr><td colspan="8" style="text-align:center;color:#888;font-style:italic;">Tidak ada data kematian pada periode ini.</td></tr>`;
+        isiSurat = `<tr><td colspan="8" style="text-align:center;padding:8px;border:1px solid #555;font-style:italic;">Tidak ada data kematian pada periode ini.</td></tr>`;
+      } else {
+        data.forEach((k, i) => {
+          const jml = parseInt(k.jumlah)||0;
+          totJumlah += jml;
+          isiSurat += `
+          <tr>
+            <td style="text-align:center;padding:4px 6px;border:1px solid #555;">${i+1}.</td>
+            <td style="padding:4px 6px;border:1px solid #555;"><b>${k.nama||'-'}</b><br><i style="font-size:8.5pt;color:#444;">${k.latin||''}</i></td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.kategori||'-'}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${jml}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${tglIndo(k.tanggal)}</td>
+            <td style="padding:4px 6px;border:1px solid #555;">${k.sebab||'-'}</td>
+            <td style="padding:4px 6px;border:1px solid #555;text-align:center;font-size:8pt;">${k.bap||'-'}</td>
+          </tr>`;
+        });
       }
 
-      rows += `<tr style="background:#fee2e2;">
-        <td colspan="4" style="text-align:right;font-weight:bold;">Jumlah Total</td>
-        <td><b>${totJumlah}</b></td>
-        <td colspan="3"></td>
-      </tr>`;
+      const nomorSurat = `B-${String(today.getDate()).padStart(2,'0')}/${today.getMonth()+1}/${tahun}`;
 
-      const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(label, 'Surat Laporan Kematian Satwa', 'Periode: ' + label)}
-        <table class="lap-tbl">
+      const css = `<style>
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body, .sk-page { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
+        .sk-page { width:210mm; min-height:297mm; padding:0 14mm 14mm 14mm; }
+        .sk-kop-img { width:100%; display:block; }
+        .sk-line-tebal { border:none; border-top:4px solid #000; margin:2px 0 2px 0; }
+        .sk-line-tipis { border:none; border-top:1.5px solid #000; margin:0 0 10px 0; }
+        .sk-header-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px; }
+        .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
+        .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; }
+        .sk-body p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
+        .sk-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin:10px 0; }
+        .sk-tbl th { background:#fee2e2; border:1px solid #555; padding:4px 6px; text-align:center; font-weight:bold; }
+        .sk-tbl td { border:1px solid #555; }
+        .sk-tbl .total-row td { font-weight:bold; background:#fff5f5; border:1px solid #555; padding:4px 6px; }
+        .sk-penutup p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
+        .sk-ttd { margin-top:24px; display:flex; justify-content:flex-end; }
+        .sk-ttd-box { text-align:center; min-width:210px; font-size:11pt; }
+        .sk-ttd-box .sk-garis { border-top:1px solid #000; margin-top:60px; padding-top:3px; font-weight:bold; }
+      </style>`;
+
+      const html = css + `<div class="sk-page">
+        <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <div style="display:none;text-align:center;padding:8px 0;">
+          <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
+          <div style="font-size:9pt;">${p.alamat_lk}</div>
+        </div>
+        <div class="sk-line-tebal"></div>
+        <div class="sk-line-tipis"></div>
+
+        <table class="sk-header-tbl">
+          <tr>
+            <td style="width:110px;">Nomor</td>
+            <td style="width:10px;">:</td>
+            <td>${nomorSurat}/LK-Kematian/${tahun}</td>
+          </tr>
+          <tr>
+            <td>Perihal</td>
+            <td>:</td>
+            <td><b>Laporan Kematian Satwa — Periode ${label}</b></td>
+          </tr>
+        </table>
+
+        <div class="sk-judul">Surat Laporan Kematian Satwa</div>
+        <div style="text-align:center;font-size:10.5pt;margin-bottom:14px;">Periode : ${label}</div>
+
+        <div class="sk-body">
+          <p>Yang bertanda tangan di bawah ini, Kurator <b>${p.nama}</b>, berlokasi di ${p.alamat_lk}, dengan ini melaporkan adanya kematian satwa koleksi Lembaga Konservasi pada periode <b>${label}</b>, sebagai berikut:</p>
+        </div>
+
+        <table class="sk-tbl">
           <thead>
             <tr>
-              <th>No.</th>
-              <th style="min-width:120px;">Nama Satwa</th>
-              <th>Nama Latin</th>
+              <th style="width:32px;">No.</th>
+              <th>Nama Jenis Satwa</th>
               <th>Kategori</th>
               <th>Jumlah</th>
-              <th>Tanggal Mati</th>
-              <th style="min-width:130px;">Sebab Kematian</th>
+              <th>Tanggal Kematian</th>
+              <th>Penyebab Kematian</th>
               <th>No. BA Kematian</th>
             </tr>
           </thead>
-          <tbody>${rows}</tbody>
+          <tbody>
+            ${isiSurat}
+            <tr class="total-row">
+              <td colspan="3" style="text-align:right;padding:4px 6px;">Jumlah Total</td>
+              <td style="text-align:center;padding:4px 6px;">${totJumlah}</td>
+              <td colspan="3" style="padding:4px 6px;"></td>
+            </tr>
+          </tbody>
         </table>
-        ${blokTTD(tglIndoHari(today))}
+
+        <div class="sk-penutup">
+          <p>Demikian laporan kematian satwa ini kami sampaikan untuk dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+        </div>
+
+        <div class="sk-ttd">
+          <div class="sk-ttd-box">
+            <div>${p.tempat}, ${tglIndoHari(today)}</div>
+            <div style="margin-top:4px;font-weight:bold;">${p.nama}</div>
+            <div class="sk-garis">${nama}</div>
+            <div style="font-style:italic;">Kurator</div>
+          </div>
+        </div>
       </div>`;
 
       document.getElementById("surat-kematian-preview").innerHTML = html;
@@ -3381,7 +3549,7 @@
     }
 
     // =====================================================================
-    // CETAK / UNDUH PDF — A4 Landscape, kop gambar ikut tercetak
+    // CETAK / UNDUH PDF
     // =====================================================================
     function cetakLaporan(previewId) {
       const el = document.getElementById(previewId);
@@ -3389,23 +3557,27 @@
         showToast("Harap tampilkan preview terlebih dahulu sebelum mencetak.", "error");
         return;
       }
-      const win = window.open("", "_blank", "width=1100,height=800");
+      // Surat kelahiran & kematian = A4 Portrait; Laporan = A4 Landscape
+      const isPortrait = previewId.startsWith("surat-");
+      const pageSize   = isPortrait ? "A4 portrait" : "A4 landscape";
+      const margin     = isPortrait ? "10mm 14mm" : "8mm 10mm";
+
+      const win = window.open("", "_blank", "width=1100,height=900");
       win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
         <title>Laporan – ${INFO_PERUSAHAAN.nama}</title>
         <style>
-          @page { size: A4 landscape; margin: 8mm 10mm; }
-          * { box-sizing: border-box; margin:0; padding:0; }
-          body { font-family:'Times New Roman',serif; font-size:10pt; color:#111; background:#fff; }
+          @page { size: ${pageSize}; margin: ${margin}; }
+          * { box-sizing:border-box; margin:0; padding:0; }
+          body { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
+
+          /* ---- Laporan Bulanan/Triwulan ---- */
           .lap-page { width:100%; }
-          .lap-kop-img { width:100%; display:block; margin-bottom:5px; }
+          .lap-kop-img, .sk-kop-img { width:100%; display:block; }
           .lap-kop-line { border:none; border-top:3px double #222; margin-bottom:7px; }
           .lap-info { width:100%; border-collapse:collapse; font-size:9pt; margin-bottom:7px; }
           .lap-info td { vertical-align:top; padding:1px 3px; }
-          .lap-info .lbl { white-space:nowrap; width:150px; }
-          .lap-info .sep { width:8px; }
           .lap-judul { text-align:center; font-size:11pt; font-weight:bold;
-                       text-transform:uppercase; letter-spacing:.4px;
-                       text-decoration:underline; margin-bottom:5px; }
+                       text-transform:uppercase; text-decoration:underline; margin-bottom:5px; }
           .lap-subjudul { text-align:center; font-size:9.5pt; margin-bottom:8px; }
           .lap-tbl { width:100%; border-collapse:collapse; font-size:8pt; }
           .lap-tbl th, .lap-tbl td { border:1px solid #444; padding:2.5px 4px; text-align:center; vertical-align:middle; }
@@ -3414,19 +3586,35 @@
           .lap-tbl td.italic { font-style:italic; }
           .lap-tbl tbody tr:last-child td { font-weight:bold; background:#eff6ff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
           .lap-ttd { margin-top:20px; display:flex; justify-content:flex-end; }
-          .lap-ttd-box { text-align:center; min-width:200px; font-size:10pt; }
+          .lap-ttd-box { text-align:center; min-width:200px; }
           .lap-ttd-box .garis-ttd { border-top:1px solid #333; margin-top:52px; padding-top:3px; font-weight:bold; }
-          #kop-fallback { display:none !important; }
+
+          /* ---- Surat Kelahiran / Kematian ---- */
+          .sk-page { width:100%; }
+          .sk-line-tebal { border:none; border-top:4px solid #000; margin:2px 0; }
+          .sk-line-tipis { border:none; border-top:1.5px solid #000; margin:0 0 10px 0; }
+          .sk-header-tbl { width:100%; border-collapse:collapse; margin-bottom:10px; }
+          .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
+          .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; }
+          .sk-body p, .sk-penutup p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
+          .sk-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin:10px 0; }
+          .sk-tbl th { border:1px solid #555; padding:4px 6px; text-align:center; font-weight:bold;
+                       -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+          .sk-tbl td { border:1px solid #555; }
+          .sk-tbl .total-row td { font-weight:bold; border:1px solid #555; padding:4px 6px;
+                                  -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+          .sk-ttd { margin-top:24px; display:flex; justify-content:flex-end; }
+          .sk-ttd-box { text-align:center; min-width:210px; }
+          .sk-ttd-box .sk-garis { border-top:1px solid #000; margin-top:60px; padding-top:3px; font-weight:bold; }
+          .sk-tbl th[style*="fee2e2"] { background:#fee2e2 !important; }
+          .sk-tbl th[style*="dbeafe"] { background:#dbeafe !important; }
         </style>
       </head><body onload="
-        var img = document.querySelector('.lap-kop-img');
-        if (img) {
-          img.onload = function() { setTimeout(function(){ window.print(); }, 400); };
-          img.onerror = function() { setTimeout(function(){ window.print(); }, 400); };
-          if (img.complete) setTimeout(function(){ window.print(); }, 400);
-        } else {
-          setTimeout(function(){ window.print(); }, 400);
-        }
+        var imgs = document.querySelectorAll('img');
+        var total = imgs.length; var loaded = 0;
+        function tryPrint() { loaded++; if (loaded >= total) setTimeout(function(){ window.print(); }, 300); }
+        if (total === 0) { setTimeout(function(){ window.print(); }, 300); }
+        else { imgs.forEach(function(img){ if(img.complete){ tryPrint(); } else { img.onload=tryPrint; img.onerror=tryPrint; } }); }
       ">
         ${el.innerHTML}
       </body></html>`);
