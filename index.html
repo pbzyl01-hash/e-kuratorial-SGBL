@@ -2992,53 +2992,90 @@
     }
 
     /** CSS umum untuk halaman cetak */
+    const KOP_IMG_URL = "https://drive.google.com/uc?export=view&id=1tY8n5rx6pdb_QKeXT_eKBCQb9mwB21fG";
+
     function cssLaporan() {
       return `
         <style>
-          .lap-page { padding:32px 40px; font-family:'Times New Roman',serif; font-size:11pt; color:#111; background:#fff; }
-          .lap-kop  { margin-bottom:12px; }
-          .lap-kop table { width:100%; font-size:10.5pt; }
-          .lap-kop td { vertical-align:top; padding:1px 2px; }
-          .lap-judul{ text-align:center; font-size:13pt; font-weight:bold; text-transform:uppercase;
-                      letter-spacing:.5px; margin-bottom:14px; text-decoration:underline; }
-          .lap-tbl  { width:100%; border-collapse:collapse; font-size:9.5pt; margin-top:8px; }
-          .lap-tbl th, .lap-tbl td { border:1px solid #333; padding:4px 6px; text-align:center; vertical-align:middle; }
+          * { box-sizing: border-box; margin:0; padding:0; }
+          .lap-page {
+            width: 277mm; min-height: 190mm;
+            padding: 0 10mm 10mm 10mm;
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt; color: #111; background: #fff;
+          }
+          /* KOP — gambar penuh lebar */
+          .lap-kop-img { width:100%; display:block; margin-bottom:6px; }
+          /* Garis bawah kop */
+          .lap-kop-line { border:none; border-top: 3px double #222; margin-bottom:8px; }
+
+          /* Info perusahaan & periode — dua kolom */
+          .lap-info { width:100%; border-collapse:collapse; font-size:9.5pt; margin-bottom:8px; }
+          .lap-info td { vertical-align:top; padding:1px 3px; }
+          .lap-info .lbl { white-space:nowrap; width:155px; }
+          .lap-info .sep { width:8px; }
+
+          /* Judul laporan */
+          .lap-judul {
+            text-align:center; font-size:11.5pt; font-weight:bold;
+            text-transform:uppercase; letter-spacing:.4px;
+            text-decoration:underline; margin-bottom:6px;
+          }
+          .lap-subjudul { text-align:center; font-size:10pt; margin-bottom:10px; }
+
+          /* Tabel data */
+          .lap-tbl { width:100%; border-collapse:collapse; font-size:8.5pt; }
+          .lap-tbl th, .lap-tbl td {
+            border:1px solid #444; padding:3px 5px;
+            text-align:center; vertical-align:middle;
+          }
           .lap-tbl th { background:#dbeafe; font-weight:bold; }
-          .lap-tbl td.left { text-align:left; }
+          .lap-tbl td.left  { text-align:left; }
           .lap-tbl td.italic { font-style:italic; }
-          .lap-tbl tr:last-child td { font-weight:bold; background:#eff6ff; }
-          .lap-ttd  { margin-top:40px; display:flex; justify-content:space-between; }
-          .lap-ttd-box { text-align:center; min-width:220px; }
-          .lap-ttd-box .nama { border-top:1px solid #333; margin-top:64px; padding-top:4px; font-weight:bold; }
+          .lap-tbl tbody tr:last-child td { font-weight:bold; background:#eff6ff; }
+
+          /* TTD */
+          .lap-ttd { margin-top:24px; display:flex; justify-content:flex-end; }
+          .lap-ttd-box { text-align:center; min-width:200px; font-size:10pt; }
+          .lap-ttd-box .garis-ttd {
+            border-top:1px solid #333; margin-top:56px;
+            padding-top:3px; font-weight:bold;
+          }
         </style>`;
     }
 
-    /** Blok KOP surat */
-    function kopSurat(periodeLabel) {
+    /** KOP dari gambar + info perusahaan + judul */
+    function kopSurat(periodeLabel, judulUtama, judulSub) {
       const p = INFO_PERUSAHAAN;
       return `
-        <div class="lap-kop">
-          <div class="lap-judul">Laporan Bulanan Penangkaran Satwa Bulan :<br>
-            <span style="font-size:11pt;">${periodeLabel}</span>
-          </div>
-          <table>
-            <tr>
-              <td style="width:50%">
-                <table>
-                  <tr><td style="width:160px">Nama Perusahaan</td><td style="width:8px">:</td><td><b>${p.nama}</b></td></tr>
-                  <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${p.sk || "&nbsp;"}</td></tr>
-                  <tr><td>Alamat Kantor</td><td>:</td><td>${p.alamat_kantor}</td></tr>
-                  <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${p.alamat_lk}</td></tr>
-                </table>
-              </td>
-              <td style="width:50%; vertical-align:top; padding-left:24px;">
-                <table>
-                  <tr><td style="width:140px">Periode Bulan</td><td style="width:8px">:</td><td><b>${periodeLabel}</b></td></tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </div>`;
+        <img class="lap-kop-img" src="${KOP_IMG_URL}"
+             onerror="this.style.display='none';document.getElementById('kop-fallback').style.display='block';"
+             alt="Kop Surat">
+        <!-- Fallback teks jika gambar gagal load -->
+        <div id="kop-fallback" style="display:none;text-align:center;padding:6px 0;border-bottom:3px double #222;margin-bottom:8px;">
+          <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
+          <div style="font-size:9pt;">${p.alamat_kantor}</div>
+        </div>
+        <hr class="lap-kop-line">
+        <div class="lap-judul">${judulUtama || 'Laporan Bulanan Lembaga Konservasi'}</div>
+        ${judulSub ? `<div class="lap-subjudul">${judulSub}</div>` : ''}
+        <table class="lap-info">
+          <tr>
+            <td style="width:50%;vertical-align:top;">
+              <table style="width:100%">
+                <tr><td class="lbl">Nama Perusahaan</td><td class="sep">:</td><td><b>${p.nama}</b></td></tr>
+                <tr><td class="lbl">SK Lembaga Konservasi</td><td class="sep">:</td><td>${p.sk || '&nbsp;'}</td></tr>
+                <tr><td class="lbl">Alamat Kantor</td><td class="sep">:</td><td>${p.alamat_kantor}</td></tr>
+                <tr><td class="lbl">Alamat Lembaga Konservasi</td><td class="sep">:</td><td>${p.alamat_lk}</td></tr>
+              </table>
+            </td>
+            <td style="width:50%;vertical-align:top;padding-left:20px;">
+              <table style="width:100%">
+                <tr><td style="width:110px">Periode Bulan</td><td style="width:8px">:</td><td><b>${periodeLabel}</b></td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>`;
     }
 
     /** Blok TTD */
@@ -3047,11 +3084,10 @@
       const nama = getNamaKurator();
       return `
         <div class="lap-ttd">
-          <div></div>
           <div class="lap-ttd-box">
             <div>${p.tempat}, ${tanggalStr}</div>
             <div style="margin-top:4px;font-weight:bold;">${p.nama}</div>
-            <div class="nama">${nama}</div>
+            <div class="garis-ttd">${nama}</div>
             <div style="font-style:italic;">Kurator</div>
           </div>
         </div>`;
@@ -3106,16 +3142,16 @@
       </tr>`;
 
       const html = cssLaporan() + `<div class="lap-page">
-        ${kopSurat(label)}
+        ${kopSurat(label, 'Laporan Bulanan Lembaga Konservasi', label)}
         <table class="lap-tbl">
           <thead>
             <tr>
               <th rowspan="3">No.</th>
-              <th rowspan="3" style="min-width:150px;">Nama Jenis/<br>Persilangan/Varietas</th>
-              <th colspan="2">Stok Awal</th>
+              <th rowspan="3" style="min-width:140px;">Nama Jenis/<br>Persilangan/Varietas</th>
+              <th colspan="2">Jumlah Awal</th>
               <th rowspan="3">Asal-usul<br>Induk</th>
               <th colspan="5">Jumlah Mutasi Bulan Ini</th>
-              <th colspan="2">Jumlah Stok Akhir</th>
+              <th colspan="2">Jumlah Sampai<br>Dengan Bulan Ini</th>
               <th rowspan="3">Keterangan</th>
             </tr>
             <tr>
@@ -3183,34 +3219,16 @@
       </tr>`;
 
       const html = cssLaporan() + `<div class="lap-page">
-        <div class="lap-judul">Laporan Triwulan Penangkaran Satwa<br>
-          <span style="font-size:11pt;">${labelTW}</span></div>
-        <table style="width:100%;font-size:10.5pt;margin-bottom:14px;">
-          <tr>
-            <td style="width:50%">
-              <table>
-                <tr><td style="width:180px">Nama Perusahaan</td><td>:</td><td><b>${INFO_PERUSAHAAN.nama}</b></td></tr>
-                <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.sk||'&nbsp;'}</td></tr>
-                <tr><td>Alamat Kantor</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_kantor}</td></tr>
-                <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_lk}</td></tr>
-              </table>
-            </td>
-            <td style="vertical-align:top;padding-left:24px;">
-              <table>
-                <tr><td style="width:140px">Periode</td><td>:</td><td><b>${labelTW}</b></td></tr>
-              </table>
-            </td>
-          </tr>
-        </table>
+        ${kopSurat(labelTW, 'Laporan Triwulan Lembaga Konservasi', labelTW)}
         <table class="lap-tbl">
           <thead>
             <tr>
               <th rowspan="3">No.</th>
-              <th rowspan="3" style="min-width:150px;">Nama Jenis/<br>Persilangan/Varietas</th>
-              <th colspan="2">Stok Awal</th>
+              <th rowspan="3" style="min-width:140px;">Nama Jenis/<br>Persilangan/Varietas</th>
+              <th colspan="2">Jumlah Awal</th>
               <th rowspan="3">Asal-usul<br>Induk</th>
               <th colspan="5">Jumlah Mutasi Periode Ini</th>
-              <th colspan="2">Jumlah Stok Akhir</th>
+              <th colspan="2">Jumlah Sampai<br>Dengan Periode Ini</th>
               <th rowspan="3">Keterangan</th>
             </tr>
             <tr>
@@ -3273,37 +3291,19 @@
       </tr>`;
 
       const html = cssLaporan() + `<div class="lap-page">
-        <div class="lap-judul">Surat Laporan Kelahiran Satwa<br>
-          <span style="font-size:11pt;">Periode: ${label}</span></div>
-        <table style="width:100%;font-size:10.5pt;margin-bottom:14px;">
-          <tr>
-            <td style="width:50%">
-              <table>
-                <tr><td style="width:180px">Nama Perusahaan</td><td>:</td><td><b>${INFO_PERUSAHAAN.nama}</b></td></tr>
-                <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.sk||'&nbsp;'}</td></tr>
-                <tr><td>Alamat Kantor</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_kantor}</td></tr>
-                <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_lk}</td></tr>
-              </table>
-            </td>
-            <td style="vertical-align:top;padding-left:24px;">
-              <table>
-                <tr><td style="width:120px">Periode Bulan</td><td>:</td><td><b>${label}</b></td></tr>
-              </table>
-            </td>
-          </tr>
-        </table>
+        ${kopSurat(label, 'Surat Laporan Kelahiran Satwa', 'Periode: ' + label)}
         <table class="lap-tbl">
           <thead>
             <tr>
               <th>No.</th>
-              <th style="min-width:130px;">Nama Satwa</th>
+              <th style="min-width:120px;">Nama Satwa</th>
               <th>Nama Latin</th>
               <th>Kelas</th>
               <th>Jumlah</th>
               <th>Kelamin</th>
               <th>Tanggal Lahir</th>
               <th>No. Tag</th>
-              <th style="min-width:120px;">Keterangan</th>
+              <th style="min-width:110px;">Keterangan</th>
               <th>No. BA Kelahiran</th>
             </tr>
           </thead>
@@ -3356,35 +3356,17 @@
       </tr>`;
 
       const html = cssLaporan() + `<div class="lap-page">
-        <div class="lap-judul">Surat Laporan Kematian Satwa<br>
-          <span style="font-size:11pt;">Periode: ${label}</span></div>
-        <table style="width:100%;font-size:10.5pt;margin-bottom:14px;">
-          <tr>
-            <td style="width:50%">
-              <table>
-                <tr><td style="width:180px">Nama Perusahaan</td><td>:</td><td><b>${INFO_PERUSAHAAN.nama}</b></td></tr>
-                <tr><td>SK Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.sk||'&nbsp;'}</td></tr>
-                <tr><td>Alamat Kantor</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_kantor}</td></tr>
-                <tr><td>Alamat Lembaga Konservasi</td><td>:</td><td>${INFO_PERUSAHAAN.alamat_lk}</td></tr>
-              </table>
-            </td>
-            <td style="vertical-align:top;padding-left:24px;">
-              <table>
-                <tr><td style="width:120px">Periode Bulan</td><td>:</td><td><b>${label}</b></td></tr>
-              </table>
-            </td>
-          </tr>
-        </table>
+        ${kopSurat(label, 'Surat Laporan Kematian Satwa', 'Periode: ' + label)}
         <table class="lap-tbl">
           <thead>
             <tr>
               <th>No.</th>
-              <th style="min-width:130px;">Nama Satwa</th>
+              <th style="min-width:120px;">Nama Satwa</th>
               <th>Nama Latin</th>
               <th>Kategori</th>
               <th>Jumlah</th>
               <th>Tanggal Mati</th>
-              <th style="min-width:140px;">Sebab Kematian</th>
+              <th style="min-width:130px;">Sebab Kematian</th>
               <th>No. BA Kematian</th>
             </tr>
           </thead>
@@ -3399,7 +3381,7 @@
     }
 
     // =====================================================================
-    // CETAK / UNDUH PDF
+    // CETAK / UNDUH PDF — A4 Landscape, kop gambar ikut tercetak
     // =====================================================================
     function cetakLaporan(previewId) {
       const el = document.getElementById(previewId);
@@ -3407,30 +3389,46 @@
         showToast("Harap tampilkan preview terlebih dahulu sebelum mencetak.", "error");
         return;
       }
-      const win = window.open("", "_blank", "width=1024,height=768");
+      const win = window.open("", "_blank", "width=1100,height=800");
       win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
-        <title>Laporan e-Kuratorial – ${INFO_PERUSAHAAN.nama}</title>
+        <title>Laporan – ${INFO_PERUSAHAAN.nama}</title>
         <style>
-          @page { size: A4 landscape; margin: 14mm 12mm; }
-          * { box-sizing: border-box; }
-          body { font-family:'Times New Roman',serif; font-size:11pt; color:#111; background:#fff; margin:0; padding:0; }
-          .lap-page { padding: 0; }
-          .lap-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin-top:8px; }
-          .lap-tbl th, .lap-tbl td { border:1px solid #333; padding:4px 6px; text-align:center; vertical-align:middle; }
-          .lap-tbl th { background:#dbeafe; font-weight:bold; }
+          @page { size: A4 landscape; margin: 8mm 10mm; }
+          * { box-sizing: border-box; margin:0; padding:0; }
+          body { font-family:'Times New Roman',serif; font-size:10pt; color:#111; background:#fff; }
+          .lap-page { width:100%; }
+          .lap-kop-img { width:100%; display:block; margin-bottom:5px; }
+          .lap-kop-line { border:none; border-top:3px double #222; margin-bottom:7px; }
+          .lap-info { width:100%; border-collapse:collapse; font-size:9pt; margin-bottom:7px; }
+          .lap-info td { vertical-align:top; padding:1px 3px; }
+          .lap-info .lbl { white-space:nowrap; width:150px; }
+          .lap-info .sep { width:8px; }
+          .lap-judul { text-align:center; font-size:11pt; font-weight:bold;
+                       text-transform:uppercase; letter-spacing:.4px;
+                       text-decoration:underline; margin-bottom:5px; }
+          .lap-subjudul { text-align:center; font-size:9.5pt; margin-bottom:8px; }
+          .lap-tbl { width:100%; border-collapse:collapse; font-size:8pt; }
+          .lap-tbl th, .lap-tbl td { border:1px solid #444; padding:2.5px 4px; text-align:center; vertical-align:middle; }
+          .lap-tbl th { background:#dbeafe !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; font-weight:bold; }
           .lap-tbl td.left { text-align:left; }
           .lap-tbl td.italic { font-style:italic; }
-          .lap-tbl tr:last-child td { font-weight:bold; background:#eff6ff; }
-          .lap-judul { text-align:center; font-size:13pt; font-weight:bold; text-transform:uppercase;
-                       letter-spacing:.5px; margin-bottom:14px; text-decoration:underline; }
-          .lap-kop table { width:100%; font-size:10.5pt; }
-          .lap-kop td { vertical-align:top; padding:1px 2px; }
-          .lap-ttd { margin-top:40px; display:flex; justify-content:flex-end; }
-          .lap-ttd-box { text-align:center; min-width:220px; }
-          .lap-ttd-box .nama { border-top:1px solid #333; margin-top:64px; padding-top:4px; font-weight:bold; }
+          .lap-tbl tbody tr:last-child td { font-weight:bold; background:#eff6ff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+          .lap-ttd { margin-top:20px; display:flex; justify-content:flex-end; }
+          .lap-ttd-box { text-align:center; min-width:200px; font-size:10pt; }
+          .lap-ttd-box .garis-ttd { border-top:1px solid #333; margin-top:52px; padding-top:3px; font-weight:bold; }
+          #kop-fallback { display:none !important; }
         </style>
-      </head><body onload="setTimeout(()=>{window.print();},300);">
-        ${el.querySelector('.lap-page') ? el.innerHTML : `<div class="lap-page" style="padding:0;">${el.innerHTML}</div>`}
+      </head><body onload="
+        var img = document.querySelector('.lap-kop-img');
+        if (img) {
+          img.onload = function() { setTimeout(function(){ window.print(); }, 400); };
+          img.onerror = function() { setTimeout(function(){ window.print(); }, 400); };
+          if (img.complete) setTimeout(function(){ window.print(); }, 400);
+        } else {
+          setTimeout(function(){ window.print(); }, 400);
+        }
+      ">
+        ${el.innerHTML}
       </body></html>`);
       win.document.close();
     }
