@@ -1451,11 +1451,15 @@
         const ml = document.getElementById("main-layout");
         ml.classList.remove("hidden");
         ml.classList.add("app-visible");
-        
+
+        // Simpan sesi agar refresh browser tidak keluar
+        sessionStorage.setItem('sgbl_session', '1');
+        sessionStorage.setItem('sgbl_active_tab', 'dashboard');
+
         showToast("Selamat bekerja, Kurator!", "success");
-        loadFromSpreadsheet(); // Ambil data terbaru dari cloud saat login
+        loadFromSpreadsheet();
         setTimeout(renderCharts, 300);
-        startAutoSync(); // Mulai polling otomatis 30 detik
+        startAutoSync();
       } else {
         errEl.textContent = "PIN salah!";
         errEl.classList.remove("hidden");
@@ -1465,7 +1469,11 @@
     }
 
     function handleLogout() {
-      stopAutoSync(); // Hentikan polling saat keluar
+      stopAutoSync();
+      // Hapus sesi agar refresh setelah logout kembali ke login
+      sessionStorage.removeItem('sgbl_session');
+      sessionStorage.removeItem('sgbl_active_tab');
+
       const ml = document.getElementById("main-layout");
       ml.classList.remove("app-visible");
       ml.classList.add("hidden");
@@ -1546,6 +1554,9 @@
       if (tabId === 'dashboard') {
         setTimeout(renderCharts, 100);
       }
+
+      // Simpan tab aktif agar restore saat refresh
+      try { sessionStorage.setItem('sgbl_active_tab', tabId); } catch(e) {}
     }
 
     function toggleMobileSidebar() {
@@ -2838,14 +2849,12 @@
     }
 
     window.onload = function() {
-      // 1. Inisialisasi Live Clock tanpa delay/pulsing agresif
+      // 1. Inisialisasi Live Clock
       const runClock = () => {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
         const clockEl = document.getElementById("live-clock");
-        if (clockEl) {
-          clockEl.textContent = now.toLocaleDateString("id-ID", options) + " WITA";
-        }
+        if (clockEl) clockEl.textContent = now.toLocaleDateString("id-ID", options) + " WITA";
       };
       runClock();
       setInterval(runClock, 1000);
@@ -2854,14 +2863,30 @@
       const savedTheme = SafeStorage.getItem('ekurator_theme') || "dark";
       applyTheme(savedTheme === "dark");
 
-      // 3. Tampilkan data localStorage sementara (agar UI tidak kosong), lalu segera ambil dari cloud
-      updateDashboardStats();
-      renderAllTables();
-      setTimeout(renderCharts, 100);
-      // Tarik data terbaru dari cloud (menggantikan data localStorage yang mungkin sudah usang)
-      loadFromSpreadsheet();
+      // 3. Cek sesi — jika masih aktif (refresh bukan logout), langsung masuk tanpa login ulang
+      const hasSession = sessionStorage.getItem('sgbl_session') === '1';
+      if (hasSession) {
+        // Sembunyikan layar login, tampilkan app
+        const loginScreen = document.getElementById("login-screen");
+        const ml          = document.getElementById("main-layout");
+        if (loginScreen) loginScreen.classList.add("app-hidden");
+        if (ml) { ml.classList.remove("hidden"); ml.classList.add("app-visible"); }
 
-      // 4. Isi dropdown tahun laporan (5 tahun ke belakang s.d. sekarang)
+        // Restore tab yang sedang dibuka sebelum refresh
+        const lastTab = sessionStorage.getItem('sgbl_active_tab') || 'dashboard';
+        switchTab(lastTab);
+
+        // Muat ulang data & mulai auto-sync
+        updateDashboardStats();
+        renderAllTables();
+        setTimeout(renderCharts, 100);
+        loadFromSpreadsheet();
+        initLaporanDropdowns();
+        startAutoSync();
+        return; // tidak perlu lanjut ke langkah 4
+      }
+
+      // 4. Tidak ada sesi — tampilkan halaman login (default)
       initLaporanDropdowns();
     }
 
