@@ -3293,7 +3293,6 @@
     async function generateSuratKelahiran() {
       const bulan = parseInt(document.getElementById("sk-bulan").value);
       const tahun = parseInt(document.getElementById("sk-tahun").value);
-      const label = bulan===0 ? `Tahun ${tahun}` : `${NAMA_BULAN[bulan]} ${tahun}`;
       const today = new Date();
       const p     = INFO_PERUSAHAAN;
       const nama  = getNamaKurator();
@@ -3302,122 +3301,118 @@
       const kopSrc = await getKopBase64();
 
       const data = filterByBulanTahun(localDB.kelahiran, bulan, tahun);
-      let totJumlah = 0;
 
-      // Bangun isi paragraf per kejadian kelahiran
-      let isiSurat = "";
-      if (data.length === 0) {
-        isiSurat = `<p style="text-align:center;color:#888;font-style:italic;margin:20px 0;">Tidak ada data kelahiran pada periode ini.</p>`;
-      } else {
-        data.forEach((k, i) => {
-          const jml = parseInt(k.jumlah)||0;
-          totJumlah += jml;
-          isiSurat += `
-          <tr>
-            <td style="text-align:center;padding:4px 6px;border:1px solid #555;">${i+1}.</td>
-            <td style="padding:4px 6px;border:1px solid #555;"><b>${k.nama||'-'}</b><br><i style="font-size:8.5pt;color:#444;">${k.latin||''}</i></td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.kelas||'-'}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${jml}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.kelamin||'-'}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${tglIndo(k.tanggal)}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.tag||'-'}</td>
-            <td style="padding:4px 6px;border:1px solid #555;">${k.ket||'-'}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;font-size:8pt;">${k.bap||'-'}</td>
-          </tr>`;
-        });
+      // Nomor surat: urutan/SGBL/ZOO/bulanRomawi/tahun
+      const bRomawi = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][bulan] || "I";
+      const noUrut  = String(data.length || 1).padStart(2,'0');
+      const nomorSurat = `${noUrut}/SGBL/ZOO/${bRomawi}/${tahun}`;
+
+      // Baris tabel
+      let barisTabel = "";
+      data.forEach((k, i) => {
+        const jml = parseInt(k.jumlah)||0;
+        barisTabel += `<tr>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${i+1}</td>
+          <td style="padding:3px 5px;border:1px solid #000;">${k.nama||'-'}</td>
+          <td style="padding:3px 5px;border:1px solid #000;font-style:italic;">${k.latin||'-'}</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${jml} ekor</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${k.tag||'Noband'}</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${tglIndo(k.tanggal)}</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${k.kelamin||'Unknown'}</td>
+          <td style="padding:3px 5px;border:1px solid #000;">${k.ket||'-'}</td>
+        </tr>`;
+      });
+
+      if (!barisTabel) {
+        barisTabel = `<tr><td colspan="8" style="text-align:center;padding:8px;border:1px solid #000;font-style:italic;">Tidak ada data kelahiran pada periode ini.</td></tr>`;
       }
 
-      const nomorSurat = `B-${String(today.getDate()).padStart(2,'0')}/${today.getMonth()+1}/${tahun}`;
-
       const css = `<style>
-        @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap');
         * { box-sizing:border-box; margin:0; padding:0; }
-        body, .sk-page { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
-        .sk-page { width:210mm; min-height:297mm; padding:0 14mm 14mm 14mm; }
-        .sk-kop-img { width:100%; display:block; }
-        .sk-line-tebal { display:none; }
-        .sk-line-tipis { display:none; }
-        .sk-header-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px; }
-        .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
-        .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.3px; }
-        .sk-perihal { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:12px; }
-        .sk-perihal td { vertical-align:top; padding:1px 0; }
-        .sk-body p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
-        .sk-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin:10px 0; }
-        .sk-tbl th { background:#dbeafe; border:1px solid #555; padding:4px 6px; text-align:center; font-weight:bold; }
-        .sk-tbl td { border:1px solid #555; }
-        .sk-tbl .total-row td { font-weight:bold; background:#eff6ff; border:1px solid #555; padding:4px 6px; }
-        .sk-penutup p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
-        .sk-ttd { margin-top:24px; display:flex; justify-content:flex-end; }
-        .sk-ttd-box { text-align:center; min-width:210px; font-size:11pt; }
-        .sk-ttd-box .sk-garis { border-top:1px solid #000; margin-top:60px; padding-top:3px; font-weight:bold; }
+        body { font-family:'Times New Roman',Times,serif; font-size:12pt; color:#000; background:#fff; }
+        .sk-page { width:100%; padding:0 0 16mm 0; }
+        .sk-kop-img { width:100%; display:block; margin-bottom:10px; }
+        .sk-meta { font-size:12pt; margin-bottom:6px; }
+        .sk-meta table { border-collapse:collapse; }
+        .sk-meta td { vertical-align:top; padding:1px 0; line-height:1.6; }
+        .sk-meta .lbl { width:90px; }
+        .sk-meta .sep { width:16px; }
+        .sk-kepada { margin:10px 0 4px 0; font-size:12pt; line-height:1.6; }
+        .sk-pembuka { margin:10px 0; font-size:12pt; line-height:1.8; text-align:justify; }
+        .sk-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin:10px 0 14px 0; }
+        .sk-tbl th { border:1px solid #000; padding:4px 6px; text-align:center; font-weight:bold; background:#fff; }
+        .sk-tbl td { border:1px solid #000; }
+        .sk-penutup { font-size:12pt; line-height:1.8; text-align:justify; margin-bottom:6px; }
+        .sk-ttd { margin-top:16px; }
+        .sk-ttd-kiri { font-size:12pt; line-height:1.6; }
+        .sk-ttd-nama { font-weight:bold; margin-top:64px; }
+        .sk-ttd-jabatan { font-size:11pt; }
+        .sk-nb { margin-top:20px; font-size:11pt; font-style:italic; }
       </style>`;
 
       const html = css + `<div class="sk-page">
         <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat"
              onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <div style="display:none;text-align:center;padding:8px 0;">
-          <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
-          <div style="font-size:9pt;">${p.alamat_lk}</div>
+        <div style="display:none;text-align:center;padding:8px 0 4px;border-bottom:2px solid #000;margin-bottom:8px;">
+          <b style="font-size:14pt;">${p.nama}</b><br>
+          <span style="font-size:9pt;">LEMBAGA KONSERVASI<br>${p.alamat_kantor}</span>
         </div>
-        
 
-        <table class="sk-header-tbl">
-          <tr>
-            <td style="width:110px;">Nomor</td>
-            <td style="width:10px;">:</td>
-            <td>${nomorSurat}/LK-Kelahiran/${tahun}</td>
-          </tr>
-          <tr>
-            <td>Perihal</td>
-            <td>:</td>
-            <td><b>Laporan Kelahiran Satwa — Periode ${label}</b></td>
-          </tr>
-        </table>
+        <div class="sk-meta">
+          <div style="text-align:right;margin-bottom:8px;">${p.tempat}, ${tglIndoHari(today)}</div>
+          <table>
+            <tr><td class="lbl">Nomor</td><td class="sep">:</td><td><b>${nomorSurat}</b></td></tr>
+            <tr><td class="lbl">Lampiran</td><td class="sep">:</td><td>-</td></tr>
+            <tr><td class="lbl">Perihal</td><td class="sep">:</td><td><b>Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</b></td></tr>
+          </table>
+        </div>
 
-        <div class="sk-judul">Surat Laporan Kelahiran Satwa</div>
-        <div style="text-align:center;font-size:10.5pt;margin-bottom:14px;">Periode : ${label}</div>
+        <div class="sk-kepada">
+          Kepada Yth.<br>
+          <b>Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</b><br>
+          di -<br>
+          Samarinda
+        </div>
 
-        <div class="sk-body">
-          <p>Yang bertanda tangan di bawah ini, Kurator <b>${p.nama}</b>, berlokasi di ${p.alamat_lk}, dengan ini melaporkan adanya kelahiran satwa koleksi Lembaga Konservasi pada periode <b>${label}</b>, sebagai berikut:</p>
+        <div class="sk-pembuka">
+          <p style="margin-bottom:8px;">Dengan Hormat,</p>
+          <p>Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di ${p.nama} yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara, Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut.</p>
         </div>
 
         <table class="sk-tbl">
           <thead>
             <tr>
-              <th style="width:32px;">No.</th>
-              <th>Nama Jenis Satwa</th>
-              <th>Kelas</th>
-              <th>Jumlah</th>
-              <th>Kelamin</th>
-              <th>Tanggal Lahir</th>
-              <th>No. Identitas / Tag</th>
-              <th>Keterangan</th>
-              <th>No. BA Kelahiran</th>
+              <th rowspan="2" style="width:30px;">No</th>
+              <th colspan="2">Nama Jenis</th>
+              <th rowspan="2">Jumlah (ekor)</th>
+              <th rowspan="2">No. Tag/ID</th>
+              <th rowspan="2">Tanggal Lahir</th>
+              <th rowspan="2">Jenis Kelamin</th>
+              <th rowspan="2">Ket.</th>
+            </tr>
+            <tr>
+              <th>Indonesia</th>
+              <th>Latin</th>
             </tr>
           </thead>
           <tbody>
-            ${isiSurat || '<tr><td colspan="9" style="text-align:center;padding:8px;border:1px solid #555;font-style:italic;">Tidak ada data.</td></tr>'}
-            <tr class="total-row">
-              <td colspan="3" style="text-align:right;padding:4px 6px;">Jumlah Total</td>
-              <td style="text-align:center;padding:4px 6px;">${totJumlah}</td>
-              <td colspan="5" style="padding:4px 6px;"></td>
-            </tr>
+            ${barisTabel}
           </tbody>
         </table>
 
         <div class="sk-penutup">
-          <p>Demikian laporan kelahiran satwa ini kami sampaikan untuk dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+          Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.
         </div>
 
         <div class="sk-ttd">
-          <div class="sk-ttd-box">
-            <div>${p.tempat}, ${tglIndoHari(today)}</div>
-            <div style="margin-top:4px;font-weight:bold;">${p.nama}</div>
-            <div class="sk-garis">${nama}</div>
-            <div style="font-style:italic;">Kurator</div>
+          <div class="sk-ttd-kiri">
+            Hormat Kami,
+            <div class="sk-ttd-nama">${nama}</div>
+            <div class="sk-ttd-jabatan">Kurator</div>
           </div>
         </div>
+
+        <div class="sk-nb">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
       </div>`;
 
       document.getElementById("surat-kelahiran-preview").innerHTML = html;
@@ -3426,12 +3421,11 @@
     }
 
     // =====================================================================
-    // SURAT LAPORAN KEMATIAN — Format Surat Resmi Dinas
+    // SURAT LAPORAN KEMATIAN — Format Template SGBL
     // =====================================================================
     async function generateSuratKematian() {
       const bulan = parseInt(document.getElementById("skm-bulan").value);
       const tahun = parseInt(document.getElementById("skm-tahun").value);
-      const label = bulan===0 ? `Tahun ${tahun}` : `${NAMA_BULAN[bulan]} ${tahun}`;
       const today = new Date();
       const p     = INFO_PERUSAHAAN;
       const nama  = getNamaKurator();
@@ -3440,114 +3434,123 @@
       const kopSrc = await getKopBase64();
 
       const data = filterByBulanTahun(localDB.kematian, bulan, tahun);
-      let totJumlah = 0;
 
-      let isiSurat = "";
-      if (data.length === 0) {
-        isiSurat = `<tr><td colspan="8" style="text-align:center;padding:8px;border:1px solid #555;font-style:italic;">Tidak ada data kematian pada periode ini.</td></tr>`;
-      } else {
-        data.forEach((k, i) => {
-          const jml = parseInt(k.jumlah)||0;
-          totJumlah += jml;
-          isiSurat += `
-          <tr>
-            <td style="text-align:center;padding:4px 6px;border:1px solid #555;">${i+1}.</td>
-            <td style="padding:4px 6px;border:1px solid #555;"><b>${k.nama||'-'}</b><br><i style="font-size:8.5pt;color:#444;">${k.latin||''}</i></td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${k.kategori||'-'}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${jml}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;">${tglIndo(k.tanggal)}</td>
-            <td style="padding:4px 6px;border:1px solid #555;">${k.sebab||'-'}</td>
-            <td style="padding:4px 6px;border:1px solid #555;text-align:center;font-size:8pt;">${k.bap||'-'}</td>
-          </tr>`;
-        });
+      // Nomor surat: urutan/SGBL-BAK/ZOO/bulanRomawi/tahun
+      const bRomawi = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][bulan] || "I";
+      const noUrut  = String(data.length || 1).padStart(2,'0');
+      const nomorSurat = `${noUrut}/SGBL-BAK/ZOO/${bRomawi}/${tahun}`;
+
+      // Baris tabel — sesuai template: No | Nama Indo | Nama Latin | Jumlah | Generasi | No Tag | Tgl Kematian | Ket | No BAP Penitipan
+      let barisTabel = "";
+      data.forEach((k, i) => {
+        const jml = parseInt(k.jumlah)||0;
+        // Ambil generasi dari master jika ada
+        const masterEntry = localDB.master.find(m => m.nama === k.nama);
+        const generasi = masterEntry ? (masterEntry.generasi || 'F0') : 'F0';
+        barisTabel += `<tr>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${i+1}</td>
+          <td style="padding:3px 5px;border:1px solid #000;">${k.nama||'-'}</td>
+          <td style="padding:3px 5px;border:1px solid #000;font-style:italic;">${k.latin||'-'}</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${jml}</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${generasi}</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">No ID</td>
+          <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${tglIndo(k.tanggal)}</td>
+          <td style="padding:3px 5px;border:1px solid #000;">${k.sebab||'Sakit'}</td>
+          <td style="padding:3px 5px;border:1px solid #000;font-size:9pt;">${k.bap||'-'}</td>
+        </tr>`;
+      });
+
+      if (!barisTabel) {
+        barisTabel = `<tr><td colspan="9" style="text-align:center;padding:8px;border:1px solid #000;font-style:italic;">Tidak ada data kematian pada periode ini.</td></tr>`;
       }
-
-      const nomorSurat = `B-${String(today.getDate()).padStart(2,'0')}/${today.getMonth()+1}/${tahun}`;
 
       const css = `<style>
         * { box-sizing:border-box; margin:0; padding:0; }
-        body, .sk-page { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
-        .sk-page { width:210mm; min-height:297mm; padding:0 14mm 14mm 14mm; }
-        .sk-kop-img { width:100%; display:block; }
-        .sk-line-tebal { display:none; }
-        .sk-line-tipis { display:none; }
-        .sk-header-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px; }
-        .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
-        .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; }
-        .sk-body p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
-        .sk-tbl { width:100%; border-collapse:collapse; font-size:9.5pt; margin:10px 0; }
-        .sk-tbl th { background:#fee2e2; border:1px solid #555; padding:4px 6px; text-align:center; font-weight:bold; }
-        .sk-tbl td { border:1px solid #555; }
-        .sk-tbl .total-row td { font-weight:bold; background:#fff5f5; border:1px solid #555; padding:4px 6px; }
-        .sk-penutup p { font-size:11pt; line-height:1.6; text-align:justify; margin-bottom:8px; text-indent:2em; }
-        .sk-ttd { margin-top:24px; display:flex; justify-content:flex-end; }
-        .sk-ttd-box { text-align:center; min-width:210px; font-size:11pt; }
-        .sk-ttd-box .sk-garis { border-top:1px solid #000; margin-top:60px; padding-top:3px; font-weight:bold; }
+        body { font-family:'Times New Roman',Times,serif; font-size:12pt; color:#000; background:#fff; }
+        .sk-page { width:100%; padding:0 0 16mm 0; }
+        .sk-kop-img { width:100%; display:block; margin-bottom:10px; }
+        .sk-meta { font-size:12pt; margin-bottom:6px; }
+        .sk-meta table { border-collapse:collapse; }
+        .sk-meta td { vertical-align:top; padding:1px 0; line-height:1.6; }
+        .sk-meta .lbl { width:90px; }
+        .sk-meta .sep { width:16px; }
+        .sk-kepada { margin:10px 0 4px 0; font-size:12pt; line-height:1.6; }
+        .sk-pembuka { margin:10px 0; font-size:12pt; line-height:1.8; text-align:justify; }
+        .sk-tbl { width:100%; border-collapse:collapse; font-size:10pt; margin:10px 0 14px 0; }
+        .sk-tbl th { border:1px solid #000; padding:4px 5px; text-align:center; font-weight:bold; background:#fff; }
+        .sk-tbl td { border:1px solid #000; }
+        .sk-penutup { font-size:12pt; line-height:1.8; text-align:justify; margin-bottom:6px; }
+        .sk-ttd { margin-top:16px; }
+        .sk-ttd-kiri { font-size:12pt; line-height:1.6; }
+        .sk-ttd-nama { font-weight:bold; margin-top:64px; }
+        .sk-ttd-jabatan { font-size:11pt; }
+        .sk-nb { margin-top:20px; font-size:11pt; font-style:italic; }
       </style>`;
 
       const html = css + `<div class="sk-page">
         <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat"
              onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <div style="display:none;text-align:center;padding:8px 0;">
-          <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
-          <div style="font-size:9pt;">${p.alamat_lk}</div>
+        <div style="display:none;text-align:center;padding:8px 0 4px;border-bottom:2px solid #000;margin-bottom:8px;">
+          <b style="font-size:14pt;">${p.nama}</b><br>
+          <span style="font-size:9pt;">LEMBAGA KONSERVASI<br>${p.alamat_kantor}</span>
         </div>
-        
 
-        <table class="sk-header-tbl">
-          <tr>
-            <td style="width:110px;">Nomor</td>
-            <td style="width:10px;">:</td>
-            <td>${nomorSurat}/LK-Kematian/${tahun}</td>
-          </tr>
-          <tr>
-            <td>Perihal</td>
-            <td>:</td>
-            <td><b>Laporan Kematian Satwa — Periode ${label}</b></td>
-          </tr>
-        </table>
+        <div class="sk-meta">
+          <div style="text-align:right;margin-bottom:8px;">${p.tempat}, ${tglIndoHari(today)}</div>
+          <table>
+            <tr><td class="lbl">Nomor</td><td class="sep">:</td><td><b>${nomorSurat}</b></td></tr>
+            <tr><td class="lbl">Lampiran</td><td class="sep">:</td><td>-</td></tr>
+            <tr><td class="lbl">Perihal</td><td class="sep">:</td><td><b>Laporan Kematian Satwa Liar dilindungi dan tidak dilindungi Undang-Undang</b></td></tr>
+          </table>
+        </div>
 
-        <div class="sk-judul">Surat Laporan Kematian Satwa</div>
-        <div style="text-align:center;font-size:10.5pt;margin-bottom:14px;">Periode : ${label}</div>
+        <div class="sk-kepada">
+          Kepada Yth.<br>
+          <b>Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</b><br>
+          di -<br>
+          Samarinda
+        </div>
 
-        <div class="sk-body">
-          <p>Yang bertanda tangan di bawah ini, Kurator <b>${p.nama}</b>, berlokasi di ${p.alamat_lk}, dengan ini melaporkan adanya kematian satwa koleksi Lembaga Konservasi pada periode <b>${label}</b>, sebagai berikut:</p>
+        <div class="sk-pembuka">
+          <p style="margin-bottom:8px;">Dengan Hormat,</p>
+          <p>Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di ${p.nama} yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara, Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut.</p>
         </div>
 
         <table class="sk-tbl">
           <thead>
             <tr>
-              <th style="width:32px;">No.</th>
-              <th>Nama Jenis Satwa</th>
-              <th>Kategori</th>
-              <th>Jumlah</th>
-              <th>Tanggal Kematian</th>
-              <th>Penyebab Kematian</th>
-              <th>No. BA Kematian</th>
+              <th rowspan="2" style="width:30px;">No</th>
+              <th colspan="2">Nama Jenis</th>
+              <th rowspan="2">Jumlah (ekor)</th>
+              <th rowspan="2">Generasi</th>
+              <th rowspan="2">No. Tag/ID</th>
+              <th rowspan="2">Tanggal Kematian</th>
+              <th rowspan="2">Keterangan</th>
+              <th rowspan="2">No. BAP Penitipan</th>
+            </tr>
+            <tr>
+              <th>Indonesia</th>
+              <th>Latin</th>
             </tr>
           </thead>
           <tbody>
-            ${isiSurat}
-            <tr class="total-row">
-              <td colspan="3" style="text-align:right;padding:4px 6px;">Jumlah Total</td>
-              <td style="text-align:center;padding:4px 6px;">${totJumlah}</td>
-              <td colspan="3" style="padding:4px 6px;"></td>
-            </tr>
+            ${barisTabel}
           </tbody>
         </table>
 
         <div class="sk-penutup">
-          <p>Demikian laporan kematian satwa ini kami sampaikan untuk dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+          Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.
         </div>
 
         <div class="sk-ttd">
-          <div class="sk-ttd-box">
-            <div>${p.tempat}, ${tglIndoHari(today)}</div>
-            <div style="margin-top:4px;font-weight:bold;">${p.nama}</div>
-            <div class="sk-garis">${nama}</div>
-            <div style="font-style:italic;">Kurator</div>
+          <div class="sk-ttd-kiri">
+            Hormat Kami,
+            <div class="sk-ttd-nama">${nama}</div>
+            <div class="sk-ttd-jabatan">Kurator</div>
           </div>
         </div>
+
+        <div class="sk-nb">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
       </div>`;
 
       document.getElementById("surat-kematian-preview").innerHTML = html;
