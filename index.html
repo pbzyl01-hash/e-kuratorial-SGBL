@@ -3039,7 +3039,7 @@
           /* KOP — gambar penuh lebar */
           .lap-kop-img { width:100%; display:block; margin-bottom:6px; }
           /* Garis bawah kop */
-          .lap-kop-line { border:none; border-top: 3px double #222; margin-bottom:8px; }
+          .lap-kop-line { display:none; }
 
           /* Info perusahaan & periode — dua kolom */
           .lap-info { width:100%; border-collapse:collapse; font-size:9.5pt; margin-bottom:8px; }
@@ -3085,7 +3085,7 @@
              style="width:100%;display:block;margin-bottom:4px;"
              onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
         <div style="display:none;text-align:center;padding:4px 0;font-size:12pt;font-weight:bold;text-transform:uppercase;">${p.nama}<br><span style="font-size:9pt;font-weight:normal;">${p.alamat_lk}</span></div>
-        <hr class="lap-kop-line">
+        
         <div class="lap-judul">${judulUtama || 'Laporan Bulanan Lembaga Konservasi'}</div>
         ${judulSub ? `<div class="lap-subjudul">${judulSub}</div>` : ''}
         <table class="lap-info">
@@ -3335,8 +3335,8 @@
         body, .sk-page { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
         .sk-page { width:210mm; min-height:297mm; padding:0 14mm 14mm 14mm; }
         .sk-kop-img { width:100%; display:block; }
-        .sk-line-tebal { border:none; border-top:4px solid #000; margin:2px 0 2px 0; }
-        .sk-line-tipis { border:none; border-top:1.5px solid #000; margin:0 0 10px 0; }
+        .sk-line-tebal { display:none; }
+        .sk-line-tipis { display:none; }
         .sk-header-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px; }
         .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
         .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.3px; }
@@ -3360,8 +3360,7 @@
           <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
           <div style="font-size:9pt;">${p.alamat_lk}</div>
         </div>
-        <div class="sk-line-tebal"></div>
-        <div class="sk-line-tipis"></div>
+        
 
         <table class="sk-header-tbl">
           <tr>
@@ -3470,8 +3469,8 @@
         body, .sk-page { font-family:'Times New Roman',Times,serif; font-size:11pt; color:#000; background:#fff; }
         .sk-page { width:210mm; min-height:297mm; padding:0 14mm 14mm 14mm; }
         .sk-kop-img { width:100%; display:block; }
-        .sk-line-tebal { border:none; border-top:4px solid #000; margin:2px 0 2px 0; }
-        .sk-line-tipis { border:none; border-top:1.5px solid #000; margin:0 0 10px 0; }
+        .sk-line-tebal { display:none; }
+        .sk-line-tipis { display:none; }
         .sk-header-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px; }
         .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
         .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; }
@@ -3493,8 +3492,7 @@
           <div style="font-size:14pt;font-weight:bold;text-transform:uppercase;">${p.nama}</div>
           <div style="font-size:9pt;">${p.alamat_lk}</div>
         </div>
-        <div class="sk-line-tebal"></div>
-        <div class="sk-line-tipis"></div>
+        
 
         <table class="sk-header-tbl">
           <tr>
@@ -3582,7 +3580,7 @@
           /* ---- Laporan Bulanan/Triwulan ---- */
           .lap-page { width:100%; }
           .lap-kop-img, .sk-kop-img { width:100%; display:block; }
-          .lap-kop-line { border:none; border-top:3px double #222; margin-bottom:7px; }
+          .lap-kop-line { display:none; }
           .lap-info { width:100%; border-collapse:collapse; font-size:9pt; margin-bottom:7px; }
           .lap-info td { vertical-align:top; padding:1px 3px; }
           .lap-judul { text-align:center; font-size:11pt; font-weight:bold;
@@ -3600,8 +3598,8 @@
 
           /* ---- Surat Kelahiran / Kematian ---- */
           .sk-page { width:100%; }
-          .sk-line-tebal { border:none; border-top:4px solid #000; margin:2px 0; }
-          .sk-line-tipis { border:none; border-top:1.5px solid #000; margin:0 0 10px 0; }
+          .sk-line-tebal { display:none; }
+          .sk-line-tipis { display:none; }
           .sk-header-tbl { width:100%; border-collapse:collapse; margin-bottom:10px; }
           .sk-header-tbl td { vertical-align:top; padding:1px 0; line-height:1.5; }
           .sk-judul { text-align:center; font-size:12pt; font-weight:bold; text-decoration:underline; margin:12px 0 4px; text-transform:uppercase; }
