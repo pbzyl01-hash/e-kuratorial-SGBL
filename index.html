@@ -776,60 +776,127 @@
         </section>
 
         <!-- ===== TAB SURAT LAPORAN KELAHIRAN ===== -->
-        <section id="tab-surat-kelahiran" class="space-y-5 hidden">
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <div>
-              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-baby text-emerald-500"></i>Surat Laporan Kelahiran Satwa</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Pilih periode untuk menampilkan surat laporan kelahiran yang siap dicetak.</p>
+        <section id="tab-surat-kelahiran" class="space-y-4 hidden">
+          <!-- Panel Kontrol -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
+                  <i class="fa-solid fa-baby text-emerald-500"></i>Surat Laporan Kelahiran Satwa
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">Isi form di bawah, lalu tampilkan preview surat resmi siap cetak.</p>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="generateSuratKelahiran()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                  <i class="fa-solid fa-eye"></i> Preview
+                </button>
+                <button onclick="cetakLaporan('surat-kelahiran-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                  <i class="fa-solid fa-print"></i> Cetak / Unduh
+                </button>
+              </div>
             </div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <select id="sk-bulan" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400">
-                <option value="0">Semua Bulan</option>
-                <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
-                <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
-                <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
-                <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
-              </select>
-              <select id="sk-tahun" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400"></select>
-              <button onclick="generateSuratKelahiran()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
-                <i class="fa-solid fa-eye"></i> Tampilkan Preview
-              </button>
-              <button onclick="cetakLaporan('surat-kelahiran-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
-                <i class="fa-solid fa-print"></i> Cetak / Unduh
-              </button>
+            <!-- Form input -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Periode Bulan</label>
+                <select id="sk-bulan" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                  <option value="0">Semua Bulan</option>
+                  <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
+                  <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
+                  <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
+                  <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Tahun</label>
+                <select id="sk-tahun" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400"></select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Nomor Surat <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
+                <input type="text" id="sk-nomor" placeholder="Otomatis / isi manual..."
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-800 dark:text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Tanggal Surat <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
+                <input type="date" id="sk-tanggal"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-800 dark:text-white">
+              </div>
             </div>
           </div>
+          <!-- Preview wrapper — A4 portrait presisi -->
           <div id="sk-preview-wrapper" class="hidden">
-            <div id="surat-kelahiran-preview" class="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-area" style="font-family:'Times New Roman',serif;"></div>
+            <div class="flex items-center justify-between mb-2 px-1">
+              <span class="text-xs text-slate-400 font-semibold uppercase tracking-wide flex items-center gap-1.5"><i class="fa-solid fa-file-lines text-emerald-500"></i>Preview Surat — A4 Portrait</span>
+              <span class="text-[10px] text-slate-400">Tampilan disesuaikan skala layar. Hasil cetak akan proporsional A4.</span>
+            </div>
+            <!-- Container scaling: A4 = 210mm × 297mm ≈ 794×1123px -->
+            <div class="overflow-x-auto flex justify-center">
+              <div style="width:794px;box-shadow:0 4px 32px rgba(0,0,0,.18);border-radius:4px;background:#fff;">
+                <div id="surat-kelahiran-preview" style="font-family:'Times New Roman',serif;width:794px;min-height:1123px;background:#fff;"></div>
+              </div>
+            </div>
           </div>
         </section>
 
         <!-- ===== TAB SURAT LAPORAN KEMATIAN ===== -->
-        <section id="tab-surat-kematian" class="space-y-5 hidden">
-          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <div>
-              <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-solid fa-skull text-rose-500"></i>Surat Laporan Kematian Satwa</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Pilih periode untuk menampilkan surat laporan kematian yang siap dicetak.</p>
+        <section id="tab-surat-kematian" class="space-y-4 hidden">
+          <!-- Panel Kontrol -->
+          <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
+                  <i class="fa-solid fa-skull text-rose-500"></i>Surat Laporan Kematian Satwa
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">Isi form di bawah, lalu tampilkan preview surat resmi siap cetak.</p>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="generateSuratKematian()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                  <i class="fa-solid fa-eye"></i> Preview
+                </button>
+                <button onclick="cetakLaporan('surat-kematian-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
+                  <i class="fa-solid fa-print"></i> Cetak / Unduh
+                </button>
+              </div>
             </div>
-            <div class="flex flex-wrap gap-3 items-center">
-              <select id="skm-bulan" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400">
-                <option value="0">Semua Bulan</option>
-                <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
-                <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
-                <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
-                <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
-              </select>
-              <select id="skm-tahun" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400"></select>
-              <button onclick="generateSuratKematian()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
-                <i class="fa-solid fa-eye"></i> Tampilkan Preview
-              </button>
-              <button onclick="cetakLaporan('surat-kematian-preview')" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl font-bold text-sm flex items-center gap-2 shadow-md transform hover:scale-[1.02] active:scale-[0.98] duration-200">
-                <i class="fa-solid fa-print"></i> Cetak / Unduh
-              </button>
+            <!-- Form input -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Periode Bulan</label>
+                <select id="skm-bulan" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400">
+                  <option value="0">Semua Bulan</option>
+                  <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option>
+                  <option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option>
+                  <option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option>
+                  <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Tahun</label>
+                <select id="skm-tahun" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400"></select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Nomor Surat <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
+                <input type="text" id="skm-nomor" placeholder="Otomatis / isi manual..."
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 text-slate-800 dark:text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">Tanggal Surat <span class="text-slate-400 font-normal normal-case">(opsional)</span></label>
+                <input type="date" id="skm-tanggal"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 text-slate-800 dark:text-white">
+              </div>
             </div>
           </div>
+          <!-- Preview wrapper -->
           <div id="skm-preview-wrapper" class="hidden">
-            <div id="surat-kematian-preview" class="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-area" style="font-family:'Times New Roman',serif;"></div>
+            <div class="flex items-center justify-between mb-2 px-1">
+              <span class="text-xs text-slate-400 font-semibold uppercase tracking-wide flex items-center gap-1.5"><i class="fa-solid fa-file-lines text-rose-500"></i>Preview Surat — A4 Portrait</span>
+              <span class="text-[10px] text-slate-400">Tampilan disesuaikan skala layar. Hasil cetak akan proporsional A4.</span>
+            </div>
+            <div class="overflow-x-auto flex justify-center">
+              <div style="width:794px;box-shadow:0 4px 32px rgba(0,0,0,.18);border-radius:4px;background:#fff;">
+                <div id="surat-kematian-preview" style="font-family:'Times New Roman',serif;width:794px;min-height:1123px;background:#fff;"></div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -3297,17 +3364,18 @@
       const p     = INFO_PERUSAHAAN;
       const nama  = getNamaKurator();
 
+      // Nomor & tanggal: gunakan input manual jika diisi
+      const inputNomor = document.getElementById("sk-nomor").value.trim();
+      const inputTgl   = document.getElementById("sk-tanggal").value;
+      const bRomawi    = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][bulan] || "I";
+      const nomorSurat = inputNomor || `__/SGBL/ZOO/${bRomawi}/${tahun}`;
+      const tglSurat   = inputTgl ? tglIndoHari(new Date(inputTgl + "T00:00:00")) : tglIndoHari(today);
+
       showToast("Memuat kop surat...", "info");
       const kopSrc = await getKopBase64();
 
       const data = filterByBulanTahun(localDB.kelahiran, bulan, tahun);
 
-      // Nomor surat: urutan/SGBL/ZOO/bulanRomawi/tahun
-      const bRomawi = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][bulan] || "I";
-      const noUrut  = String(data.length || 1).padStart(2,'0');
-      const nomorSurat = `${noUrut}/SGBL/ZOO/${bRomawi}/${tahun}`;
-
-      // Baris tabel
       let barisTabel = "";
       data.forEach((k, i) => {
         const jml = parseInt(k.jumlah)||0;
@@ -3322,100 +3390,74 @@
           <td style="padding:3px 5px;border:1px solid #000;">${k.ket||'-'}</td>
         </tr>`;
       });
-
-      if (!barisTabel) {
-        barisTabel = `<tr><td colspan="8" style="text-align:center;padding:8px;border:1px solid #000;font-style:italic;">Tidak ada data kelahiran pada periode ini.</td></tr>`;
-      }
+      if (!barisTabel) barisTabel = `<tr><td colspan="8" style="text-align:center;padding:8px;border:1px solid #000;font-style:italic;color:#666;">Tidak ada data kelahiran pada periode ini.</td></tr>`;
 
       const css = `<style>
         * { box-sizing:border-box; margin:0; padding:0; }
-        body { font-family:'Times New Roman',Times,serif; font-size:12pt; color:#000; background:#fff; }
-        .sk-page { width:100%; padding:0 0 16mm 0; }
+        body,.sk-page { font-family:'Times New Roman',Times,serif; font-size:13px; color:#000; background:#fff; }
+        .sk-page { width:794px; min-height:1123px; padding:28px 54px 36px 54px; }
         .sk-kop-img { width:100%; display:block; margin-bottom:10px; }
-        .sk-meta { font-size:12pt; margin-bottom:6px; }
-        .sk-meta table { border-collapse:collapse; }
-        .sk-meta td { vertical-align:top; padding:1px 0; line-height:1.6; }
-        .sk-meta .lbl { width:90px; }
-        .sk-meta .sep { width:16px; }
-        .sk-kepada { margin:10px 0 4px 0; font-size:12pt; line-height:1.6; }
-        .sk-pembuka { margin:10px 0; font-size:12pt; line-height:1.8; text-align:justify; }
-        .sk-tbl { width:100%; border-collapse:collapse; font-size:11pt; margin:10px 0 14px 0; }
-        .sk-tbl th { border:1px solid #000; padding:4px 6px; text-align:center; font-weight:bold; background:#fff; }
-        .sk-tbl td { border:1px solid #000; }
-        .sk-penutup { font-size:12pt; line-height:1.8; text-align:justify; margin-bottom:6px; }
-        .sk-ttd { margin-top:16px; }
-        .sk-ttd-kiri { font-size:12pt; line-height:1.6; }
-        .sk-ttd-nama { font-weight:bold; margin-top:64px; }
-        .sk-ttd-jabatan { font-size:11pt; }
-        .sk-nb { margin-top:20px; font-size:11pt; font-style:italic; }
+        .sk-meta table { border-collapse:collapse; width:100%; }
+        .sk-meta td { vertical-align:top; padding:1.5px 0; line-height:1.55; font-size:13px; }
+        .sk-meta .lbl { width:92px; }
+        .sk-meta .sep { width:14px; }
+        .sk-kepada { margin:14px 0 4px; font-size:13px; line-height:1.7; }
+        .sk-pembuka { margin:12px 0; font-size:13px; line-height:1.8; text-align:justify; }
+        .sk-tbl { width:100%; border-collapse:collapse; font-size:11.5px; margin:10px 0 14px; }
+        .sk-tbl th { border:1px solid #000; padding:4px 5px; text-align:center; font-weight:bold; }
+        .sk-tbl td { border:1px solid #000; padding:3px 5px; vertical-align:middle; }
+        .sk-penutup { font-size:13px; line-height:1.8; text-align:justify; }
+        .sk-ttd { margin-top:18px; font-size:13px; line-height:1.7; }
+        .sk-ttd-nama { font-weight:bold; margin-top:60px; }
+        .sk-nb { margin-top:18px; font-size:12px; font-style:italic; }
       </style>`;
 
-      const html = css + `<div class="sk-page">
-        <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <div style="display:none;text-align:center;padding:8px 0 4px;border-bottom:2px solid #000;margin-bottom:8px;">
-          <b style="font-size:14pt;">${p.nama}</b><br>
-          <span style="font-size:9pt;">LEMBAGA KONSERVASI<br>${p.alamat_kantor}</span>
-        </div>
-
+      const html2 = css + `<div class="sk-page">
+        <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat" onerror="this.style.display='none'">
         <div class="sk-meta">
-          <div style="text-align:right;margin-bottom:8px;">${p.tempat}, ${tglIndoHari(today)}</div>
+          <div style="text-align:right;margin-bottom:10px;">${p.tempat}, ${tglSurat}</div>
           <table>
             <tr><td class="lbl">Nomor</td><td class="sep">:</td><td><b>${nomorSurat}</b></td></tr>
             <tr><td class="lbl">Lampiran</td><td class="sep">:</td><td>-</td></tr>
-            <tr><td class="lbl">Perihal</td><td class="sep">:</td><td><b>Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</b></td></tr>
+            <tr><td class="lbl">Perihal</td><td class="sep">:</td>
+              <td><b>Laporan Kelahiran Satwa Liar Dilindungi dan Tidak Dilindungi Undang-Undang</b></td></tr>
           </table>
         </div>
-
         <div class="sk-kepada">
           Kepada Yth.<br>
           <b>Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</b><br>
           di -<br>
           Samarinda
         </div>
-
         <div class="sk-pembuka">
-          <p style="margin-bottom:8px;">Dengan Hormat,</p>
+          <p style="margin-bottom:10px;">Dengan Hormat,</p>
           <p>Bersama ini kami sampaikan laporan kelahiran satwa liar dilindungi dan tidak dilindungi Undang-Undang di ${p.nama} yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara, Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut.</p>
         </div>
-
         <table class="sk-tbl">
           <thead>
             <tr>
-              <th rowspan="2" style="width:30px;">No</th>
+              <th rowspan="2" style="width:28px;">No</th>
               <th colspan="2">Nama Jenis</th>
-              <th rowspan="2">Jumlah (ekor)</th>
+              <th rowspan="2">Jumlah<br>(ekor)</th>
               <th rowspan="2">No. Tag/ID</th>
               <th rowspan="2">Tanggal Lahir</th>
               <th rowspan="2">Jenis Kelamin</th>
               <th rowspan="2">Ket.</th>
             </tr>
-            <tr>
-              <th>Indonesia</th>
-              <th>Latin</th>
-            </tr>
+            <tr><th>Indonesia</th><th>Latin</th></tr>
           </thead>
-          <tbody>
-            ${barisTabel}
-          </tbody>
+          <tbody>${barisTabel}</tbody>
         </table>
-
-        <div class="sk-penutup">
-          Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.
-        </div>
-
+        <div class="sk-penutup">Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.</div>
         <div class="sk-ttd">
-          <div class="sk-ttd-kiri">
-            Hormat Kami,
-            <div class="sk-ttd-nama">${nama}</div>
-            <div class="sk-ttd-jabatan">Kurator</div>
-          </div>
+          Hormat Kami,
+          <div class="sk-ttd-nama">${nama}</div>
+          Kurator
         </div>
-
         <div class="sk-nb">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
       </div>`;
 
-      document.getElementById("surat-kelahiran-preview").innerHTML = html;
+      document.getElementById("surat-kelahiran-preview").innerHTML = html2;
       document.getElementById("sk-preview-wrapper").classList.remove("hidden");
       document.getElementById("surat-kelahiran-preview").scrollIntoView({behavior:"smooth",block:"start"});
     }
@@ -3430,21 +3472,21 @@
       const p     = INFO_PERUSAHAAN;
       const nama  = getNamaKurator();
 
+      // Nomor & tanggal: gunakan input manual jika diisi
+      const inputNomor = document.getElementById("skm-nomor").value.trim();
+      const inputTgl   = document.getElementById("skm-tanggal").value;
+      const bRomawi    = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][bulan] || "I";
+      const nomorSurat = inputNomor || `__/SGBL-BAK/ZOO/${bRomawi}/${tahun}`;
+      const tglSurat   = inputTgl ? tglIndoHari(new Date(inputTgl + "T00:00:00")) : tglIndoHari(today);
+
       showToast("Memuat kop surat...", "info");
       const kopSrc = await getKopBase64();
 
       const data = filterByBulanTahun(localDB.kematian, bulan, tahun);
 
-      // Nomor surat: urutan/SGBL-BAK/ZOO/bulanRomawi/tahun
-      const bRomawi = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][bulan] || "I";
-      const noUrut  = String(data.length || 1).padStart(2,'0');
-      const nomorSurat = `${noUrut}/SGBL-BAK/ZOO/${bRomawi}/${tahun}`;
-
-      // Baris tabel — sesuai template: No | Nama Indo | Nama Latin | Jumlah | Generasi | No Tag | Tgl Kematian | Ket | No BAP Penitipan
       let barisTabel = "";
       data.forEach((k, i) => {
         const jml = parseInt(k.jumlah)||0;
-        // Ambil generasi dari master jika ada
         const masterEntry = localDB.master.find(m => m.nama === k.nama);
         const generasi = masterEntry ? (masterEntry.generasi || 'F0') : 'F0';
         barisTabel += `<tr>
@@ -3456,104 +3498,78 @@
           <td style="text-align:center;padding:3px 5px;border:1px solid #000;">No ID</td>
           <td style="text-align:center;padding:3px 5px;border:1px solid #000;">${tglIndo(k.tanggal)}</td>
           <td style="padding:3px 5px;border:1px solid #000;">${k.sebab||'Sakit'}</td>
-          <td style="padding:3px 5px;border:1px solid #000;font-size:9pt;">${k.bap||'-'}</td>
+          <td style="padding:3px 5px;border:1px solid #000;font-size:10.5px;">${k.bap||'-'}</td>
         </tr>`;
       });
-
-      if (!barisTabel) {
-        barisTabel = `<tr><td colspan="9" style="text-align:center;padding:8px;border:1px solid #000;font-style:italic;">Tidak ada data kematian pada periode ini.</td></tr>`;
-      }
+      if (!barisTabel) barisTabel = `<tr><td colspan="9" style="text-align:center;padding:8px;border:1px solid #000;font-style:italic;color:#666;">Tidak ada data kematian pada periode ini.</td></tr>`;
 
       const css = `<style>
         * { box-sizing:border-box; margin:0; padding:0; }
-        body { font-family:'Times New Roman',Times,serif; font-size:12pt; color:#000; background:#fff; }
-        .sk-page { width:100%; padding:0 0 16mm 0; }
+        body,.sk-page { font-family:'Times New Roman',Times,serif; font-size:13px; color:#000; background:#fff; }
+        .sk-page { width:794px; min-height:1123px; padding:28px 54px 36px 54px; }
         .sk-kop-img { width:100%; display:block; margin-bottom:10px; }
-        .sk-meta { font-size:12pt; margin-bottom:6px; }
-        .sk-meta table { border-collapse:collapse; }
-        .sk-meta td { vertical-align:top; padding:1px 0; line-height:1.6; }
-        .sk-meta .lbl { width:90px; }
-        .sk-meta .sep { width:16px; }
-        .sk-kepada { margin:10px 0 4px 0; font-size:12pt; line-height:1.6; }
-        .sk-pembuka { margin:10px 0; font-size:12pt; line-height:1.8; text-align:justify; }
-        .sk-tbl { width:100%; border-collapse:collapse; font-size:10pt; margin:10px 0 14px 0; }
-        .sk-tbl th { border:1px solid #000; padding:4px 5px; text-align:center; font-weight:bold; background:#fff; }
-        .sk-tbl td { border:1px solid #000; }
-        .sk-penutup { font-size:12pt; line-height:1.8; text-align:justify; margin-bottom:6px; }
-        .sk-ttd { margin-top:16px; }
-        .sk-ttd-kiri { font-size:12pt; line-height:1.6; }
-        .sk-ttd-nama { font-weight:bold; margin-top:64px; }
-        .sk-ttd-jabatan { font-size:11pt; }
-        .sk-nb { margin-top:20px; font-size:11pt; font-style:italic; }
+        .sk-meta table { border-collapse:collapse; width:100%; }
+        .sk-meta td { vertical-align:top; padding:1.5px 0; line-height:1.55; font-size:13px; }
+        .sk-meta .lbl { width:92px; }
+        .sk-meta .sep { width:14px; }
+        .sk-kepada { margin:14px 0 4px; font-size:13px; line-height:1.7; }
+        .sk-pembuka { margin:12px 0; font-size:13px; line-height:1.8; text-align:justify; }
+        .sk-tbl { width:100%; border-collapse:collapse; font-size:10.5px; margin:10px 0 14px; }
+        .sk-tbl th { border:1px solid #000; padding:4px 4px; text-align:center; font-weight:bold; }
+        .sk-tbl td { border:1px solid #000; padding:3px 4px; vertical-align:middle; }
+        .sk-penutup { font-size:13px; line-height:1.8; text-align:justify; }
+        .sk-ttd { margin-top:18px; font-size:13px; line-height:1.7; }
+        .sk-ttd-nama { font-weight:bold; margin-top:60px; }
+        .sk-nb { margin-top:18px; font-size:12px; font-style:italic; }
       </style>`;
 
-      const html = css + `<div class="sk-page">
-        <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <div style="display:none;text-align:center;padding:8px 0 4px;border-bottom:2px solid #000;margin-bottom:8px;">
-          <b style="font-size:14pt;">${p.nama}</b><br>
-          <span style="font-size:9pt;">LEMBAGA KONSERVASI<br>${p.alamat_kantor}</span>
-        </div>
-
+      const html2 = css + `<div class="sk-page">
+        <img class="sk-kop-img" src="${kopSrc}" alt="Kop Surat" onerror="this.style.display='none'">
         <div class="sk-meta">
-          <div style="text-align:right;margin-bottom:8px;">${p.tempat}, ${tglIndoHari(today)}</div>
+          <div style="text-align:right;margin-bottom:10px;">${p.tempat}, ${tglSurat}</div>
           <table>
             <tr><td class="lbl">Nomor</td><td class="sep">:</td><td><b>${nomorSurat}</b></td></tr>
             <tr><td class="lbl">Lampiran</td><td class="sep">:</td><td>-</td></tr>
-            <tr><td class="lbl">Perihal</td><td class="sep">:</td><td><b>Laporan Kematian Satwa Liar dilindungi dan tidak dilindungi Undang-Undang</b></td></tr>
+            <tr><td class="lbl">Perihal</td><td class="sep">:</td>
+              <td><b>Laporan Kematian Satwa Liar dilindungi dan tidak dilindungi Undang-Undang</b></td></tr>
           </table>
         </div>
-
         <div class="sk-kepada">
           Kepada Yth.<br>
           <b>Bapak Kepala Balai Konservasi Sumber Daya Alam Kalimantan Timur</b><br>
           di -<br>
           Samarinda
         </div>
-
         <div class="sk-pembuka">
-          <p style="margin-bottom:8px;">Dengan Hormat,</p>
+          <p style="margin-bottom:10px;">Dengan Hormat,</p>
           <p>Bersama ini kami sampaikan laporan kematian satwa liar dilindungi dan tidak dilindungi Undang-Undang di ${p.nama} yang beralamat di Kecamatan Tabang, Kabupaten Kutai Kartanegara, Provinsi Kalimantan Timur, untuk kemudian dapat dilakukan pemeriksaan satwa dengan data sebagai berikut.</p>
         </div>
-
         <table class="sk-tbl">
           <thead>
             <tr>
-              <th rowspan="2" style="width:30px;">No</th>
+              <th rowspan="2" style="width:28px;">No</th>
               <th colspan="2">Nama Jenis</th>
-              <th rowspan="2">Jumlah (ekor)</th>
+              <th rowspan="2">Jumlah<br>(ekor)</th>
               <th rowspan="2">Generasi</th>
               <th rowspan="2">No. Tag/ID</th>
-              <th rowspan="2">Tanggal Kematian</th>
+              <th rowspan="2">Tanggal<br>Kematian</th>
               <th rowspan="2">Keterangan</th>
-              <th rowspan="2">No. BAP Penitipan</th>
+              <th rowspan="2">No. BAP<br>Penitipan</th>
             </tr>
-            <tr>
-              <th>Indonesia</th>
-              <th>Latin</th>
-            </tr>
+            <tr><th>Indonesia</th><th>Latin</th></tr>
           </thead>
-          <tbody>
-            ${barisTabel}
-          </tbody>
+          <tbody>${barisTabel}</tbody>
         </table>
-
-        <div class="sk-penutup">
-          Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.
-        </div>
-
+        <div class="sk-penutup">Demikian kami sampaikan atas perhatian dan kerjasamanya kami ucapkan terima kasih.</div>
         <div class="sk-ttd">
-          <div class="sk-ttd-kiri">
-            Hormat Kami,
-            <div class="sk-ttd-nama">${nama}</div>
-            <div class="sk-ttd-jabatan">Kurator</div>
-          </div>
+          Hormat Kami,
+          <div class="sk-ttd-nama">${nama}</div>
+          Kurator
         </div>
-
         <div class="sk-nb">NB : Tembusan Kepala Seksi KSDA Wilayah II Tenggarong</div>
       </div>`;
 
-      document.getElementById("surat-kematian-preview").innerHTML = html;
+      document.getElementById("surat-kematian-preview").innerHTML = html2;
       document.getElementById("skm-preview-wrapper").classList.remove("hidden");
       document.getElementById("surat-kematian-preview").scrollIntoView({behavior:"smooth",block:"start"});
     }
